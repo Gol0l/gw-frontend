@@ -8,12 +8,15 @@ class InpSolarSystem extends InputForm {
       super(inputObject);
 
       this.template = {
+         name: "string",
          top: "number",
          left: "number",
          gravPar: "number",
          simSettings: "object",
          planetList: "array",
-         centerMass: "object"
+         centerMass: "object",
+         neighbours: "array",
+         selectedPlanet: "string"
 
       };
 

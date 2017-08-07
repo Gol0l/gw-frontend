@@ -14,7 +14,9 @@ class InpGalaxyMap extends InputForm {
          mapHeight: "number",
          frameDim: "object",
          simSettings: "object",
-         systemsList: "array"
+         systemsList: "array",
+         selectedPlanet: "string",
+         funcPlanetOnClick: "function"
       };
 
       this.validate(inputObject)

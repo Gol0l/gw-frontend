@@ -20,12 +20,7 @@ function getVoronoi (sites, bbox) {
             newPolygon.push(newVertex)
          }
 
-         var stringPolygon = ""
-         for (var j = 0; j < newPolygon.length; j++) {
-
-            stringPolygon += newPolygon[j][0].toString() + "," + newPolygon[j][1].toString() + " "
-         }
-         polygonList[i] = stringPolygon
+         polygonList[i] = newPolygon
       }
 
 

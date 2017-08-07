@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import {Satellite} from './Satellite.js';
 import {InpSatellite} from '../inpclasses/InpSatellite.js'
 import {CenterMass} from './CenterMass.js'
 import {InpCenterMass} from '../inpclasses/InpCenterMass.js'
+import {StatusBar} from './StatusBar.js';
+import {InpStatusBar} from '../inpclasses/InpStatusBar.js';
+
 
 class SolarSystem extends React.Component {
    /*props: an object of the class InpSolarSystem
@@ -67,6 +71,10 @@ class SolarSystem extends React.Component {
                      animProgress: newAnimProgress});
    }
 
+   
+
+
+
 
    render() {
 
@@ -81,35 +89,90 @@ class SolarSystem extends React.Component {
                         displayScale: scale * this.state.scaleFactor,
                         fps: this.props.inp.simSettings.fps,
                         simSpeed: this.props.inp.simSettings.simSpeed};
-                        
+
       const planetList = this.props.inp.planetList
 
-
+      var battleCount = 0;
+      var lobbyCount = 0;
       var displayList = [];
       for (var i = 0; i < planetList.length; i++) {
-         displayList.push(<Satellite key = {i} inp = {new InpSatellite({radius: planetList[i].distance,
+         if (planetList[i].status == "battle") {
+            battleCount += 1;
+         }
+         if (planetList[i].status == "lobby") {
+            lobbyCount += 1;
+         }
+
+         displayList.push(<Satellite key = {i} inp = {new InpSatellite({systemName: this.props.inp.name,
+                                                                        radius: planetList[i].distance,
                                                                         size: planetList[i].size * basePlanetSize,
                                                                         start: "random",
                                                                         settings: settings,
                                                                         content: planetList[i].content,
-                                                                        spin: planetList[i].spin})
+                                                                        spin: planetList[i].spin,
+                                                                        name: planetList[i].name,
+                                                                        status: planetList[i].status,
+                                                                        timeToBattle: planetList[i].timeToBattle,
+                                                                        faction: planetList[i].faction,
+                                                                        isSelected: (this.props.inp.selectedPlanet == planetList[i].name) ? true : false,
+                                                                        funcPlanetOnClick: this.props.inp.funcPlanetOnClick
+
+                                                                        })
                                                       } />)
 
       }
+      var statusContent = [];
+         if (lobbyCount > 0) {
+            statusContent.push(  <div style = {{height: "1em", width: "1em"}}>
+                                    <img style = {{left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/lobbySymbol.jpeg')}/>
+                                 </div>)
+            statusContent.push(  <div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>
+                                    {lobbyCount}
+                                 </div>)
+         }
+         if (battleCount > 0) {
+            statusContent.push(  <div style = {{height: "1em", width: "1em"}}>
+                                    <img style = {{left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/battleSymbol.gif')}/>
+                                 </div>)
+            statusContent.push(  <div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>
+                                    {battleCount}
+                                 </div>)
+
+         }
 
 
+
+      const leftShift = -centerMass.radius/2 * scale * baseStarSize
+      const topShift = -centerMass.radius/2 * scale * baseStarSize
+      const width = centerMass.radius * scale * baseStarSize
+      const height = centerMass.radius * scale * baseStarSize
 
       return (
          <div id = "container" style = {divStyle}>
+            <div style = {{position: "relative", left: 0,
+                                                 top: 0}}>
 
-            {(this.state.scaleFactor > 0.01) ? displayList : null}
-            <div  style = {{position: "absolute",  left: -centerMass.radius/2 * scale * baseStarSize,
-                                                   top: -centerMass.radius/2 * scale * baseStarSize}}
-                  onClick = {this.handleClick}>
-               <CenterMass inp = {{ width: centerMass.radius * scale * baseStarSize, height: centerMass.radius * scale * baseStarSize,
-                                    brightness: centerMass.brightness, color: centerMass.color, coronaColor: centerMass.coronaColor}}/>
+               <StatusBar inp = {new InpStatusBar({height: 10,
+                                                      distance: height * 1.2,
+                                                      contents: statusContent})
+               } />
+
+               <StatusBar inp = {new InpStatusBar({height: 10,
+                                                      distance: -height * 0.8,
+                                                      contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.name}</div>]})
+               } />
             </div>
 
+            {(this.state.scaleFactor > 0.01) ? displayList : null}
+
+
+            <div  style = {{position: "absolute",  left: leftShift,
+                                                   top: topShift}}
+                  onClick = {this.handleClick}
+                  ref = {(node) => this.centerMassNode = node}>
+               <CenterMass inp = {new InpCenterMass({ width: width, height: height,
+                                                      brightness: centerMass.brightness, color: centerMass.color, coronaColor: centerMass.coronaColor})} />
+            </div>
 
 
 

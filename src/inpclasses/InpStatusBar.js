@@ -1,18 +1,15 @@
 
 import {InputForm} from './InputForm.js'
 
-class InpCenterMass extends InputForm {
+class InpStatusBar extends InputForm {
 
    constructor(inputObject) {
       super(inputObject);
 
       this.template = {
-
-         width: "number",
          height: "number",
-         brightness: "number",
-         color: "string",
-         coronaColor: "string"
+         distance: "number",
+         contents: "array"
 
       };
 
@@ -21,4 +18,4 @@ class InpCenterMass extends InputForm {
 
    }
 }
-export {InpCenterMass};
+export {InpStatusBar};

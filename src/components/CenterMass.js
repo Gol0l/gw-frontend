@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 
+
 class CenterMass extends React.Component {
    /*props: an object of the class InpCenterMass
    */
@@ -36,15 +37,20 @@ class CenterMass extends React.Component {
       const coronaColor = this.props.inp.coronaColor;
 
       return (
-         <div style = {{
-                        position: "absolute",
-                        width: width,
-                        height: height,
-                        borderRadius: "50%", background: color,
-                        boxShadow: "0px 0px " + (brightness * 4).toString()+"px " + (brightness).toString() + "px " + coronaColor.toString()
-                     }}
-               onMouseEnter = {this.handleMouseEnter}
-               onMouseLeave = {this.handleMouseLeave}>
+         <div style = {{position: "relative"}}>
+            <div style = {{position: "relative",
+                           width: width,
+                           height: height,
+                           borderRadius: "50%", background: color,
+                           boxShadow: "0px 0px " + (brightness * 4).toString()+"px " + (brightness).toString() + "px " + coronaColor.toString()
+                        }}
+                  onMouseEnter = {this.handleMouseEnter}
+                  onMouseLeave = {this.handleMouseLeave}>
+
+            </div>
+
+
+
          </div>
       )
    }

@@ -7,12 +7,19 @@ class InpSatellite extends InputForm {
 
       this.template = {
 
+         name: "string",
+         systemName: "string",
          start: "arbitrary",
          radius: "number",
          size: "number",
-         content: "object",
+         content: "string",
          settings: "object",
-         spin: "number"
+         spin: "number",
+         faction: "string",
+         status: "string",
+         timeToBattle: "number",
+         isSelected: "boolean",
+         funcPlanetOnClick: "function"
 
       };
 
