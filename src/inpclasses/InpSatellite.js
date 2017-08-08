@@ -8,6 +8,7 @@ class InpSatellite extends InputForm {
       this.template = {
 
          name: "string",
+         displayName: "string",
          systemName: "string",
          start: "arbitrary",
          radius: "number",
@@ -19,7 +20,8 @@ class InpSatellite extends InputForm {
          status: "string",
          timeToBattle: "number",
          isSelected: "boolean",
-         funcPlanetOnClick: "function"
+         funcPlanetOnClick: "function",
+         shouldStatusDisplay: "boolean"
 
       };
 

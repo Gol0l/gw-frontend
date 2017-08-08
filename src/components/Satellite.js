@@ -72,7 +72,6 @@ class Satellite extends React.Component {
       const displaySprite = <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.inp.content.toString())}/>;
       const displayScale = this.props.inp.settings.displayScale;
       const radius = this.props.inp.radius;
-      const minSizeForStatus = 10;
       const divStyle = {position: "absolute",
                         transform: "translate("
                         + (displayScale * (radius * Math.cos(this.state.angle) - objectSize/2)).toString() + "px,"
@@ -89,7 +88,6 @@ class Satellite extends React.Component {
       var factionImg;
 
       switch (this.props.inp.faction) {
-
 
          case "aeon":
             factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/aeon.jpeg')}/>;
@@ -129,7 +127,7 @@ class Satellite extends React.Component {
                                           contents: [statusContent]}) }/>,
                            <StatusBar key = "name" inp = {new InpStatusBar({height: 12,
                                           distance: -objectSize* displayScale * 1.0 + 3,
-                                          contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.name}</div>]})
+                                          contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
                            } />,
                            <StatusBar key = "factionSymbol" inp = {new InpStatusBar({height: 16,
                                           distance: -objectSize* displayScale * 1.0 -14,
@@ -151,7 +149,7 @@ class Satellite extends React.Component {
 
                {(this.props.inp.isSelected) ? displaySelector : <div></div>}
 
-               {(objectSize * displayScale > minSizeForStatus) ? displayStatus : <div></div>}
+               {(this.props.inp.shouldStatusDisplay) ? displayStatus : <div></div>}
             </div>
 
             <div style = {divStyle} ref = {(node) => this.planetNode = node} onClick = {this.handleOnClick}>

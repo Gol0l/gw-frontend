@@ -10,105 +10,18 @@ import {InpActionButton} from './inpclasses/InpActionButton.js'
 
 
 class App extends Component {
-   constructor() {
+   constructor(props) {
 
-      var contentvar1 = {        name: "star1",
-                                 top: 350,
-                                 left: 300,
-                                 centerMass: {radius: 1, color: "lightYellow", coronaColor: "lightYellow", brightness: 2},
-                                 neighbours: ["star2"],
-                                 planetList: [
-                                       {content: 'planetSprites1.png',
-                                       distance:2, size:1, spin:0.1, faction: "cybran", status: "battle", timeToBattle: 0, name: "planet1",
-                                       mapInfo: {  mapName: "Seton's Clutch",
-                                                   mapImg: "SetonsClutch.png",
-                                                   mapSize: 20,
-                                                   maxPlayers: 8},
-                                       battleParticipants: [
-                                          {factionName: "aeon", players: ["playerA", "playerB", "playerC"]},
-                                          {factionName: "cybran", players: ["playerD", "playerE"]}
-
-                                       ]},
-                                       {content: 'planetSprites1.png',
-                                       distance:4, size:1, spin:0.1, faction: "aeon", status: "idle", timeToBattle: 0, name: "planet2",
-                                       mapInfo: {  mapName: "Seton's Clutch",
-                                                   mapImg: "SetonsClutch.png",
-                                                   mapSize: 20,
-                                                   maxPlayers: 8},
-                                       battleParticipants: [
-
-                                       ]},
-                                       {content: 'planetSprites1.png',
-                                       distance:7, size:1, spin:0.1, faction: "aeon", status: "lobby", timeToBattle: 0, name: "planet3",
-                                       mapInfo: {  mapName: "Seton's Clutch",
-                                                   mapImg: "SetonsClutch.png",
-                                                   mapSize: 20,
-                                                   maxPlayers: 8},
-                                       battleParticipants: [
-                                          {factionName: "aeon", players: ["playerA", "playerB", "playerC"]},
-                                          {factionName: "cybran", players: ["playerD", "playerE"]}
-
-                                       ]}
-                                 ],
-                                 gravPar: 1}
-
-      var contentvar2 = {        name: "star2",
-                                 top: 550,
-                                 left: 300,
-                                 centerMass: {radius: 1, color: "lightYellow", coronaColor: "lightYellow", brightness: 2},
-                                 neighbours: ["star1"],
-                                 planetList: [
-                                       {content: 'planetSprites1.png',
-                                       distance:2, size:1, spin:0.1, faction: "aeon", status: "battle", timeToBattle: 0, name: "planet4",
-                                       mapInfo: {  mapName: "Seton's Clutch",
-                                                   mapImg: "SetonsClutch.png",
-                                                   mapSize: 20,
-                                                   maxPlayers: 8},
-                                       battleParticipants: [
-                                          {factionName: "aeon", players: ["playerA", "playerB", "playerC"]},
-                                          {factionName: "uef", players: ["playerD", "playerE"]}
-
-                                       ]},
-                                       {content: 'planetSprites1.png',
-                                       distance:4, size:1, spin:0.1, faction: "uef", status: "idle", timeToBattle: 0, name: "planet5",
-                                       mapInfo: {  mapName: "Seton's Clutch",
-                                                   mapImg: "SetonsClutch.png",
-                                                   mapSize: 20,
-                                                   maxPlayers: 8},
-                                       battleParticipants: [
-
-                                       ]},
-                                       {content: 'planetSprites1.png',
-                                       distance:7, size:1, spin:0.1, faction: "seraphim", status: "lobby", timeToBattle: 0, name: "planet6",
-                                       mapInfo: {  mapName: "Seton's Clutch",
-                                                   mapImg:  "SetonsClutch.png",
-                                                   mapSize: 20,
-                                                   maxPlayers: 8},
-                                       battleParticipants: [
-                                          {factionName: "aeon", players: ["playerA", "playerB", "playerC"]},
-                                          {factionName: "seraphim", players: ["playerD", "playerE"]}
-
-                                       ]}
-                                 ],
-                                 gravPar: 1}
-
-
-      super();
+      super(props);
       const length = 0;
 
       this.state = {
          width: window.innerWidth, height: window.innerHeight,
-         mapWidth: 2000, mapHeight: 1000,
+         mapWidth: this.props.model.mapWidth, mapHeight: this.props.model.mapHeight,
          frameDim: {leftSize: 0, topSize: 0, rightSize: 0, bottomSize: 0},
-         simSettings: { mapScale: 1,
-                        systemScale: 12,
-                        baseStarSize: 1.2, basePlanetSize: 0.9,
-                        simSpeed: 1,
-                        fps: 30},
-         systemsList: [
-         contentvar1,
-         contentvar2],
-         playerInfo: {name: "user", faction: "aeon", readyForBattle: true},
+         simSettings: this.props.model.simSettings,
+         systemsList: this.props.model.systemsList,
+         playerInfo: this.props.model.playerInfo,
          selection: {systemName: "none", planetName: "none", planetRect: "none"}
 
       };
@@ -174,9 +87,9 @@ class App extends Component {
                                                 <ActionButton inp = {new InpActionButton({buttonType: buttonType,
                                                                                           buttonFunction: buttonFunction})} />,
 
-                                                <BattleLobby inp = {new InpBattleLobby({  battleParticipants: planetInfo.battleParticipants,
-                                                                                          status: planetInfo.status,
-                                                                                          timeToBattle: planetInfo.timeToBattle,
+                                                <BattleLobby inp = {new InpBattleLobby({  battleParticipants: planetInfo.currentBattle.battleParticipants,
+                                                                                          status: planetInfo.currentBattle.status,
+                                                                                          timeToBattle: planetInfo.currentBattle.timeToBattle,
                                                                                           maxPlayers: planetInfo.mapInfo.maxPlayers})} />]
                                              : <div></div>
 
@@ -217,7 +130,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
    var buttonType = "noDisplay"
    const planetInfo = systemsList[sIndex].planetList[pIndex]
 
-   switch (planetInfo.statugetBoundingClientRects) {
+   switch (planetInfo.currentBattle.status) {
       case "idle":
          if (planetInfo.faction != playerInfo.faction) {
             if (isPlanetAccessible() && playerInfo.readyForBattle) {
@@ -238,9 +151,9 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
 
          var factions = []
          var playerCount = 0
-         for (var i = 0; i < planetInfo.battleParticipants.length; i++) {
-            factions.push(planetInfo.battleParticipants[i].factionName)
-               for (var j = 0; j < planetInfo.battleParticipants[i].length; j++) {
+         for (var i = 0; i < planetInfo.currentBattle.battleParticipants.length; i++) {
+            factions.push(planetInfo.currentBattle.battleParticipants[i].factionName)
+               for (var j = 0; j < planetInfo.currentBattle.battleParticipants[i].length; j++) {
                   playerCount += 1
                }
          }

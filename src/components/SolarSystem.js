@@ -71,7 +71,7 @@ class SolarSystem extends React.Component {
                      animProgress: newAnimProgress});
    }
 
-   
+
 
 
 
@@ -96,10 +96,10 @@ class SolarSystem extends React.Component {
       var lobbyCount = 0;
       var displayList = [];
       for (var i = 0; i < planetList.length; i++) {
-         if (planetList[i].status == "battle") {
+         if (planetList[i].currentBattle.status == "battle") {
             battleCount += 1;
          }
-         if (planetList[i].status == "lobby") {
+         if (planetList[i].currentBattle.status == "lobby") {
             lobbyCount += 1;
          }
 
@@ -108,12 +108,14 @@ class SolarSystem extends React.Component {
                                                                         size: planetList[i].size * basePlanetSize,
                                                                         start: "random",
                                                                         settings: settings,
-                                                                        content: planetList[i].content,
+                                                                        content: planetList[i].sprite,
                                                                         spin: planetList[i].spin,
                                                                         name: planetList[i].name,
-                                                                        status: planetList[i].status,
-                                                                        timeToBattle: planetList[i].timeToBattle,
+                                                                        displayName: planetList[i].displayName,
+                                                                        status: planetList[i].currentBattle.status,
+                                                                        timeToBattle: planetList[i].currentBattle.timeToBattle,
                                                                         faction: planetList[i].faction,
+                                                                        shouldStatusDisplay: (scale * basePlanetSize > 7) ? true : false,
                                                                         isSelected: (this.props.inp.selectedPlanet == planetList[i].name) ? true : false,
                                                                         funcPlanetOnClick: this.props.inp.funcPlanetOnClick
 
@@ -159,7 +161,7 @@ class SolarSystem extends React.Component {
 
                <StatusBar inp = {new InpStatusBar({height: 10,
                                                       distance: -height * 0.8,
-                                                      contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.name}</div>]})
+                                                      contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
                } />
             </div>
 

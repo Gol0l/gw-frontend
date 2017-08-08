@@ -5,6 +5,7 @@ class Model {
       name
       faction
       readyForBattle
+      isLoggedIn
    }
    simSettings => class ModelSimSettings {
       mapScale
@@ -15,6 +16,7 @@ class Model {
       fps
    }
    systemsList => Array class ModelSolarSystem {
+      displayName
       name
       top
       left
@@ -26,6 +28,7 @@ class Model {
          coronaColor
       }
       planetList => Array class ModelPlanet {
+         displayName
          name
          sprite
          distance

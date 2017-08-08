@@ -9,6 +9,7 @@ class InpSolarSystem extends InputForm {
 
       this.template = {
          name: "string",
+         displayName: "string",
          top: "number",
          left: "number",
          gravPar: "number",

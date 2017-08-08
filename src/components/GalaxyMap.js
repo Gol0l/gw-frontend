@@ -134,6 +134,7 @@ class GalaxyMap extends React.Component {
       for (var i = 0; i < systemsList.length; i++) {
          displayList.push(<SolarSystem inp = {new InpSolarSystem({
                                                 name: systemsList[i].name,
+                                                displayName: systemsList[i].displayName,
                                                 top: Math.floor(systemsList[i].top * mapScale),
                                                 left: Math.floor(systemsList[i].left * mapScale),
                                                 planetList: systemsList[i].planetList,
