@@ -22,6 +22,7 @@ class ActionButton extends React.Component {
          <div id="attack" className = "themeBackgroundDefault themeBorderDefault themeTextDefault themeButton themeShadowDefault" onClick = {this.handleClick}>
    		    {this.props.inp.buttonType}
    		</div>
+         
       )
    }
 }

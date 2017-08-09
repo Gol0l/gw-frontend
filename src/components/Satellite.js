@@ -67,7 +67,7 @@ class Satellite extends React.Component {
    }
 
    render() {
-
+      const minScaleForDisplay = 15;
       const objectSize = this.props.inp.size;
       const displaySprite = <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.inp.content.toString())}/>;
       const displayScale = this.props.inp.settings.displayScale;
@@ -123,14 +123,14 @@ class Satellite extends React.Component {
       }
 
       var displayStatus = [<StatusBar key = "status" inp = {new InpStatusBar({height: 16,
-                                          distance: objectSize * displayScale * 1.0 + 8,
+                                          distance: objectSize * displayScale * 0.5 + 4,
                                           contents: [statusContent]}) }/>,
                            <StatusBar key = "name" inp = {new InpStatusBar({height: 12,
-                                          distance: -objectSize* displayScale * 1.0 + 3,
+                                          distance: -objectSize * displayScale * 0.5 - 13,
                                           contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
                            } />,
                            <StatusBar key = "factionSymbol" inp = {new InpStatusBar({height: 16,
-                                          distance: -objectSize* displayScale * 1.0 -14,
+                                          distance: -objectSize * displayScale * 0.5 - 30,
                                           contents: [<div style = {{height: "1em", width: "auto"}}>{factionImg}</div>]})
                            } />]
 
@@ -149,7 +149,7 @@ class Satellite extends React.Component {
 
                {(this.props.inp.isSelected) ? displaySelector : <div></div>}
 
-               {(this.props.inp.shouldStatusDisplay) ? displayStatus : <div></div>}
+               {(displayScale > minScaleForDisplay) ? displayStatus : <div></div>}
             </div>
 
             <div style = {divStyle} ref = {(node) => this.planetNode = node} onClick = {this.handleOnClick}>

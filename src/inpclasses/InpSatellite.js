@@ -20,8 +20,7 @@ class InpSatellite extends InputForm {
          status: "string",
          timeToBattle: "number",
          isSelected: "boolean",
-         funcPlanetOnClick: "function",
-         shouldStatusDisplay: "boolean"
+         funcPlanetOnClick: "function"
 
       };
 

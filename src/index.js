@@ -38,7 +38,9 @@ model.systemsList[1].planetList[2].currentBattle.battleParticipants = [{factionN
 model.systemsList[0].planetList[0].currentBattle.timeToBattle = 0;
 
 
-
+model.playerInfo.faction = "aeon";
+model.playerInfo.isLoggedIn = true;
+model.playerInfo.readyForBattle = true;
 
 
 

@@ -36,7 +36,7 @@ class StatusBar extends React.Component {
 
 
    }
-   
+
 
 
    render() {
@@ -52,7 +52,7 @@ class StatusBar extends React.Component {
 
       }
       const topShift = - (this.props.inp.height + this.props.inp.distance)
-      var divStyle = {position: "absolute", left: this.state.left, top: topShift, whiteSpace: "nowrap"}
+      var divStyle = {position: "absolute", left: this.state.left, top: topShift, whiteSpace: "nowrap", lineHeight: "0px"}
       return (
          <div id = "StatusBar" style = {divStyle}>
 

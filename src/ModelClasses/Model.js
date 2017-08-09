@@ -29,9 +29,9 @@ class ModelSimSettings {
    constructor() {
 
       this.mapScale = 1; //relevant for zoom beheaviour
-      this.systemScale = 10; //the scale of the systems
-      this.baseStarSize = 1.2; //factor to scale all star radii
-      this.basePlanetSize = 0.7; //factor to scale all sprite radii
+      this.systemScale = 7; //the scale of the systems
+      this.baseStarSize = 1.6; //factor to scale all star radii
+      this.basePlanetSize = 0.35; //factor to scale all sprite radii
       this.simSpeed = 1; //the speed of planet movement
       this.fps = 30; //the fps in planetmovement
    }

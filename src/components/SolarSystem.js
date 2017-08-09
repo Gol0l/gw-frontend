@@ -115,7 +115,6 @@ class SolarSystem extends React.Component {
                                                                         status: planetList[i].currentBattle.status,
                                                                         timeToBattle: planetList[i].currentBattle.timeToBattle,
                                                                         faction: planetList[i].faction,
-                                                                        shouldStatusDisplay: (scale * basePlanetSize > 7) ? true : false,
                                                                         isSelected: (this.props.inp.selectedPlanet == planetList[i].name) ? true : false,
                                                                         funcPlanetOnClick: this.props.inp.funcPlanetOnClick
 
@@ -144,23 +143,23 @@ class SolarSystem extends React.Component {
 
 
 
-      const leftShift = -centerMass.radius/2 * scale * baseStarSize
-      const topShift = -centerMass.radius/2 * scale * baseStarSize
-      const width = centerMass.radius * scale * baseStarSize
-      const height = centerMass.radius * scale * baseStarSize
+      const leftShift = -centerMass.radius * Math.sqrt(scale) * baseStarSize
+      const topShift = -centerMass.radius * Math.sqrt(scale) * baseStarSize
+      const width = centerMass.radius * 2 * Math.sqrt(scale) * baseStarSize
+      const height = centerMass.radius * 2 * Math.sqrt(scale) * baseStarSize
 
       return (
          <div id = "container" style = {divStyle}>
             <div style = {{position: "relative", left: 0,
                                                  top: 0}}>
 
-               <StatusBar inp = {new InpStatusBar({height: 10,
-                                                      distance: height * 1.2,
+               <StatusBar inp = {new InpStatusBar({height: 16,
+                                                      distance: height * 0.6 + 3,
                                                       contents: statusContent})
                } />
 
-               <StatusBar inp = {new InpStatusBar({height: 10,
-                                                      distance: -height * 0.8,
+               <StatusBar inp = {new InpStatusBar({height: 14,
+                                                      distance: -height * 0.6 - 14,
                                                       contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
                } />
             </div>
