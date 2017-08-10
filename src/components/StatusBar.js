@@ -14,7 +14,7 @@ class StatusBar extends React.Component {
 
       this.nodes = [];
       this.allowUpdate = true;
-      this.onlyAllowOnce = true;
+      this.didMount = false;
 
    }
 
@@ -27,7 +27,6 @@ class StatusBar extends React.Component {
          var rect = ReactDOM.findDOMNode(this.nodes[i]).getBoundingClientRect()
          var zoomFactor = height / rect.height;
          newWidth += rect.width * zoomFactor
-
       }
       this.setState({left: -1 * newWidth / 2});
    }
@@ -35,31 +34,37 @@ class StatusBar extends React.Component {
    componentDidUpdate() {
       if (this.allowUpdate) {
          const height = this.props.inp.height;
-         var newWidth = 0
+         this.newWidth = 0
          for (var i = 0; i < this.props.inp.contents.length; i++) {
-            var displayContent = this.props.inp.contents[i];
-
             var rect = ReactDOM.findDOMNode(this.nodes[i]).getBoundingClientRect()
-            var zoomFactor = height / rect.height;
-            newWidth += rect.width * zoomFactor
+            var zoomFactor = height / rect.height;;
+            this.newWidth += rect.width * zoomFactor;
 
          }
-         this.setState({left: -1 * newWidth / 2});
+         this.setState({left: -1 * this.newWidth / 2});
          this.allowUpdate = false;
+         this.didMount = true;
       }
    }
 
    componentWillReceiveProps() {
-      if (this.onlyAllowOnce) {
-         this.allowUpdate = true;
-         this.onlyAllowOnce = false;
+      if (this.didMount) {
+         const height = this.props.inp.height;
+         var newWidth = 0
+         for (var i = 0; i < this.props.inp.contents.length; i++) {
+            var rect = ReactDOM.findDOMNode(this.nodes[i]).getBoundingClientRect()
+            var zoomFactor = height / rect.height;
+            newWidth += rect.width * zoomFactor;
+         }
+         if (this.newWidth != newWidth) {
+            this.allowUpdate = true;
+         }
       }
    }
 
 
 
    render() {
-
 
       var displayList = [];
       for (var i = 0; i < this.props.inp.contents.length; i++) {
