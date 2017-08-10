@@ -27,30 +27,43 @@ class App extends Component {
       };
 
       this.planetOnClick = this.planetOnClick.bind(this);
-
+      this.resizeWindow = this.resizeWindow.bind(this);
       this.buttonAttack = this.buttonAttack.bind(this);
       this.buttonCantAttack = this.buttonCantAttack.bind(this);
       this.buttonError = this.buttonError.bind(this);
       this.buttonNoDisplay = this.buttonNoDisplay.bind(this);
+      this.buttonLeaveLobby = this.buttonLeaveLobby.bind(this);
 
    }
 
+   componentDidMount() {
+      window.addEventListener('resize', this.resizeWindow);
+   }
+
+   resizeWindow(newWidth, newHeight) {
+      newWidth = window.innerWidth;
+      newHeight = window.innerHeight;
+      this.setState({width: newWidth, height: newHeight});
+   }
 
    planetOnClick(systemName, name, rect) {
       this.setState({selection: {systemName: systemName, planetName: name, planetRect: rect}});
    }
 
-   buttonAttack = function() {
+   buttonAttack() {
       alert('attacking/joining the battle for this planet')
    }
-   buttonCantAttack = function() {
+   buttonCantAttack() {
       alert('cant attack/join the battle for this planet!')
    }
-   buttonError = function() {
+   buttonError() {
       alert('error: planet status not proper?')
    }
-   buttonNoDisplay = function() {
+   buttonNoDisplay() {
       alert('how did you click something that isnt supposed to be displayed')
+   }
+   buttonLeaveLobby() {
+      alert('leaving the Lobby')
    }
 
    render() {
@@ -75,18 +88,21 @@ class App extends Component {
                                     joinDefense: this.buttonAttack,
                                     greyedJoinDefense: this.buttonCantAttack,
                                     battleOngoing: this.buttonCantAttack,
+                                    leaveLobby: this.buttonLeaveLobby,
                                     error: this.buttonError,
                                     noDisplay: this.buttonNoDisplay}
+
       var buttonFunction = buttonTypeToFunction[buttonType]
+      console.log("now", buttonType, buttonFunction)
 
-      var interfaceElements = (doDisplay) ? [  <MapPreview inp = {new InpMapPreview({ mapName: planetInfo.mapInfo.mapName,
-                                                                        mapSize: planetInfo.mapInfo.mapSize,
-                                                                        mapImg: planetInfo.mapInfo.mapImg,
-                                                                        maxPlayers: planetInfo.mapInfo.maxPlayers})} />,
-
-                                                <ActionButton inp = {new InpActionButton({buttonType: buttonType,
-                                                                                          buttonFunction: buttonFunction})} />,
-
+      var interfaceElements = (doDisplay) ? [  <MapPreview inp = {new InpMapPreview({  mapName: planetInfo.mapInfo.mapName,
+                                                                                       mapSize: planetInfo.mapInfo.mapSize,
+                                                                                       mapImg: planetInfo.mapInfo.mapImg,
+                                                                                       maxPlayers: planetInfo.mapInfo.maxPlayers})} />,
+                                                <div id = "buttonWrap" style = {{position: "relative", left: this.state.width / 2}}>
+                                                   <ActionButton inp = {new InpActionButton({buttonType: buttonType,
+                                                                                             buttonFunction: buttonFunction})} />
+                                                </div>,
                                                 <BattleLobby inp = {new InpBattleLobby({  battleParticipants: planetInfo.currentBattle.battleParticipants,
                                                                                           status: planetInfo.currentBattle.status,
                                                                                           timeToBattle: planetInfo.currentBattle.timeToBattle,
@@ -127,6 +143,7 @@ function isPlanetAccessible() {
 }
 
 function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR THE KIND OF ACTION HAPPENS HERE
+
    var buttonType = "noDisplay"
    const planetInfo = systemsList[sIndex].planetList[pIndex]
 
@@ -135,11 +152,9 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
          if (planetInfo.faction != playerInfo.faction) {
             if (isPlanetAccessible() && playerInfo.readyForBattle) {
                buttonType = "startAttack"
-               console.log("startAttack")
             }
             else {
                buttonType = "greyedStartAttack"
-               console.log("greyedStartAttack")
             }
          }
          else {
@@ -149,49 +164,62 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
 
       case "lobby":
 
-         var factions = []
-         var playerCount = 0
+         var factions = [];
+         var playerCount = 0;
          for (var i = 0; i < planetInfo.currentBattle.battleParticipants.length; i++) {
             factions.push(planetInfo.currentBattle.battleParticipants[i].factionName)
-               for (var j = 0; j < planetInfo.currentBattle.battleParticipants[i].length; j++) {
-                  playerCount += 1
+            if (planetInfo.currentBattle.battleParticipants[i].factionName == playerInfo.faction) {
+               for (var j = 0; j < planetInfo.currentBattle.battleParticipants[i].players.length; j++) {
+                  playerCount += 1;
                }
+            }
          }
+         var teamIndex = factions.indexOf(playerInfo.faction);
+         var playerInLobby = false;
 
-         if (factions.includes(playerInfo.faction) && playerCount < planetInfo.mapInfo.maxPlayers) {
-            console.log("lobby - playerfaction present and lobby not full")
-            if (planetInfo.faction != playerInfo.faction) {
-               if (playerInfo.readyForBattle) {
-                  buttonType = "joinAttack"
-                  console.log("joinAttack")
+         if (teamIndex != -1) {
+            playerInLobby = ((planetInfo.currentBattle.battleParticipants[teamIndex].players).includes(playerInfo.name)) ? true : false;
+         }
+         else {
+            playerInLobby = false;
+         }
+         if (!playerInLobby) {
+            if (factions.includes(playerInfo.faction)) {
+               if (planetInfo.faction != playerInfo.faction) {
+                  if (playerInfo.readyForBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
+                     buttonType = "joinAttack"
+                  }
+                  else {
+                     buttonType = "greyedJoinAttack"
+                  }
                }
                else {
-                  buttonType = "greyedJoinAttack"
-                  console.log("greyedJoinAttack")
+                  if (playerInfo.readyForBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
+                     buttonType = "joinDefense"
+                  }
+                  else {
+                     buttonType = "greyedJoinDefense"
+                  }
                }
             }
             else {
-               if (playerInfo.readyForBattle) {
-                  buttonType = "joinDefense"
-                  console.log("joinDefense")
-               }
-               else {
-                  buttonType = "greyedJoinDefense"
-                  console.log("greyedJoinDefense")
-               }
+               buttonType = "noDisplay";
             }
+         }
+         else {
+            buttonType = "leaveLobby";
          }
          break;
 
       case "battle":
-         buttonType = "battleOngoing"
-         console.log("battleOngoing")
+         buttonType = "battleOngoing";
          break;
 
       default:
-         buttonType = "error"
+         buttonType = "error";
          break;
    }
+   console.log("buttonType", buttonType)
    return buttonType
 }
 

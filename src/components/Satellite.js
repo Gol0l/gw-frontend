@@ -69,21 +69,34 @@ class Satellite extends React.Component {
    render() {
       const minScaleForDisplay = 15;
       const objectSize = this.props.inp.size;
-      const displaySprite = <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.inp.content.toString())}/>;
       const displayScale = this.props.inp.settings.displayScale;
       const radius = this.props.inp.radius;
-      const divStyle = {position: "absolute",
-                        transform: "translate("
+
+      var displaySprite =  <div  style = {{  position: "absolute",
+                                             transform: "rotate(" + this.state.rotation.toString() + "deg)",
+                                             width: Math.round(objectSize * displayScale),
+                                             height: Math.round(objectSize * displayScale)
+                                          }}>
+                              <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.inp.content.toString())}/>
+                           </div>
+
+      var displayShadow =  <div  style = {{  position: "absolute",
+                                             transform: "translate("
+                                             + (- 2/2).toString() + "px,"
+                                             + (- 2/2).toString() + "px)"
+                                             + " "
+                                             + "rotate(" + (180*this.state.angle/Math.PI).toString() + "deg)",
+                                             width: Math.round((objectSize) * displayScale) + 2,
+                                             height: Math.round((objectSize) * displayScale) + 2
+                                          }}>
+                              <img style = {{pointerEvents: "none", position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/shadow.png')}/>
+                           </div>
+
+      var planetStyle = {  transform: "translate("
                         + (displayScale * (radius * Math.cos(this.state.angle) - objectSize/2)).toString() + "px,"
-                        + (displayScale * (radius * Math.sin(this.state.angle) - objectSize/2)).toString() + "px)"
-                        + " "
-                        + "rotate(" + this.state.rotation.toString() + "deg)",
-                        width: Math.round(objectSize * displayScale),
-                        height: Math.round(objectSize * displayScale),
-                        //
-                        };
-
-
+                        + (displayScale * (radius * Math.sin(this.state.angle) - objectSize/2)).toString() + "px)",
+                           width: Math.round(objectSize * displayScale),
+                           height: Math.round(objectSize * displayScale)}
 
       var factionImg;
 
@@ -152,8 +165,9 @@ class Satellite extends React.Component {
                {(displayScale > minScaleForDisplay) ? displayStatus : <div></div>}
             </div>
 
-            <div style = {divStyle} ref = {(node) => this.planetNode = node} onClick = {this.handleOnClick}>
+            <div id = "planetWrapper" style = {planetStyle} ref = {(node) => this.planetNode = node} onClick = {this.handleOnClick}>
                {displaySprite}
+               {displayShadow}
             </div>
          </div>
 

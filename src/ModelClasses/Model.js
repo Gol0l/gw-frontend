@@ -1,3 +1,8 @@
+
+//only properties which are necessary to be clear from the beginning are given in the constructor
+//many properties just have defaults
+//properties that arent necessary for the core gameplay and not yet exist in the database like planet size and spin are currently just random
+
 class Model {
    constructor(mapWidth, mapHeight) {
       this.mapWidth = mapWidth; //Width and Height of the map on which the stars' coordinates lie
@@ -9,7 +14,6 @@ class Model {
    }
 
    addSystem(displayName, name, top, left) {
-      console.log(this.systemsList)
       this.systemsList.push(new ModelSolarSystem(displayName, name, top, left));
    }
 }
@@ -28,7 +32,7 @@ class ModelPlayerInfo {
 class ModelSimSettings {
    constructor() {
 
-      this.mapScale = 1; //relevant for zoom beheaviour
+      this.mapScale = 3; //relevant for zoom beheaviour
       this.systemScale = 7; //the scale of the systems
       this.baseStarSize = 1.6; //factor to scale all star radii
       this.basePlanetSize = 0.35; //factor to scale all sprite radii
@@ -59,8 +63,8 @@ class ModelSolarSystem {
 class ModelCenterMass {
    constructor() {
 
-      this.radius = Math.random() + 1; //the radius of the circle
-      this.brightness = 1 + Math.random() * 4; //the size of the shadow
+      this.radius = Math.random() + 0.7; //the radius of the circle
+      this.brightness = 1 + Math.random() * 6; //the size of the shadow
       this.color = "white";
       this.coronaColor = "lightBlue";
    }

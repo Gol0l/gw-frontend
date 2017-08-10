@@ -17,26 +17,44 @@
 	top:0vh;
 }
 
-#attack {
+#actionButton {
 	position:absolute;
 	bottom:1vh;
-	left:43vw;
 }
 
 .themeBackgroundDefault {
 	padding:5px;
-	background-color:rgba(170,190,255,0.1);
+	background-color:rgba(180,180,255,0.1);
 	opacity:0.8;
 	transition:opacity 0.1s ease-out;
 }
+
 .themeBackgroundDefault:hover {
 	opacity:1;
+}
+
+.themeBackgroundGrey {
+	padding:5px;
+	background-color:rgba(160,160,160,0.1);
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
+}
+
+.themeBackgroundGrey:hover {
+	opacity:0.6;
 }
 
 .themeBorderDefault {
 	border-style:solid;
 	border-width:1px;
-	border-color:rgba(180, 200, 255, 0.5);
+	border-color:rgba(190, 190, 255, 0.5);
+	border-radius:2px;
+}
+
+.themeBorderGrey {
+	border-style:solid;
+	border-width:1px;
+	border-color:rgba(170, 170, 170, 0.5);
 	border-radius:2px;
 }
 
@@ -53,11 +71,15 @@
 	box-shadow:0px 0px 10px 1px rgba(150, 150, 255, 0.8);
 }
 
+.themeShadowGrey {
+	box-shadow:0px 0px 10px 1px rgba(150, 150, 150, 0.8);
+}
+
 .themeTextDefault {
 	cursor: default;
 	color:rgba(240,255,255,1);
 	font-family:Arial;
-	text-shadow:0px 0px 10px rgba(170,190,255,1);
+	text-shadow:0px 0px 10px rgba(180,190,255,1);
 }
 
 .themeButton {
