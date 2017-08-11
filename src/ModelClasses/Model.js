@@ -64,7 +64,7 @@ class ModelCenterMass {
    constructor() {
 
       this.radius = Math.random() + 0.7; //the radius of the circle
-      this.brightness = 1 + Math.random() * 6; //the size of the shadow
+      this.brightness = 2 + Math.random() * 4; //the size of the shadow
       this.color = "white";
       this.coronaColor = "lightBlue";
    }

@@ -167,6 +167,14 @@ class GalaxyMap extends React.Component {
          systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i]})} />)
       }
 
+      var lineGradient = <linearGradient id="fadeLine" x1="0%" y1="0%" x2="100%" y2="0%">
+                           <stop offset="0%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
+                           <stop offset="5%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
+                           <stop offset="33%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0.7"}} />
+                           <stop offset="66%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0.7"}} />
+                           <stop offset="95%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
+                           <stop offset="100%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
+                        </linearGradient>
 
 
       return(
@@ -182,6 +190,9 @@ class GalaxyMap extends React.Component {
                                                 content:
                                                    <div>
                                                       <svg style = {{position: "absolute", width: mapWidth * mapScale, height: mapHeight * mapScale}}>
+                                                         <defs>
+                                                            {lineGradient}
+                                                         </defs>
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>
