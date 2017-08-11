@@ -148,7 +148,8 @@ class Satellite extends React.Component {
                            } />]
 
 
-      var displaySelector = <Selector inp = {new InpSelector({width: objectSize * displayScale * 2.4, height: objectSize * displayScale * 2.4})} />
+      var displaySelector = <Selector inp = {new InpSelector({ width: objectSize * displayScale * 2.4, height: objectSize * displayScale * 2.4,
+                                                               isOpened: this.props.inp.isSelected})} />
 
 
       return (
@@ -160,7 +161,7 @@ class Satellite extends React.Component {
                            + (displayScale * (radius * Math.cos(this.state.angle))).toString() + "px,"
                            + (displayScale * (radius * Math.sin(this.state.angle))).toString() + "px)"}}>
 
-               {(this.props.inp.isSelected) ? displaySelector : <div></div>}
+               {displaySelector}
 
                {(displayScale > minScaleForDisplay) ? displayStatus : <div></div>}
             </div>

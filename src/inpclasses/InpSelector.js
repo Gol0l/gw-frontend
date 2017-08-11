@@ -9,7 +9,8 @@ class InpSelector extends InputForm {
       this.template = {
 
          width: "number",
-         height: "number"
+         height: "number",
+         isOpened: "boolean"
 
       };
 

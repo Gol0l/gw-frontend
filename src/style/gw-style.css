@@ -95,3 +95,77 @@
 .noPadding {
 	padding:0;
 }
+
+
+
+
+
+
+
+#animation-frame svg{
+  width:100%;
+  height:100%;
+  padding:0%;
+  animation-name: selectorOpen;
+  animation-duration: 0.4s;
+  stroke-width: 3px;
+}
+.animation-frame-open .animated-child{
+  width:100%;
+  height:100%;
+  padding:0%;
+  animation-name: selectorOpen;
+  animation-duration: 0.4s;
+}
+.animation-frame-close .animated-child{
+  animation-name: selectorClose;
+  animation-duration: 0.4s;
+  width:1%;
+  height:1%;
+  padding:50%;
+}
+
+
+
+@keyframes selectorOpen {
+  0% {
+	 display: block;
+    padding-top:48%;
+    padding-left:48%;
+    height:4%;
+    width: 4%;
+  }
+  66% {
+    padding-top:48%;
+    padding-left:0%;
+    height:4%;
+    width:100%;
+  }
+  100% {
+    padding-top:0%;
+    width:100%;
+    height:100%;
+  }
+}
+
+@keyframes selectorClose {
+  0% {
+    padding-top:0%;
+    padding-left:0%;
+    width:100%;
+    height:100%;
+  }
+  33% {
+    padding-top:48%;
+    padding-left:0%;
+    height:4%;
+    width:100%;
+  }
+  100% {
+    padding-top:48%;
+    padding-left:48%;
+    height:4%;
+    width: 4%;
+	 display: none;
+  }
+}

@@ -80,7 +80,7 @@ class ModelPlanet {
 
       this.distance = Math.floor((Math.random() * 8) + 2); //distance from the star
       this.size = Math.random() + 1; //size of the sprite
-      this.spin = Math.random() * 2 / 10; //speed of rotation of the sprite
+      this.spin = (Math.random()*2-1) * 2 / 10; //speed of rotation of the sprite
       this.currentBattle = new ModelBattle()
    }
 }
