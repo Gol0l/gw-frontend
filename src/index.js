@@ -12,9 +12,17 @@ var model = new Model(2000, 2000)
 
 model.addSystem("star1", "idstar1", 350, 300);
 model.addSystem("star2", "idstar2", 550, 350);
-
+model.addSystem("star3", "idstar3", 480, 300);
+model.addSystem("star4", "idstar4", 200, 130);
 model.systemsList[0].neighbours.push("idstar2");
+model.systemsList[0].neighbours.push("idstar3");
+model.systemsList[0].neighbours.push("idstar4");
 model.systemsList[1].neighbours.push("idstar1");
+model.systemsList[2].neighbours.push("idstar1");
+model.systemsList[2].addPlanet("planet1", "idplanet7", "cybran", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
+model.systemsList[3].neighbours.push("idstar1");
+model.systemsList[3].addPlanet("planet1", "idplanet8", "aeon", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
+
 
 model.systemsList[0].addPlanet("planet1", "idplanet1", "cybran", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
 model.systemsList[0].addPlanet("planet2", "idplanet2", "aeon", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');

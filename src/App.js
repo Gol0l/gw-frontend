@@ -93,7 +93,7 @@ class App extends Component {
                                     noDisplay: this.buttonNoDisplay}
 
       var buttonFunction = buttonTypeToFunction[buttonType]
-      console.log("now", buttonType, buttonFunction)
+
 
       var interfaceElements = (doDisplay) ? [  <MapPreview inp = {new InpMapPreview({  mapName: planetInfo.mapInfo.mapName,
                                                                                        mapSize: planetInfo.mapInfo.mapSize,
@@ -119,6 +119,7 @@ class App extends Component {
                                                       simSettings: this.state.simSettings,
                                                       systemsList: this.state.systemsList,
                                                       selectedPlanet: this.state.selection.planetName,
+                                                      playerFaction: this.state.playerInfo.faction,
                                                       funcPlanetOnClick: this.planetOnClick
                                                    })} />
 
@@ -219,7 +220,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
          buttonType = "error";
          break;
    }
-   console.log("buttonType", buttonType)
+
    return buttonType
 }
 

@@ -15,6 +15,7 @@ import {MapTile} from './MapTile.js';
 import {InpMapTile} from '../inpclasses/InpMapTile.js';
 
 import {MapLine} from './MapLine.js';
+import {svgStyle} from './MapLine.js';
 import {InpMapLine} from '../inpclasses/InpMapLine.js';
 
 import {getVoronoi} from '../voronoi/getVoronoi.js';
@@ -54,7 +55,7 @@ class GalaxyMap extends React.Component {
          for (var j = 0; j < systemsList[i].neighbours.length; j++) {
             var neighbourIndex = systemIndexFromName(systemsList, systemsList[i].neighbours[j])
             var line = [[systemsList[i].left, systemsList[i].top], [systemsList[neighbourIndex].left, systemsList[neighbourIndex].top]]
-            lines.push(line)
+            lines.push({line: line, origin: systemsList[i].name})
          }
       }
       return lines
@@ -83,9 +84,6 @@ class GalaxyMap extends React.Component {
                i++
                newScale = (mapScale + newScale) / 2;
             }
-
-
-
 
       //setting zoom to zoom in on the mouse cursor by moving the DragBox according to the cursor position and mapWidth/Height increase
 
@@ -127,10 +125,13 @@ class GalaxyMap extends React.Component {
       const mapWidth = this.props.inp.mapWidth;
       const mapHeight = this.props.inp.mapHeight;
       const frameDim = this.props.inp.frameDim;
+      const playerFaction = this.props.inp.playerFaction;
 
       var displayList = [];
       var positionList = [];
-      var tileColorList = []
+      var tileColorList = [];
+      var gateList = [];
+      var playerGateList = [];
       for (var i = 0; i < systemsList.length; i++) {
          displayList.push(<SolarSystem inp = {new InpSolarSystem({
                                                 name: systemsList[i].name,
@@ -151,7 +152,15 @@ class GalaxyMap extends React.Component {
 
 
          var factionInfluence = getFactionInfluence(systemsList[i].planetList)
+         if (factionInfluence.influence == 1) {
+            gateList.push(systemsList[i].name);
+            if (factionInfluence.faction == playerFaction) {
+               playerGateList.push(systemsList[i].name);
+            }
+         }
+
          tileColorList.push(getTileColor(factionInfluence))
+
 
       }
 
@@ -163,18 +172,24 @@ class GalaxyMap extends React.Component {
       for (var i = 0; i < polygonList.length; i++) {
          tileList.push(<MapTile key = {i} inp = {new InpMapTile({points: polygonList[i], color: tileColorList[i]})} />)
       }
+
+      console.log("gatelist", gateList, "playerGateList", playerGateList)
       for (var i = 0; i < lineList.length; i++) {
-         systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i]})} />)
+         if (playerGateList.includes(lineList[i].origin)) {
+            console.log("ownedline from", lineList[i].origin)
+            systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "owned", identifier: i})} />)
+         }
+         else if (gateList.includes(lineList[i].origin)) {
+            console.log("activeline from", lineList[i].origin)
+            systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "active", identifier: i})} />)
+         }
+         else {
+            console.log("inactiveline from", lineList[i].origin)
+            systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "inactive", identifier: i})} />)
+
+         }
       }
 
-      var lineGradient = <linearGradient id="fadeLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                           <stop offset="0%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
-                           <stop offset="5%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
-                           <stop offset="33%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0.7"}} />
-                           <stop offset="66%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0.7"}} />
-                           <stop offset="95%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
-                           <stop offset="100%" style={{stopColor:"rgb(200,200,200)", stopOpacity:"0"}} />
-                        </linearGradient>
 
 
       return(
@@ -190,9 +205,7 @@ class GalaxyMap extends React.Component {
                                                 content:
                                                    <div>
                                                       <svg style = {{position: "absolute", width: mapWidth * mapScale, height: mapHeight * mapScale}}>
-                                                         <defs>
-                                                            {lineGradient}
-                                                         </defs>
+                                                         {svgStyle}
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>
@@ -236,9 +249,9 @@ function prepareSystemLines(systemLines, mapScale) {
    var newLines = [];
    for (var i = 0; i < systemLines.length; i++) {
       var line = [];
-      line.push([systemLines[i][0][0] * mapScale, systemLines[i][0][1] * mapScale])
-      line.push([systemLines[i][1][0] * mapScale, systemLines[i][1][1] * mapScale])
-      newLines.push(line)
+      line.push([systemLines[i].line[0][0] * mapScale, systemLines[i].line[0][1] * mapScale])
+      line.push([systemLines[i].line[1][0] * mapScale, systemLines[i].line[1][1] * mapScale])
+      newLines.push({line: line, origin: systemLines[i].origin})
    }
    return newLines
 }
@@ -281,7 +294,7 @@ function getFactionInfluence(planetList) {
    }
 
    var tempMax = Math.max(...factionInfluence)
-   if (factionInfluence.reduce((pv, cv) => pv += ((cv == tempMax) ? 1 : 0), 0) == 1) {
+   if (factionInfluence.reduce((pv, cv) => pv += ((cv == tempMax) ? 1 : 0), 0) == 1) { //if maximum is unique
 
       var influence = tempMax / factionInfluence.reduce((pv, cv) => pv + cv, 0);
 

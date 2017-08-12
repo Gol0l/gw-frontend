@@ -7,7 +7,10 @@ class InpMapLine extends InputForm {
       super(inputObject);
 
       this.template = {
-         points: "array"
+
+         points: "array",
+         type: "string",
+         identifier: "number"
 
       };
 

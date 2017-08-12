@@ -8,6 +8,18 @@ function getVoronoi (sites, bbox) {
 
    var polygonList = new Array(result.cells.length)
 
+   var indexConvert = []
+   for (var i = 0; i < result.cells.length; i++) {
+      for (var j = 0; j < sites.length; j++) {
+         if (sites[j].x == result.cells[i].site.x && sites[j].y == result.cells[i].site.y) {
+            indexConvert.push(j)
+         }
+      }
+
+   }
+
+
+
    for (var i = 0; i < result.cells.length; i++)
       {
          var newPolygon = new Array()
@@ -20,7 +32,7 @@ function getVoronoi (sites, bbox) {
             newPolygon.push(newVertex)
          }
 
-         polygonList[i] = newPolygon
+         polygonList[indexConvert[i]] = newPolygon
       }
 
 

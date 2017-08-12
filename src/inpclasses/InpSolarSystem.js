@@ -17,7 +17,8 @@ class InpSolarSystem extends InputForm {
          planetList: "array",
          centerMass: "object",
          neighbours: "array",
-         selectedPlanet: "string"
+         selectedPlanet: "string",
+         funcPlanetOnClick: "function"
 
       };
 

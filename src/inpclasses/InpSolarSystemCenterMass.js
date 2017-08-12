@@ -7,8 +7,10 @@ class InpSolarSystemCenterMass extends InputForm {
       super(inputObject);
 
       this.template = {
+
          radius: "number",
          color: "string",
+         coronaColor: "string",
          brightness: "number"
 
       };
