@@ -22,7 +22,7 @@ class InputForm {
       }
 
       var correct = true;
-      if (Object.keys(template).length = Object.keys(types).length) {
+      if (Object.keys(template).length === Object.keys(types).length) {
          for (var key in template) {
             if (template.hasOwnProperty(key) && types.hasOwnProperty(key)) {
                if (template[key] != types[key] && template[key] != "arbitrary") {
