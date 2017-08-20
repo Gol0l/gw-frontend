@@ -79,14 +79,4 @@ function MapLine (props) {
    }
 }
 
-const svgStyle =  <defs>
-                     <linearGradient id="fadeLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                        <stop offset="5%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                        <stop offset="33%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0.7"}} />
-                        <stop offset="66%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0.7"}} />
-                        <stop offset="95%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                        <stop offset="100%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                     </linearGradient>
-                  </defs>
-export {MapLine, svgStyle};
+export {MapLine};

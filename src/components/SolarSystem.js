@@ -151,25 +151,21 @@ class SolarSystem extends React.Component {
 
       return (
          <div id = "container" style = {divStyle}>
-            <div style = {{position: "relative", left: 0,
-                                                 top: 0}}>
 
-               <StatusBar inp = {new InpStatusBar({height: 16,
-                                                      distance: height * 0.6 + 3,
-                                                      contents: statusContent})
-               } />
+            <StatusBar inp = {new InpStatusBar({height: 16,
+                                                distance: height * 0.6 + 3,
+                                                contents: statusContent})
+            } />
 
-               <StatusBar inp = {new InpStatusBar({height: 14,
-                                                      distance: -height * 0.6 - 14,
-                                                      contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
-               } />
-            </div>
+            <StatusBar inp = {new InpStatusBar({height: 14,
+                                                distance: -height * 0.6 - 14,
+                                                contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
+            } />
 
             {(this.state.scaleFactor > 0.01) ? displayList : null}
 
 
-            <div  style = {{position: "absolute",
-                                                transform: "translate(" + leftShift.toString() + "px," + topShift.toString() + "px)"}}
+            <div  style = {{position: "absolute", left: leftShift, top: topShift}}
                   onClick = {this.handleClick}
                   ref = {(node) => this.centerMassNode = node}>
                <CenterMass inp = {new InpCenterMass({ width: width, height: height,

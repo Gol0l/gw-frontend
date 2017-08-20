@@ -15,7 +15,6 @@ import {MapTile} from './MapTile.js';
 import {InpMapTile} from '../inpclasses/InpMapTile.js';
 
 import {MapLine} from './MapLine.js';
-import {svgStyle} from './MapLine.js';
 import {InpMapLine} from '../inpclasses/InpMapLine.js';
 
 import {getVoronoi} from '../voronoi/getVoronoi.js';
@@ -205,7 +204,6 @@ class GalaxyMap extends React.Component {
                                                 content:
                                                    <div>
                                                       <svg style = {{position: "absolute", width: mapWidth * mapScale, height: mapHeight * mapScale}}>
-                                                         {svgStyle}
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>
