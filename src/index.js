@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import {Model} from './ModelClasses/Model.js';
+import {Model} from './modelclasses/Model.js';
 
 
 var mapWidth = 2000;
@@ -14,6 +14,9 @@ model.addSystem("star1", "idstar1", 350, 300);
 model.addSystem("star2", "idstar2", 550, 350);
 model.addSystem("star3", "idstar3", 480, 300);
 model.addSystem("star4", "idstar4", 200, 130);
+for (var i = 0; i < 300; i++) {
+   model.addSystem("genstar" + i.toString(), "idgenstar" + i.toString(), (i * 5) % 100, i*5);
+}
 model.systemsList[0].neighbours.push("idstar2");
 model.systemsList[0].neighbours.push("idstar3");
 model.systemsList[0].neighbours.push("idstar4");

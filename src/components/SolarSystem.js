@@ -84,7 +84,8 @@ class SolarSystem extends React.Component {
       const baseStarSize = this.props.inp.simSettings.baseStarSize;
       const scale = this.props.inp.simSettings.scale
       const centerMass = this.props.inp.centerMass;
-      const divStyle = {position: "absolute", top: top, left: left};
+      //const divStyle = {position: "absolute", top: top, left: left};
+      const divStyle = {position: "absolute", transform: "translate(" + left.toString() + "px," + top.toString() + "px)"};
       const settings = {gravPar: this.props.inp.gravPar,
                         displayScale: scale * this.state.scaleFactor,
                         fps: this.props.inp.simSettings.fps,
@@ -167,8 +168,8 @@ class SolarSystem extends React.Component {
             {(this.state.scaleFactor > 0.01) ? displayList : null}
 
 
-            <div  style = {{position: "absolute",  left: leftShift,
-                                                   top: topShift}}
+            <div  style = {{position: "absolute",
+                                                transform: "translate(" + leftShift.toString() + "px," + topShift.toString() + "px)"}}
                   onClick = {this.handleClick}
                   ref = {(node) => this.centerMassNode = node}>
                <CenterMass inp = {new InpCenterMass({ width: width, height: height,

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 function MapLine (props) {
 
-   console.log("type", props.inp.type)
+
    var number = props.inp.identifier;
    if (props.inp.type == "inactive") {
       return(  <svg>
@@ -30,7 +30,7 @@ function MapLine (props) {
    }
 
    if (props.inp.type == "active") {
-      console.log("activvvee")
+
       return(  <svg>
                   <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {props.inp.points[0][0]}
                                                                   y1 = {props.inp.points[0][1]}
