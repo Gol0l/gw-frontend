@@ -26,6 +26,7 @@ var network = new (function() {
             var data = JSON.parse(event.data);
             var handler = ws_handlers[data.action];
             if (handler) {
+
                 handler(data.data);
             } else {
                 console.log("No handler registered for this message: " + data.action);
@@ -34,14 +35,33 @@ var network = new (function() {
         };
     };
 
+    private_.n = 0
+
     this.getPlanets = function(successCallback, failCallback) {
         var planet_url = "http://" + private_.domain + "/data/planet";
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(response) {
             if (this.readyState == 4 && this.status == 200) {
-               var json = JSON.parse(xhttp.responseText);
-               successCallback(json.data);
+               private_.planets = JSON.parse(xhttp.responseText);
+               if (++private_.n == 2)
+                 successCallback(private_.solarSystems, private_.planets)
+            }
+        };
+        xhttp.open("GET", planet_url);
+        xhttp.send();
+    };
+
+    this.getSolarSystems = function(successCallback, failCallback) {
+        this.getPlanets(successCallback, failCallback)
+        var planet_url = "http://" + private_.domain + "/data/solarSystem";
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(response) {
+            if (this.readyState == 4 && this.status == 200) {
+               private_.solarSystems = JSON.parse(xhttp.responseText);
+               if (++private_.n == 2)
+                 successCallback(private_.solarSystems.data, private_.planets.data)
             } else if (this.readyState == 4) {
               failCallback();
             }
@@ -51,22 +71,25 @@ var network = new (function() {
     };
 })();
 
-function newInit(planets) {
+function newInit(solarSystems, planets) {
+  console.log("Solar Systems:")
+  console.log(solarSystems)
+  console.log("Planets:")
   console.log(planets)
+  var solarSystemIndexes = {}
 
-  var solarSystems = {}
+  for (var i = 0; i < solarSystems.length; i++) {
+    var solarSystem = solarSystems[i]
+    solarSystemIndexes[solarSystem.id] = i;
+    model.addSystem(solarSystem.attributes.name, solarSystem.id, solarSystem.attributes.x * 20, solarSystem.attributes.y * 20)
+  }
 
   for (var i = 0; i < planets.length; i++) {
     var planet = planets[i]
-    if (solarSystems[planet.relationships.solarSystem.data.id] === undefined) {
-      var index = model.systemsList.length
-        solarSystems[planet.relationships.solarSystem.data.id] = index;
-      model.addSystem("star" + index, planet.relationships.solarSystem.data.id, (100 + 713 * index + 124 * index * index) % 400, (100 + 513 * index + 284 * index * index) % 400);
-    }
-    var system = model.systemsList[solarSystems[planet.relationships.solarSystem.data.id]]
+    var systemId = solarSystemIndexes[planet.relationships.solarSystem.data.id]
+    var system = model.systemsList[systemId]
     var attr = planet.attributes
-    console.log(attr)
-    system.addPlanet("planet" + (i + 1), planet.id, attr.currentOwner, {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png')
+    system.addPlanet("planet" + (i + 1), planet.id, "aeon", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png')
   }
   ReactDOM.render(<App model = {model}/>, document.getElementById('root'));
 }
@@ -121,8 +144,7 @@ function oldInit() {
 
 network.setDomain("localhost:8080");
 // Fallbacks to default model if it can't reach the backend.
-network.getPlanets(newInit, oldInit)
-
+network.getSolarSystems(newInit, oldInit)
 
 
 
