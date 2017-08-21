@@ -9,8 +9,6 @@ class InpDragBox extends InputForm {
       this.template = {
          left: "arbitrary",
          top: "arbitrary",
-         width: "arbitrary",
-         height: "arbitrary",
          minLeft: "arbitrary",
          minTop: "arbitrary",
          maxLeft: "arbitrary",

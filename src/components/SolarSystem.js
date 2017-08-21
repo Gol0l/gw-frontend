@@ -84,7 +84,8 @@ class SolarSystem extends React.Component {
       const baseStarSize = this.props.inp.simSettings.baseStarSize;
       const scale = this.props.inp.simSettings.scale
       const centerMass = this.props.inp.centerMass;
-      const divStyle = {position: "absolute", top: top, left: left};
+      //const divStyle = {position: "absolute", top: top, left: left};
+      const divStyle = {position: "absolute", transform: "translate(" + left.toString() + "px," + top.toString() + "px)"};
       const settings = {gravPar: this.props.inp.gravPar,
                         displayScale: scale * this.state.scaleFactor,
                         fps: this.props.inp.simSettings.fps,
@@ -150,25 +151,21 @@ class SolarSystem extends React.Component {
 
       return (
          <div id = "container" style = {divStyle}>
-            <div style = {{position: "relative", left: 0,
-                                                 top: 0}}>
 
-               <StatusBar inp = {new InpStatusBar({height: 16,
-                                                      distance: height * 0.6 + 3,
-                                                      contents: statusContent})
-               } />
+            <StatusBar inp = {new InpStatusBar({height: 16,
+                                                distance: height * 0.6 + 3,
+                                                contents: statusContent})
+            } />
 
-               <StatusBar inp = {new InpStatusBar({height: 14,
-                                                      distance: -height * 0.6 - 14,
-                                                      contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
-               } />
-            </div>
+            <StatusBar inp = {new InpStatusBar({height: 14,
+                                                distance: -height * 0.6 - 14,
+                                                contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
+            } />
 
             {(this.state.scaleFactor > 0.01) ? displayList : null}
 
 
-            <div  style = {{position: "absolute",  left: leftShift,
-                                                   top: topShift}}
+            <div  style = {{position: "absolute", left: leftShift, top: topShift}}
                   onClick = {this.handleClick}
                   ref = {(node) => this.centerMassNode = node}>
                <CenterMass inp = {new InpCenterMass({ width: width, height: height,

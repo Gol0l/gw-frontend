@@ -2,23 +2,12 @@ import React, { Component } from 'react';
 
 class DragBox extends React.Component {
 
-   /*props: left
-            top
-            content
-            width
-            heeight
-            minLeft
-            minTop
-            maxLeft
-            maxTop
-   */
+
    constructor(props) {
 
       super(props);
       this.state = {
-         dynamicStyle: {width: (isNaN(this.props.inp.width)) ? "auto" : this.props.inp.width,
-                        height: (isNaN(this.props.inp.height)) ? "auto" : this.props.inp.height,
-                        top: (isNaN(this.props.inp.top)) ? 0 : this.props.inp.top,
+         dynamicStyle: {top: (isNaN(this.props.inp.top)) ? 0 : this.props.inp.top,
                         left: (isNaN(this.props.inp.left)) ? 0 : this.props.inp.left},
          mouseSelect: false,
          mouseGrabPosX: null,
@@ -35,8 +24,6 @@ class DragBox extends React.Component {
    }
    componentDidMount() {
       var tempDynamicStyle = this.state.dynamicStyle;
-      tempDynamicStyle.width = this.node.offsetWidth;
-      tempDynamicStyle.height = this.node.offsetHeight;
       this.setState({dynamicStyle: tempDynamicStyle,
                      lastOffsetTop: this.node.offsetTop,
                      lastOffsetLeft: this.node.offsetLeft});
@@ -84,12 +71,14 @@ class DragBox extends React.Component {
 
    render() {
       const content = this.props.inp.content;
-      const divStyle = Object.assign(this.state.dynamicStyle, {position: "absolute"});
-
+      const divStyle = this.state.dynamicStyle;
+      
       return (
-         <div style = {divStyle} ref = {node => this.node = node} onMouseDown = {this.handleMouseDown}
-                                                                  onMouseUp = {this.handleMouseUp}
-                                                                  onMouseMove = {this.handleMouseMove}>
+         <div  style = {{  position: "absolute",
+                           left: divStyle.left, top: divStyle.top}}
+               ref = {node => this.node = node} onMouseDown = {this.handleMouseDown}
+                                                onMouseUp = {this.handleMouseUp}
+                                                onMouseMove = {this.handleMouseMove}>
             {content}
          </div>
       );

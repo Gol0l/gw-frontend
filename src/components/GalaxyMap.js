@@ -15,7 +15,6 @@ import {MapTile} from './MapTile.js';
 import {InpMapTile} from '../inpclasses/InpMapTile.js';
 
 import {MapLine} from './MapLine.js';
-import {svgStyle} from './MapLine.js';
 import {InpMapLine} from '../inpclasses/InpMapLine.js';
 
 import {getVoronoi} from '../voronoi/getVoronoi.js';
@@ -173,18 +172,18 @@ class GalaxyMap extends React.Component {
          tileList.push(<MapTile key = {i} inp = {new InpMapTile({points: polygonList[i], color: tileColorList[i]})} />)
       }
 
-      console.log("gatelist", gateList, "playerGateList", playerGateList)
+
       for (var i = 0; i < lineList.length; i++) {
          if (playerGateList.includes(lineList[i].origin)) {
-            console.log("ownedline from", lineList[i].origin)
+
             systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "owned", identifier: i})} />)
          }
          else if (gateList.includes(lineList[i].origin)) {
-            console.log("activeline from", lineList[i].origin)
+
             systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "active", identifier: i})} />)
          }
          else {
-            console.log("inactiveline from", lineList[i].origin)
+
             systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "inactive", identifier: i})} />)
 
          }
@@ -197,7 +196,7 @@ class GalaxyMap extends React.Component {
 
             <div style = {{position: "relative", left: frameDim.leftSize, top: frameDim.topSize}}>
                <img src={require('../img/background2.jpg')} width = {width - (frameDim.rightSize + frameDim.leftSize)} height = {height - (frameDim.bottomSize + frameDim.topSize)}/>
-               <DragBox inp = {new InpDragBox({ left: "auto", top: "auto", width: "auto", height: "auto",
+               <DragBox inp = {new InpDragBox({ left: "auto", top: "auto",
                                                 minLeft: -(mapWidth * mapScale - (width - frameDim.leftSize - frameDim.rightSize)),
                                                 minTop: -(mapHeight * mapScale - (height - frameDim.topSize - frameDim.bottomSize)),
                                                 maxLeft: 0,
@@ -205,7 +204,6 @@ class GalaxyMap extends React.Component {
                                                 content:
                                                    <div>
                                                       <svg style = {{position: "absolute", width: mapWidth * mapScale, height: mapHeight * mapScale}}>
-                                                         {svgStyle}
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>

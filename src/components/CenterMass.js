@@ -41,7 +41,8 @@ class CenterMass extends React.Component {
             <div style = {{position: "relative",
                            width: width,
                            height: height,
-                           borderRadius: "50%", background: color,
+                           background: color,
+                           borderRadius: "50%",
                            boxShadow: "0px 0px " + (brightness * 4).toString()+"px " + (brightness).toString() + "px " + coronaColor.toString()
                         }}
                   onMouseEnter = {this.handleMouseEnter}

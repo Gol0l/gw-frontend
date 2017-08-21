@@ -1,7 +1,7 @@
 import {Voronoi} from './Voronoi.js'
 
 
-
+console.log("executing voronoi algforithm")
 function getVoronoi (sites, bbox) {
    var voronoi = new Voronoi();
    var result = voronoi.compute(sites, bbox)
