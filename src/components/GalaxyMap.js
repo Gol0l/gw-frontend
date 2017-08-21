@@ -290,7 +290,6 @@ function getFactionInfluence(planetList) {
             break;
       }
    }
-
    var tempMax = Math.max(...factionInfluence)
    if (factionInfluence.reduce((pv, cv) => pv += ((cv == tempMax) ? 1 : 0), 0) == 1) { //if maximum is unique
 
@@ -315,21 +314,21 @@ function getTileColor(factionInfluence) {
    var tileColor;
    switch (factionInfluence.faction) {
       case ("aeon"):
-         tileColor = "rgba(0, " + (255 * factionInfluence.influence).toString() + ", 0, 0.25)"
+         tileColor = "rgba(0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0.25)"
          break;
       case ("cybran"):
-         tileColor = "rgba(" + (255 * factionInfluence.influence).toString() + ", 0, 0, 0.25)"
+         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0, 0.25)"
          break;
       case ("uef"):
-         tileColor = "rgba(0, 0, " + (255 * factionInfluence.influence).toString() + ", 0.25)"
+         tileColor = "rgba(0, 0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0.25)"
          break;
       case ("seraphim"):
-         tileColor = "rgba(" + (255 * factionInfluence.influence).toString() + ", " + (255 * factionInfluence.influence).toString() + ", 0, 0.25)"
+         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", " + (255 * factionInfluence.influence).toString() + ", 0, 0.25)"
          break;
       case ("none"):
-         tileColor = "rgba(0, 0, 0, 0)"
+         tileColor = "rgba(0, 0, 0, 0.25)"
       default:
-         tileColor = "rgba(0, 0, 0, 0)"
+         tileColor = "rgba(0, 0, 0, 0.25)"
 
    }
 

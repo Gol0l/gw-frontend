@@ -80,8 +80,8 @@ class Satellite extends React.Component {
 
       var displayShadow =  <div  style = {{  position: "absolute",
                                              transform: "translate("
-                                             + (- 2/2).toString() + "px,"
-                                             + (- 2/2).toString() + "px)"
+                                             + (- 1/2).toString() + "px,"
+                                             + (- 1/2).toString() + "px)"
                                              + " "
                                              + "rotate(" + (180*this.state.angle/Math.PI).toString() + "deg)",
                                              width: Math.round((objectSize) * displayScale) + 2,
@@ -151,7 +151,7 @@ class Satellite extends React.Component {
 
 
       return (
-         <div>
+         <div style = {{position: "absolute"}}>
 
 
             <div style = {{position: "absolute",

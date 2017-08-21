@@ -100,6 +100,8 @@ function oldInit() {
   model.addSystem("star4", "idstar4", 200, 130);
   for (var i = 0; i < 300; i++) {
    model.addSystem("genstar" + i.toString(), "idgenstar" + i.toString(), (i * 5) % 100, i*5);
+   model.systemsList[0].addPlanet("planet1", "idgenplanet" + i.toString(), "cybran", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
+
   }
   model.systemsList[0].neighbours.push("idstar2");
   model.systemsList[0].neighbours.push("idstar3");
@@ -130,6 +132,7 @@ function oldInit() {
   model.systemsList[1].planetList[0].currentBattle.status = "battle";
   model.systemsList[1].planetList[0].currentBattle.battleParticipants = [{factionName: "aeon", players: ["playerA", "playerB", "playerC"]}, {factionName: "uef", players: ["playerD", "playerE"]}];
   model.systemsList[1].planetList[0].currentBattle.timeToBattle = 0;
+  model.systemsList[1].planetList[0].distance = 1;
 
   model.systemsList[1].planetList[2].currentBattle.status = "lobby";
   model.systemsList[1].planetList[2].currentBattle.battleParticipants = [{factionName: "aeon", players: ["playerA", "playerB", "playerC"]}, {factionName: "seraphim", players: ["playerD", "playerE"]}];

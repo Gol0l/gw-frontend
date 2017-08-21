@@ -78,7 +78,7 @@ class ModelPlanet {
       this.mapInfo = mapInfo; //form: {mapImg: mapname.pmg, mapName: mapname, mapSize: 20, maxPlayers: 8}
       this.sprite = sprite; //form: planetspritename.png
 
-      this.distance = Math.floor((Math.random() * 8) + 2); //distance from the star
+      this.distance = (Math.random() * 8) + 2; //distance from the star
       this.size = Math.random() + 1; //size of the sprite
       this.spin = (Math.random()*2-1) * 2 / 10; //speed of rotation of the sprite
       this.currentBattle = new ModelBattle()

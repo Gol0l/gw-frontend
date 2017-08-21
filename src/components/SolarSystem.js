@@ -84,7 +84,7 @@ class SolarSystem extends React.Component {
       const baseStarSize = this.props.inp.simSettings.baseStarSize;
       const scale = this.props.inp.simSettings.scale
       const centerMass = this.props.inp.centerMass;
-      //const divStyle = {position: "absolute", top: top, left: left};
+
       const divStyle = {position: "absolute", transform: "translate(" + left.toString() + "px," + top.toString() + "px)"};
       const settings = {gravPar: this.props.inp.gravPar,
                         displayScale: scale * this.state.scaleFactor,
