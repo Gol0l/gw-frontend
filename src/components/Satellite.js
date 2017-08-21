@@ -50,8 +50,6 @@ class Satellite extends React.Component {
       this.setState({angle: newAngle,
                      rotation: newRotation});
 
-
-      (this.props.inp.isSelected) ? this.props.inp.funcPlanetOnClick(this.props.inp.systemName, this.props.inp.name, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect()) : {}
    }
 
    handleOnClick() {
@@ -148,7 +146,7 @@ class Satellite extends React.Component {
                            } />]
 
 
-      var displaySelector = <Selector inp = {new InpSelector({ width: objectSize * displayScale * 2.4, height: objectSize * displayScale * 2.4,
+      var displaySelector = <Selector inp = {new InpSelector({ width: Math.round(objectSize * displayScale * 2.4), height: Math.round(objectSize * displayScale * 2.4),
                                                                isOpened: this.props.inp.isSelected})} />
 
 
