@@ -7,7 +7,7 @@ class InpMapTile extends InputForm {
       super(inputObject);
 
       this.template = {
-         points: "string",
+         points: "array",
          color: "string"
 
       };

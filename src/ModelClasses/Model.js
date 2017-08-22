@@ -32,7 +32,7 @@ class ModelPlayerInfo {
 class ModelSimSettings {
    constructor() {
 
-      this.mapScale = 3; //relevant for zoom beheaviour
+      this.mapScale = 1; //relevant for zoom beheaviour
       this.systemScale = 7; //the scale of the systems
       this.baseStarSize = 1.6; //factor to scale all star radii
       this.basePlanetSize = 0.35; //factor to scale all sprite radii

@@ -99,8 +99,13 @@ function oldInit() {
   model.addSystem("star3", "idstar3", 480, 300);
   model.addSystem("star4", "idstar4", 200, 130);
   for (var i = 0; i < 300; i++) {
+   console.log("thisisthedifferentbuild")
    model.addSystem("genstar" + i.toString(), "idgenstar" + i.toString(), (i * 5) % 100, i*5);
-   model.systemsList[0].addPlanet("planet1", "idgenplanet" + i.toString(), "cybran", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
+   model.systemsList[i].neighbours.push("idgenstar2");
+   model.systemsList[i].neighbours.push("idgenstar9");
+   model.systemsList[i].neighbours.push("idgenstar15");
+   model.systemsList[i].addPlanet("planet1", "idplanet7", "seraphim", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
+
 
   }
   model.systemsList[0].neighbours.push("idstar2");

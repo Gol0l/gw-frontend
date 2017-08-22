@@ -163,8 +163,8 @@ class GalaxyMap extends React.Component {
 
       }
 
-      var polygonList = prepareVoronoiResult(this.voronoiResult, mapScale)
-      var lineList = prepareSystemLines(this.systemLines, mapScale)
+      var polygonList = this.voronoiResult;
+      var lineList = this.systemLines;
 
       var tileList = [];
       var systemConnections = []
@@ -202,8 +202,9 @@ class GalaxyMap extends React.Component {
                                                 maxLeft: 0,
                                                 maxTop: 0,
                                                 content:
-                                                   <div>
-                                                      <svg style = {{position: "absolute", width: mapWidth * mapScale, height: mapHeight * mapScale}}>
+                                                   <div style = {{position: "absolute"}}>
+                                                      <svg style = {{position: "absolute", width: mapWidth, height: mapHeight,
+                                                                     transform: "scale(" + mapScale.toString() + "," + mapScale.toString() + ")", transformOrigin: "top left"}}>
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>
@@ -241,34 +242,6 @@ function systemIndexFromName(systemsList, systemName) {
 
    return sIndex
 }
-
-function prepareSystemLines(systemLines, mapScale) {
-
-   var newLines = [];
-   for (var i = 0; i < systemLines.length; i++) {
-      var line = [];
-      line.push([systemLines[i].line[0][0] * mapScale, systemLines[i].line[0][1] * mapScale])
-      line.push([systemLines[i].line[1][0] * mapScale, systemLines[i].line[1][1] * mapScale])
-      newLines.push({line: line, origin: systemLines[i].origin})
-   }
-   return newLines
-}
-
-function prepareVoronoiResult(voronoiResult, mapScale) {
-   var polygonList = []
-   for (var i = 0; i < voronoiResult.length; i++) {
-
-      var stringPolygon = ""
-      for (var j = 0; j < voronoiResult[i].length; j++) {
-
-         stringPolygon += (voronoiResult[i][j][0] * mapScale).toString() + "," + (voronoiResult[i][j][1] * mapScale).toString() + " "
-      }
-      polygonList.push(stringPolygon)
-   }
-   return polygonList
-}
-
-
 
 
 function getFactionInfluence(planetList) {
@@ -323,7 +296,7 @@ function getTileColor(factionInfluence) {
          tileColor = "rgba(0, 0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0.25)"
          break;
       case ("seraphim"):
-         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", " + (255 * factionInfluence.influence).toString() + ", 0, 0.25)"
+         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", " + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0.25)"
          break;
       case ("none"):
          tileColor = "rgba(0, 0, 0, 0.25)"

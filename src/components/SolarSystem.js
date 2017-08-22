@@ -152,15 +152,19 @@ class SolarSystem extends React.Component {
       return (
          <div id = "container" style = {divStyle}>
 
-            <StatusBar inp = {new InpStatusBar({height: 16,
-                                                distance: height * 0.6 + 3,
-                                                contents: statusContent})
-            } />
+            {(scale < 8) ? <div></div> :
+               <StatusBar inp = {new InpStatusBar({height: 16,
+                                                   distance: height * 0.6 + 3,
+                                                   contents: statusContent})
+               } />
+            }
 
-            <StatusBar inp = {new InpStatusBar({height: 14,
-                                                distance: -height * 0.6 - 14,
-                                                contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
-            } />
+            {(scale < 8) ? <div></div> :
+               <StatusBar inp = {new InpStatusBar({height: 14,
+                                                   distance: -height * 0.6 - 14,
+                                                   contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
+               } />
+            }
 
             {(this.state.scaleFactor > 0.01) ? displayList : null}
 
