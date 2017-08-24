@@ -7,8 +7,6 @@ class DragBox extends React.Component {
 
       super(props);
       this.state = {
-         dynamicStyle: {top: (isNaN(this.props.inp.top)) ? 0 : this.props.inp.top,
-                        left: (isNaN(this.props.inp.left)) ? 0 : this.props.inp.left},
          mouseSelect: false,
          mouseGrabPosX: null,
          mouseGrabPosY: null,
@@ -23,9 +21,8 @@ class DragBox extends React.Component {
 
    }
    componentDidMount() {
-      var tempDynamicStyle = this.state.dynamicStyle;
-      this.setState({dynamicStyle: tempDynamicStyle,
-                     lastOffsetTop: this.node.offsetTop,
+
+      this.setState({lastOffsetTop: this.node.offsetTop,
                      lastOffsetLeft: this.node.offsetLeft});
    }
 
@@ -48,31 +45,31 @@ class DragBox extends React.Component {
    handleMouseMove(e) {
 
       if (this.state.mouseSelect) {
-         var tempDynamicStyle = this.state.dynamicStyle;
-
-         tempDynamicStyle.top = e.pageY - this.state.mouseGrabPosY + this.state.lastOffsetTop;
-         tempDynamicStyle.left = e.pageX - this.state.mouseGrabPosX + this.state.lastOffsetLeft;
+         var newLeft = this.props.inp.left;
+         var newTop = this.props.inp.top;
+         newTop = e.pageY - this.state.mouseGrabPosY + this.state.lastOffsetTop;
+         newLeft = e.pageX - this.state.mouseGrabPosX + this.state.lastOffsetLeft;
 
          const minLeft = (isNaN(this.props.inp.minLeft)) ? -10000 : this.props.inp.minLeft;
          const minTop = (isNaN(this.props.inp.minTop)) ? -10000 : this.props.inp.minTop;
          const maxLeft = (isNaN(this.props.inp.maxLeft)) ? 10000 : this.props.inp.maxLeft;
          const maxTop = (isNaN(this.props.inp.maxTop)) ? 10000 : this.props.inp.maxTop;
 
-         tempDynamicStyle.top = (tempDynamicStyle.top > maxTop) ? maxTop : tempDynamicStyle.top;
-         tempDynamicStyle.top = (tempDynamicStyle.top < minTop) ? minTop : tempDynamicStyle.top;
-         tempDynamicStyle.left = (tempDynamicStyle.left > maxLeft) ? maxLeft : tempDynamicStyle.left;
-         tempDynamicStyle.left = (tempDynamicStyle.left < minLeft) ? minLeft : tempDynamicStyle.left;
+         newTop = (newTop > maxTop) ? maxTop : newTop;
+         newTop = (newTop < minTop) ? minTop : newTop;
+         newLeft = (newLeft > maxLeft) ? maxLeft : newLeft;
+         newLeft = (newLeft < minLeft) ? minLeft : newLeft;
 
-
-         this.setState({dynamicStyle: tempDynamicStyle});
+      this.props.inp.returnShiftedPosition(newLeft, newTop)
       }
    }
 
 
    render() {
       const content = this.props.inp.content;
-      const divStyle = this.state.dynamicStyle;
-      
+      const divStyle = {top: this.props.inp.top,
+                        left: this.props.inp.left};
+
       return (
          <div  style = {{  position: "absolute",
                            left: divStyle.left, top: divStyle.top}}

@@ -30,13 +30,16 @@ class GalaxyMap extends React.Component {
       super(props);
 
 
-      this.state = { simSettings: this.props.inp.simSettings};
+      this.state = { simSettings: this.props.inp.simSettings,
+                     leftShift: 0,
+                     topShift: 0};
 
 
       this.initialVoronoi  = this.initialVoronoi.bind(this);
       this.initialSystemLines = this.initialSystemLines.bind(this);
       this.handleWheel = this.handleWheel.bind(this);
-
+      this.handleDrag = this.handleDrag.bind(this);
+      this.getViewport = this.getViewport.bind(this);
       this.voronoiResult = this.initialVoronoi();
       this.systemLines = this.initialSystemLines();
 
@@ -70,6 +73,16 @@ class GalaxyMap extends React.Component {
       return getVoronoi(positionList, bbox)
 
    }
+
+   getViewport() {
+      var viewport = {height: 0, width: 0, top: 0, left: 0}
+      viewport.height = this.props.inp.height - this.props.inp.frameDim.topSize - this.props.inp.frameDim.bottomSize;
+      viewport.width = this.props.inp.width - this.props.inp.frameDim.leftSize - this.props.inp.frameDim.rightSize;
+      viewport.top = -this.state.topShift;
+      viewport.left = -this.state.leftShift;
+      return viewport
+   }
+
    handleWheel(e) {
       const mapScale = this.state.simSettings.mapScale;
       var newScale = mapScale * (1.0 + (e.deltaY / -850));
@@ -97,23 +110,30 @@ class GalaxyMap extends React.Component {
       const moveTop = verCursorPosRatio * heightDiff;
 
 
-      var tempNodeDynamicStyle = this.dragBoxNode.state.dynamicStyle;
-      tempNodeDynamicStyle.left = this.dragBoxNode.state.dynamicStyle.left - moveLeft;
-      tempNodeDynamicStyle.top = this.dragBoxNode.state.dynamicStyle.top - moveTop;
 
-      const minTop = -(this.props.inp.mapHeight * mapScale - (this.props.inp.height - this.props.inp.frameDim.topSize - this.props.inp.frameDim.bottomSize));
-      const minLeft = -(this.props.inp.mapWidth * mapScale - (this.props.inp.width - this.props.inp.frameDim.leftSize - this.props.inp.frameDim.rightSize));
-      tempNodeDynamicStyle.top = (tempNodeDynamicStyle.top > 0) ? 0 : tempNodeDynamicStyle.top;
-      tempNodeDynamicStyle.top = (tempNodeDynamicStyle.top < minTop) ? minTop : tempNodeDynamicStyle.top;
-      tempNodeDynamicStyle.left = (tempNodeDynamicStyle.left > 0) ? 0 : tempNodeDynamicStyle.left;
-      tempNodeDynamicStyle.left = (tempNodeDynamicStyle.left < minLeft) ? minLeft : tempNodeDynamicStyle.left;
+      var newLeftShift = this.state.leftShift - moveLeft;
+      var newTopShift = this.state.topShift - moveTop;
+      const viewport = this.getViewport()
+      const minTop = -(this.props.inp.mapHeight * mapScale - viewport.height);
+      const minLeft = -(this.props.inp.mapWidth * mapScale - viewport.width);
+      newTopShift = (newTopShift > 0) ? 0 : newTopShift;
+      newTopShift = (newTopShift < minTop) ? minTop : newTopShift;
+      newLeftShift = (newLeftShift > 0) ? 0 : newLeftShift;
+      newLeftShift = (newLeftShift < minLeft) ? minLeft : newLeftShift;
 
-      this.dragBoxNode.setState({dynamicStyle: tempNodeDynamicStyle});
 
       var tempSimSettings = this.state.simSettings;
       tempSimSettings.mapScale = newScale;
-      this.setState({simSettings: tempSimSettings});
+
+      this.setState({simSettings: tempSimSettings, leftShift: newLeftShift, topShift: newTopShift});
+
    }
+
+   handleDrag(left, top) {
+      this.setState({leftShift: left, topShift: top})
+   }
+
+
 
    render() {
       const systemsList = this.props.inp.systemsList;
@@ -131,8 +151,18 @@ class GalaxyMap extends React.Component {
       var tileColorList = [];
       var gateList = [];
       var playerGateList = [];
+      const viewport = this.getViewport()
+
       for (var i = 0; i < systemsList.length; i++) {
-         displayList.push(<SolarSystem inp = {new InpSolarSystem({
+         var isVisible = false;
+         var widthPadding = 0.02 * viewport.width;
+         var heightPadding = 0.02 * viewport.width;
+         if (systemsList[i].left * mapScale > viewport.left - widthPadding && systemsList[i].left * mapScale < viewport.left + viewport.width + widthPadding
+            && systemsList[i].top * mapScale > viewport.top - heightPadding && systemsList[i].top * mapScale < viewport.top + viewport.height + heightPadding) {
+               isVisible = true;
+            }
+
+         displayList.push((isVisible) ? <SolarSystem inp = {new InpSolarSystem({
                                                 name: systemsList[i].name,
                                                 displayName: systemsList[i].displayName,
                                                 top: Math.floor(systemsList[i].top * mapScale),
@@ -144,10 +174,10 @@ class GalaxyMap extends React.Component {
                                                 simSettings: { scale: simSettings.systemScale * mapScale, fps: simSettings.fps, simSpeed: simSettings.simSpeed,
                                                                basePlanetSize: simSettings.basePlanetSize, baseStarSize: simSettings.baseStarSize},
                                                 selectedPlanet: this.props.inp.selectedPlanet,
-                                                funcPlanetOnClick: this.props.inp.funcPlanetOnClick
-
+                                                funcPlanetOnClick: this.props.inp.funcPlanetOnClick,
+                                                isVisible: isVisible
                                                 })}
-                                       key = {i}/>)
+                                       key = {i}/> : <div key = {i}></div>)
 
 
          var factionInfluence = getFactionInfluence(systemsList[i].planetList)
@@ -196,11 +226,12 @@ class GalaxyMap extends React.Component {
 
             <div style = {{position: "relative", left: frameDim.leftSize, top: frameDim.topSize}}>
                <img src={require('../img/background2.jpg')} width = {width - (frameDim.rightSize + frameDim.leftSize)} height = {height - (frameDim.bottomSize + frameDim.topSize)}/>
-               <DragBox inp = {new InpDragBox({ left: "auto", top: "auto",
+               <DragBox inp = {new InpDragBox({ left: this.state.leftShift, top: this.state.topShift,
                                                 minLeft: -(mapWidth * mapScale - (width - frameDim.leftSize - frameDim.rightSize)),
                                                 minTop: -(mapHeight * mapScale - (height - frameDim.topSize - frameDim.bottomSize)),
                                                 maxLeft: 0,
                                                 maxTop: 0,
+                                                returnShiftedPosition: this.handleDrag,
                                                 content:
                                                    <div style = {{position: "absolute"}}>
                                                       <svg style = {{position: "absolute", width: mapWidth, height: mapHeight,

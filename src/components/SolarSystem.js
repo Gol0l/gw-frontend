@@ -71,10 +71,14 @@ class SolarSystem extends React.Component {
                      animProgress: newAnimProgress});
    }
 
+   shouldComponentUpdate(nextProps, nextState) {
+      var deepEqual = require('deep-equal');
+      return (!deepEqual(nextProps.inp, this.props.inp) || !deepEqual(nextState, this.state))
+   }
 
-
-
-
+   componentWillUnmount() {
+      
+   }
 
    render() {
 
@@ -175,8 +179,6 @@ class SolarSystem extends React.Component {
                <CenterMass inp = {new InpCenterMass({ width: width, height: height,
                                                       brightness: centerMass.brightness, color: centerMass.color, coronaColor: centerMass.coronaColor})} />
             </div>
-
-
 
          </div>
       )

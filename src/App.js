@@ -18,7 +18,7 @@ class App extends Component {
       this.state = {
          width: window.innerWidth, height: window.innerHeight,
          mapWidth: this.props.model.mapWidth, mapHeight: this.props.model.mapHeight,
-         frameDim: {leftSize: 0, topSize: 0, rightSize: 0, bottomSize: 0},
+         frameDim: {leftSize: 100, topSize: 100, rightSize: 100, bottomSize: 100},
          simSettings: this.props.model.simSettings,
          systemsList: this.props.model.systemsList,
          playerInfo: this.props.model.playerInfo,
@@ -46,8 +46,15 @@ class App extends Component {
       this.setState({width: newWidth, height: newHeight});
    }
 
-   planetOnClick(systemName, name, rect) {
-      this.setState({selection: {systemName: systemName, planetName: name, planetRect: rect}});
+   planetOnClick(systemName, name, rect, selecting) {
+      if (selecting == true) {
+         this.setState({selection: {systemName: systemName, planetName: name, planetRect: rect}});
+      }
+      else if (selecting == false && this.state.selection.planetName == name) {
+         this.setState({selection: {systemName: "none", planetName: "none", planetRect: "none"}});
+      }
+
+
    }
 
    buttonAttack() {

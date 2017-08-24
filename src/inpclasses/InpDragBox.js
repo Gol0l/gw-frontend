@@ -7,12 +7,13 @@ class InpDragBox extends InputForm {
       super(inputObject);
 
       this.template = {
-         left: "arbitrary",
-         top: "arbitrary",
+         left: "number",
+         top: "number",
          minLeft: "arbitrary",
          minTop: "arbitrary",
          maxLeft: "arbitrary",
          maxTop: "arbitrary",
+         returnShiftedPosition: "function",
          content: "object"
 
       };
