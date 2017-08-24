@@ -3,9 +3,7 @@ import "../style/gw-style.css"
 
 
 class Selector extends React.Component {
-   /*props: an object of the class InpSelector
-   */
-
+   
    render() {
       const width = this.props.inp.width;
       const height = this.props.inp.height;

@@ -13,10 +13,10 @@ class BattleLobby extends React.Component {
       var teams = [];
       const battleParticipants = this.props.inp.battleParticipants;
       for (var i = 0; i < battleParticipants.length; i++) {
-         teams.push(	<span style={{fontWeight: "bold"}} key = {i}>{battleParticipants[i].factionName}</span>)
+         teams.push(	<span style={{fontWeight: "bold"}} key = {"lobbySpan" + i.toString()}>{battleParticipants[i].factionName}</span>)
 
          for (var j = 0; j < this.props.inp.maxPlayers/2; j++) {
-            teams.push(  <div className="themeBorderDefault playerSlot" key = {j}>
+            teams.push(  <div className="themeBorderDefault playerSlot" key = {"lobbyDiv" + i.toString() + j.toString()}>
                            {(battleParticipants[i].players[j]) ? battleParticipants[i].players[j] : "empty"}
                         </div>);
          }

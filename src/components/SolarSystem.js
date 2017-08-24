@@ -38,6 +38,8 @@ class SolarSystem extends React.Component {
          this.setState({isExpanded: true,
                         animProgress: 0,
                         intervalID: intervalID});
+
+         this.props.inp.funcSystemSelect(this.props.inp.name, true)
       }
       else {
          const animSteps = Math.round(this.state.animDuration * fps);
@@ -61,7 +63,9 @@ class SolarSystem extends React.Component {
          clearInterval(this.state.intervalID);
          this.setState({scaleFactor: goal,
                         animProgress: 0});
-
+         if (!this.state.isExpanded) {
+            this.props.inp.funcSystemSelect(this.props.inp.name, false)
+         }
       }
 
       var increment = (goal - current) / animSteps;
@@ -77,7 +81,7 @@ class SolarSystem extends React.Component {
    }
 
    componentWillUnmount() {
-      
+
    }
 
    render() {

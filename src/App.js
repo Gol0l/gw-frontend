@@ -18,7 +18,7 @@ class App extends Component {
       this.state = {
          width: window.innerWidth, height: window.innerHeight,
          mapWidth: this.props.model.mapWidth, mapHeight: this.props.model.mapHeight,
-         frameDim: {leftSize: 100, topSize: 100, rightSize: 100, bottomSize: 100},
+         frameDim: {leftSize: 0, topSize: 0, rightSize: 0, bottomSize: 0},
          simSettings: this.props.model.simSettings,
          systemsList: this.props.model.systemsList,
          playerInfo: this.props.model.playerInfo,

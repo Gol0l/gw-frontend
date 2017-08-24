@@ -40,12 +40,12 @@ class GalaxyMap extends React.Component {
       this.handleWheel = this.handleWheel.bind(this);
       this.handleDrag = this.handleDrag.bind(this);
       this.getViewport = this.getViewport.bind(this);
+      this.handleSystemSelect = this.handleSystemSelect.bind(this);
+
+      this.selectedSystems = [];
+
       this.voronoiResult = this.initialVoronoi();
       this.systemLines = this.initialSystemLines();
-
-
-
-
 
 
    }
@@ -133,6 +133,18 @@ class GalaxyMap extends React.Component {
       this.setState({leftShift: left, topShift: top})
    }
 
+   handleSystemSelect(name, currentlySelecting) {
+      if (currentlySelecting) {
+         this.selectedSystems.push(name)
+      }
+      else {
+         var index = this.selectedSystems.indexOf(name);
+         if (index > -1) {
+             this.selectedSystems.splice(index, 1);
+         }
+      }
+   }
+
 
 
    render() {
@@ -152,7 +164,6 @@ class GalaxyMap extends React.Component {
       var gateList = [];
       var playerGateList = [];
       const viewport = this.getViewport()
-
       for (var i = 0; i < systemsList.length; i++) {
          var isVisible = false;
          var widthPadding = 0.02 * viewport.width;
@@ -161,8 +172,8 @@ class GalaxyMap extends React.Component {
             && systemsList[i].top * mapScale > viewport.top - heightPadding && systemsList[i].top * mapScale < viewport.top + viewport.height + heightPadding) {
                isVisible = true;
             }
-
-         displayList.push((isVisible) ? <SolarSystem inp = {new InpSolarSystem({
+         var isSelected = (this.selectedSystems.indexOf(systemsList[i].name) != -1) ? true : false;
+         displayList.push((isVisible || isSelected) ? <SolarSystem inp = {new InpSolarSystem({
                                                 name: systemsList[i].name,
                                                 displayName: systemsList[i].displayName,
                                                 top: Math.floor(systemsList[i].top * mapScale),
@@ -175,9 +186,9 @@ class GalaxyMap extends React.Component {
                                                                basePlanetSize: simSettings.basePlanetSize, baseStarSize: simSettings.baseStarSize},
                                                 selectedPlanet: this.props.inp.selectedPlanet,
                                                 funcPlanetOnClick: this.props.inp.funcPlanetOnClick,
-                                                isVisible: isVisible
+                                                funcSystemSelect: this.handleSystemSelect
                                                 })}
-                                       key = {i}/> : <div key = {i}></div>)
+                                       key = {i} /> : <div key = {i}></div>)
 
 
          var factionInfluence = getFactionInfluence(systemsList[i].planetList)
@@ -218,7 +229,6 @@ class GalaxyMap extends React.Component {
 
          }
       }
-
 
 
       return(
