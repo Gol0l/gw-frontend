@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../style/gw-style.css';
+
 
 class MapPreview extends React.Component {
    /*props: an object of the class InpSelector

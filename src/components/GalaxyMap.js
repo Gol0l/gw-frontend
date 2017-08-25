@@ -8,9 +8,6 @@ import {InpSolarSystem} from '../inpclasses/InpSolarSystem.js';
 import {DragBox} from './DragBox.js';
 import {InpDragBox} from '../inpclasses/InpDragBox.js'
 
-import {WindowFrame} from './WindowFrame.js';
-import {InpWindowFrame} from '../inpclasses/InpWindowFrame.js'
-
 import {MapTile} from './MapTile.js';
 import {InpMapTile} from '../inpclasses/InpMapTile.js';
 
@@ -249,7 +246,7 @@ class GalaxyMap extends React.Component {
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>
-                                                      <div id="background" style = {{position: "absolute", backgroundColor: "rgba(0, 0, 40, 0.3)", width: mapWidth * mapScale, height: mapHeight * mapScale}} onWheel = {this.handleWheel}>
+                                                      <div id="background" style = {{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.2)", width: mapWidth * mapScale, height: mapHeight * mapScale}} onWheel = {this.handleWheel}>
                                                          {displayList}
                                                       </div>
                                                    </div>})

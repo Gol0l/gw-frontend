@@ -30,7 +30,7 @@
 
 .themeBackgroundDefault {
 	padding:5px;
-	background-color:rgba(180,180,255,0.1);
+	background-color:rgba(180,255,180,0.2);
 	opacity:0.8;
 	transition:opacity 0.1s ease-out;
 }
@@ -41,7 +41,7 @@
 
 .themeBackgroundGrey {
 	padding:5px;
-	background-color:rgba(160,160,160,0.1);
+	background-color:rgba(160,160,160,0.2);
 	opacity:0.8;
 	transition:opacity 0.1s ease-out;
 }
@@ -52,7 +52,7 @@
 
 .themeBackgroundNoHover {
 	padding:5px;
-	background-color:rgba(180,180,255,0.1);
+	background-color:rgba(180,255,180,0.2);
 	opacity:0.8;
 	transition:opacity 0.1s ease-out;
 }
@@ -60,7 +60,7 @@
 .themeBorderDefault {
 	border-style:solid;
 	border-width:1px;
-	border-color:rgba(190, 190, 255, 0.5);
+	border-color:rgba(190, 255, 190, 0.5);
 	border-radius:2px;
 }
 
@@ -81,7 +81,7 @@
 }
 
 .themeShadowDefault {
-	box-shadow:0px 0px 10px 1px rgba(150, 150, 255, 0.8);
+	box-shadow:0px 0px 10px 1px rgba(150, 255, 150, 0.8);
 }
 
 .themeShadowGrey {
@@ -92,7 +92,7 @@
 	cursor: default;
 	color:rgba(240,255,255,1);
 	font-family:Arial;
-	text-shadow:0px 0px 10px rgba(180,190,255,1);
+	text-shadow:0px 0px 10px rgba(190,255,190,1);
 }
 
 .themeButton {
@@ -124,6 +124,7 @@
   stroke-width: 3px;
 }
 .animation-frame-open .animated-child{
+  stroke:rgba(160, 255, 160, 1);
   width:100%;
   height:100%;
   padding:0%;
@@ -131,6 +132,7 @@
   animation-duration: 0.4s;
 }
 .animation-frame-close .animated-child{
+  stroke:rgba(160, 255, 160, 1);
   animation-name: selectorClose;
   animation-duration: 0.4s;
   width:1%;

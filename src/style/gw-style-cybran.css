@@ -1,0 +1,185 @@
+#mapbox {
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	display:block;
+	width:25vh;
+}
+
+#map {
+	width:99%;
+}
+
+#lobbybox {
+	position:absolute;
+	width:25vh;
+	left:0px;
+	top:0vh;
+}
+#audiobox {
+	position:absolute;
+	width:10vw;
+	left:89vw;
+	top:0vh;
+}
+
+#actionButton {
+	position:absolute;
+	bottom:1vh;
+}
+
+.themeBackgroundDefault {
+	padding:5px;
+	background-color:rgba(150,0,0,0.2);
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
+}
+
+.themeBackgroundDefault:hover {
+	opacity:1;
+}
+
+.themeBackgroundGrey {
+	padding:5px;
+	background-color:rgba(160,160,160,0.2);
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
+}
+
+.themeBackgroundGrey:hover {
+	opacity:0.6;
+}
+
+.themeBackgroundNoHover {
+	padding:5px;
+	background-color:rgba(150,0,0,0.2);
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
+}
+
+.themeBorderDefault {
+	border-style:solid;
+	border-width:1px;
+	border-color:rgba(150, 10, 10, 0.5);
+	border-radius:2px;
+}
+
+.themeBorderGrey {
+	border-style:solid;
+	border-width:1px;
+	border-color:rgba(170, 170, 170, 0.5);
+	border-radius:2px;
+}
+
+.playerSlot {
+	margin-top:2px;
+	margin-bottom:2px;
+	border-radius:5px;
+	font-weight:bold;
+	padding-left:5px;
+	padding-right:5px;
+}
+
+.themeShadowDefault {
+	box-shadow:0px 0px 10px 1px rgba(150, 10, 10, 0.8);
+}
+
+.themeShadowGrey {
+	box-shadow:0px 0px 10px 1px rgba(150, 150, 150, 0.8);
+}
+
+.themeTextDefault {
+	cursor: default;
+	color:rgba(240,255,255,1);
+	font-family:Arial;
+	text-shadow:0px 0px 10px rgba(150, 10, 10,1);
+}
+
+.themeButton {
+	font-size:4vh;
+	padding-left:2vw;
+	padding-right:2vw;
+}
+
+.themeButton:hover {
+	color:white;
+}
+
+.noPadding {
+	padding:0;
+}
+
+
+
+
+
+
+
+#animation-frame svg{
+  width:100%;
+  height:100%;
+  padding:0%;
+  animation-name: selectorOpen;
+  animation-duration: 0.4s;
+  stroke-width: 3px;
+}
+.animation-frame-open .animated-child{
+  stroke:rgba(150, 0, 0, 1);
+  width:100%;
+  height:100%;
+  padding:0%;
+  animation-name: selectorOpen;
+  animation-duration: 0.4s;
+}
+.animation-frame-close .animated-child{
+  stroke:rgba(150, 0, 0, 1);
+  animation-name: selectorClose;
+  animation-duration: 0.4s;
+  width:1%;
+  height:1%;
+  padding:50%;
+}
+
+
+
+@keyframes selectorOpen {
+  0% {
+	 display: block;
+    padding-top:48%;
+    padding-left:48%;
+    height:4%;
+    width: 4%;
+  }
+  66% {
+    padding-top:48%;
+    padding-left:0%;
+    height:4%;
+    width:100%;
+  }
+  100% {
+    padding-top:0%;
+    width:100%;
+    height:100%;
+  }
+}
+
+@keyframes selectorClose {
+  0% {
+    padding-top:0%;
+    padding-left:0%;
+    width:100%;
+    height:100%;
+  }
+  33% {
+    padding-top:48%;
+    padding-left:0%;
+    height:4%;
+    width:100%;
+  }
+  100% {
+    padding-top:48%;
+    padding-left:48%;
+    height:4%;
+    width: 4%;
+  }
+}

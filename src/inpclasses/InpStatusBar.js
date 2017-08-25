@@ -1,4 +1,3 @@
-
 import {InputForm} from './InputForm.js'
 
 class InpStatusBar extends InputForm {

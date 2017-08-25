@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import '../style/gw-style.css';
+
+
+
 
 
 class BattleLobby extends React.Component {

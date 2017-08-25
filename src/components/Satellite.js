@@ -35,7 +35,6 @@ class Satellite extends React.Component {
    componentWillUnmount() {
       clearInterval(this.state.intervalID);
       this.props.inp.funcPlanetOnClick(this.props.inp.systemName, this.props.inp.name, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
-      console.log("killing")
 
    }
 

@@ -10,6 +10,7 @@ import {InpActionButton} from './inpclasses/InpActionButton.js';
 import {AudioController} from './components/AudioController.js';
 
 
+
 class App extends Component {
    constructor(props) {
 
@@ -26,6 +27,24 @@ class App extends Component {
          selection: {systemName: "none", planetName: "none", planetRect: "none"}
 
       };
+      switch (this.props.model.playerInfo.faction) {
+         case "aeon":
+            require("./style/gw-style-aeon.css")
+            break;
+         case "uef":
+            require("./style/gw-style-uef.css")
+            break;
+         case "cybran":
+            require("./style/gw-style-cybran.css")
+            break;
+         case "seraphim":
+            console.log("seraphim?")
+            require("./style/gw-style-seraphim.css")
+            break;
+         default:
+            require("./style/gw-style-uef.css")
+            break;
+      }
 
       this.planetOnClick = this.planetOnClick.bind(this);
       this.resizeWindow = this.resizeWindow.bind(this);
@@ -54,7 +73,7 @@ class App extends Component {
       if (selecting == true) {
          this.setState({selection: {systemName: systemName, planetName: name, planetRect: rect}});
          var selectSFX = new Audio(require('./sounds/select1.ogg'));
-         selectSFX.volume = 0.2;
+         selectSFX.volume = 0.5;
          selectSFX.play();
          //select2SFX.play();
       }

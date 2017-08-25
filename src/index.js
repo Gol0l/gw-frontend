@@ -145,7 +145,7 @@ function oldInit() {
 
 
   model.playerInfo.name = "user";
-  model.playerInfo.faction = "aeon";
+  model.playerInfo.faction = "cybran";
   model.playerInfo.isLoggedIn = true;
   model.playerInfo.readyForBattle = true;
   ReactDOM.render(<App model = {model}/>, document.getElementById('root'));

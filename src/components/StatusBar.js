@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-/*props: an object of the class InpStatusBar
-*/
+
 class StatusBar extends React.Component {
 
    render() {
