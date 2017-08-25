@@ -6,7 +6,8 @@ import {InpMapPreview} from './inpclasses/InpMapPreview.js'
 import {BattleLobby} from './components/BattleLobby.js';
 import {InpBattleLobby} from './inpclasses/InpBattleLobby.js'
 import {ActionButton} from './components/ActionButton.js';
-import {InpActionButton} from './inpclasses/InpActionButton.js'
+import {InpActionButton} from './inpclasses/InpActionButton.js';
+import {AudioController} from './components/AudioController.js';
 
 
 class App extends Component {
@@ -34,7 +35,10 @@ class App extends Component {
       this.buttonNoDisplay = this.buttonNoDisplay.bind(this);
       this.buttonLeaveLobby = this.buttonLeaveLobby.bind(this);
 
-   }
+
+
+      }
+
 
    componentDidMount() {
       window.addEventListener('resize', this.resizeWindow);
@@ -49,6 +53,10 @@ class App extends Component {
    planetOnClick(systemName, name, rect, selecting) {
       if (selecting == true) {
          this.setState({selection: {systemName: systemName, planetName: name, planetRect: rect}});
+         var selectSFX = new Audio(require('./sounds/select1.ogg'));
+         selectSFX.volume = 0.2;
+         selectSFX.play();
+         //select2SFX.play();
       }
       else if (selecting == false && this.state.selection.planetName == name) {
          this.setState({selection: {systemName: "none", planetName: "none", planetRect: "none"}});
@@ -132,6 +140,7 @@ class App extends Component {
 
 
                {interfaceElements}
+               <AudioController/>
 
          </div>
 

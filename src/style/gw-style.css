@@ -16,6 +16,12 @@
 	left:0px;
 	top:0vh;
 }
+#audiobox {
+	position:absolute;
+	width:10vw;
+	left:89vw;
+	top:0vh;
+}
 
 #actionButton {
 	position:absolute;
@@ -42,6 +48,13 @@
 
 .themeBackgroundGrey:hover {
 	opacity:0.6;
+}
+
+.themeBackgroundNoHover {
+	padding:5px;
+	background-color:rgba(180,180,255,0.1);
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
 }
 
 .themeBorderDefault {
