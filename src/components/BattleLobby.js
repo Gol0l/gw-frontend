@@ -8,7 +8,7 @@ class BattleLobby extends React.Component {
 
    constructor(props) {
       super(props);
-
+      console.log(props.inp);
    }
 
    render() {
@@ -27,7 +27,7 @@ class BattleLobby extends React.Component {
       return (
 
    		<div id='lobbybox' className="themeBackgroundDefault themeBorderDefault themeTextDefault themeShadowDefault">
-            LOBBY <span style = {{float: "right"}}>{this.props.inp.timeToBattle}</span> <br/>
+            LOBBY <span style = {{float: "right"}}>{this.props.inp.waitingProgress}</span> <br/>
    			{teams}
 
    		</div>

@@ -18,7 +18,6 @@ class InpSatellite extends InputForm {
          spin: "number",
          faction: "string",
          status: "string",
-         timeToBattle: "number",
          isSelected: "boolean",
          funcPlanetOnClick: "function"
 

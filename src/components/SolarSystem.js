@@ -122,7 +122,6 @@ class SolarSystem extends React.Component {
                                                                         name: planetList[i].name,
                                                                         displayName: planetList[i].displayName,
                                                                         status: planetList[i].currentBattle.status,
-                                                                        timeToBattle: planetList[i].currentBattle.timeToBattle,
                                                                         faction: planetList[i].faction,
                                                                         isSelected: (this.props.inp.selectedPlanet == planetList[i].name) ? true : false,
                                                                         funcPlanetOnClick: this.props.inp.funcPlanetOnClick

@@ -11,10 +11,26 @@ class Model {
       this.playerInfo = new ModelPlayerInfo();
       this.simSettings = new ModelSimSettings();
       this.systemsList = []; //form: an array of ModelSolarSystem objects
+      this.messageHandlers = {}; //an object of handlers for the messages from the backend
+      this.characters = [] //a local copy of the gw characters
+      this.generateDictionaries()
    }
 
    addSystem(displayName, name, top, left) {
       this.systemsList.push(new ModelSolarSystem(displayName, name, top, left));
+   }
+
+   generateDictionaries() {
+      this.systemDict = {}
+      this.planetDict = {}
+      this.battleDict = {}
+      for (var i = 0; i < this.systemsList.length; i++) {
+         this.systemDict.push({key: this.systemsList[i].name, value: this.systemsList[i]})
+         for (var j = 0; j < this.planetList.length; j++) {
+            this.planetDict.push({key: this.systemsList[i].planetList[j].name, value: this.systemsList[i].planetList[j]})
+            this.battleDict.push({key: this.systemsList[i].planetList[j].currentBattle.name, value: this.systemsList[i].planetList[j].currentBattle})
+         }
+      }
    }
 }
 
@@ -23,9 +39,12 @@ class ModelPlayerInfo {
 
       this.name = ""; //a UNIQUE identifying string
       this.displayName = ""; //name that a user sees
+      this.suggestedDisplayName = "Bernd";
       this.faction = ""; //player faction
       this.readyForBattle = false; //a variable that sums up all player related reasons why he might or might not be able to join a lobby
       this.isLoggedIn = false;
+      this.hasCharacter = false;
+
    }
 }
 
@@ -88,8 +107,10 @@ class ModelPlanet {
 class ModelBattle {
    constructor() {
 
+      this.name = "nobattle"; //a UNIQUE identifying string
       this.status = "idle"; //"idle", "lobby", and "battle" for nothing, an open lobby and a battle currently going on
-      this.timeToBattle = 0; //either the current time to battle that gets updated regularly to be displayed in the lobby or an initial time that the client counts down himself from
+      this.waitingProgress = 0; //either the current time to battle that gets updated regularly to be displayed in the lobby or an initial time that the client counts down himself from
+      this.battleParticipantsUnique = []; //form: [{factionName: string of name, players: array of names}, {factionName: string of name, players: array of names}]
       this.battleParticipants = []; //form: [{factionName: string of name, players: array of names}, {factionName: string of name, players: array of names}]
    }
 }

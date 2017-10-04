@@ -9,7 +9,7 @@ class InpBattleLobby extends InputForm {
       this.template = {
 
          battleParticipants: "array",
-         timeToBattle: "number",
+         waitingProgress: "number",
          status: "string",
          maxPlayers: "number"
 

@@ -10,6 +10,15 @@ var mapWidth = 2000;
 var mapHeight = 2000;
 var model = new Model(2000, 2000)
 
+/*
+var gololInit = function() {
+   var network = new Connector();
+   network.setupSocket(user_token, handlers);
+
+   network.request("gwCharacter", "");
+   network.request("solarSystem", "");
+}
+*/
 var network = new (function() {
 
     var private_ = {};
@@ -94,7 +103,7 @@ function newInit(solarSystems, planets) {
 }
 
 function oldInit() {
-  console.log("thisisthenewbuild")
+  console.log("thisisthenewbuild2")
   model.addSystem("star1", "idstar1", 350, 300);
   model.addSystem("star2", "idstar2", 550, 350);
   model.addSystem("star3", "idstar3", 480, 300);
@@ -124,11 +133,11 @@ function oldInit() {
 
   model.systemsList[0].planetList[0].currentBattle.status = "lobby";
   model.systemsList[0].planetList[0].currentBattle.battleParticipants = [{factionName: "aeon", players: ["user", "playerB", "playerC"]}, {factionName: "cybran", players: ["playerD", "playerE"]}];
-  model.systemsList[0].planetList[0].currentBattle.timeToBattle = 0;
+  model.systemsList[0].planetList[0].currentBattle.waitingProgress = 0;
 
   model.systemsList[0].planetList[2].currentBattle.status = "lobby";
   model.systemsList[0].planetList[2].currentBattle.battleParticipants = [{factionName: "aeon", players: ["playerA", "playerB", "playerC", "playerD"]}, {factionName: "cybran", players: ["playerD", "playerE"]}];
-  model.systemsList[0].planetList[2].currentBattle.timeToBattle = 0;
+  model.systemsList[0].planetList[2].currentBattle.waitingProgress = 0;
 
   model.systemsList[1].addPlanet("planet4", "idplanet4", "aeon", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
   model.systemsList[1].addPlanet("planet5", "idplanet5", "uef", {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8}, 'planetSprites1.png');
@@ -136,17 +145,18 @@ function oldInit() {
 
   model.systemsList[1].planetList[0].currentBattle.status = "battle";
   model.systemsList[1].planetList[0].currentBattle.battleParticipants = [{factionName: "aeon", players: ["playerA", "playerB", "playerC"]}, {factionName: "uef", players: ["playerD", "playerE"]}];
-  model.systemsList[1].planetList[0].currentBattle.timeToBattle = 0;
+  model.systemsList[1].planetList[0].currentBattle.waitingProgress = 0;
   model.systemsList[1].planetList[0].distance = 1;
 
-  model.systemsList[1].planetList[2].currentBattle.status = "lobby";
-  model.systemsList[1].planetList[2].currentBattle.battleParticipants = [{factionName: "aeon", players: ["playerA", "playerB", "playerC"]}, {factionName: "seraphim", players: ["playerD", "playerE"]}];
-  model.systemsList[1].planetList[2].currentBattle.timeToBattle = 0;
+  model.systemsList[1].planetList[1].currentBattle.status = "lobby";
+  model.systemsList[1].planetList[1].currentBattle.battleParticipants = [{factionName: "aeon", players: ["playerA", "playerB", "playerC"]}, {factionName: "seraphim", players: ["playerD", "playerE"]}];
+  model.systemsList[1].planetList[1].currentBattle.waitingProgress = 0;
 
 
   model.playerInfo.name = "user";
-  model.playerInfo.faction = "cybran";
+  model.playerInfo.faction = "uef";
   model.playerInfo.isLoggedIn = true;
+  model.playerInfo.hasCharacter = true;
   model.playerInfo.readyForBattle = true;
   ReactDOM.render(<App model = {model}/>, document.getElementById('root'));
 }
