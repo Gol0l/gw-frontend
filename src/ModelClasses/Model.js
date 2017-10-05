@@ -1,4 +1,6 @@
 
+import {CharacterDictionary} from '../network/CharacterDictionary.js'
+
 //only properties which are necessary to be clear from the beginning are given in the constructor
 //many properties just have defaults
 //properties that arent necessary for the core gameplay and not yet exist in the database like planet size and spin are currently just random
@@ -16,19 +18,25 @@ class Model {
       this.generateDictionaries()
    }
 
-   addSystem(displayName, name, top, left) {
-      this.systemsList.push(new ModelSolarSystem(displayName, name, top, left));
+   addSystem(displayName, id, top, left) {
+      this.systemsList.push(new ModelSolarSystem(displayName, id, top, left));
    }
 
+   generateCharacterDict(dataCharacters, network) {
+      this.characterDict = new CharacterDictionary(network);
+      for (var i = 0; i < dataCharacters.length; i++) {
+         this.characterDict.setChar(dataCharacters[i].id, dataCharacters[i].attributes.name, dataCharacters.attributes.faction);
+      }
+   }
    generateDictionaries() {
       this.systemDict = {}
       this.planetDict = {}
       this.battleDict = {}
       for (var i = 0; i < this.systemsList.length; i++) {
-         this.systemDict.push({key: this.systemsList[i].name, value: this.systemsList[i]})
+         this.systemDict.push({key: this.systemsList[i].id, value: this.systemsList[i]})
          for (var j = 0; j < this.planetList.length; j++) {
-            this.planetDict.push({key: this.systemsList[i].planetList[j].name, value: this.systemsList[i].planetList[j]})
-            this.battleDict.push({key: this.systemsList[i].planetList[j].currentBattle.name, value: this.systemsList[i].planetList[j].currentBattle})
+            this.planetDict.push({key: this.systemsList[i].planetList[j].id, value: this.systemsList[i].planetList[j]})
+            this.battleDict.push({key: this.systemsList[i].planetList[j].currentBattle.id, value: this.systemsList[i].planetList[j].currentBattle})
          }
       }
    }
@@ -37,7 +45,7 @@ class Model {
 class ModelPlayerInfo {
    constructor() {
 
-      this.name = ""; //a UNIQUE identifying string
+      this.id = ""; //a UNIQUE identifying string
       this.displayName = ""; //name that a user sees
       this.suggestedDisplayName = "Bernd";
       this.faction = ""; //player faction
@@ -61,21 +69,21 @@ class ModelSimSettings {
 }
 
 class ModelSolarSystem {
-   constructor(displayName, name, top, left) {
+   constructor(displayName, id, top, left) {
       this.displayName = displayName; //name that the player sees
-      this.name = name; //a UNIQUE identifying string
+      this.id = id; //a UNIQUE identifying string
       this.top = top;
       this.left = left;
 
       this.gravPar = 1; //simply a mix of the gravitational constant and the stars mass in physical terms, increasing it just makes planets rotate faster, not really relevant
       this.centerMass = new ModelCenterMass(); //the component that renders the actual star
-      this.neighbours = []; //from: an array of the stars names
+      this.neighbours = []; //from: an array of the stars ids
       this.planetList = []; //form: an array od ModelPlanet objects
 
    }
 
-   addPlanet(displayName, name, faction, mapInfo, sprite) {
-      this.planetList.push(new ModelPlanet(displayName, name, faction, mapInfo, sprite));
+   addPlanet(displayName, id, faction, mapInfo, mapId, sprite) {
+      this.planetList.push(new ModelPlanet(displayName, id, faction, mapInfo, mapId, sprite));
    }
 }
 
@@ -90,11 +98,12 @@ class ModelCenterMass {
 }
 
 class ModelPlanet {
-   constructor(displayName, name, faction, mapInfo, sprite) {
-      this.displayName = name; //name that the player sees
-      this.name = name; //a UNIQUE identifying string
+   constructor(displayName, id, faction, mapInfo, mapId, sprite) {
+      this.displayName = displayName; //name that the player sees
+      this.id = id; //a UNIQUE identifying string
       this.faction = faction; //the planets current governing faction
       this.mapInfo = mapInfo; //form: {mapImg: mapname.pmg, mapName: mapname, mapSize: 20, maxPlayers: 8}
+      this.mapId = mapId;
       this.sprite = sprite; //form: planetspritename.png
 
       this.distance = (Math.random() * 8) + 2; //distance from the star
@@ -107,10 +116,10 @@ class ModelPlanet {
 class ModelBattle {
    constructor() {
 
-      this.name = "nobattle"; //a UNIQUE identifying string
+      this.id = "nobattle"; //a UNIQUE identifying string
       this.status = "idle"; //"idle", "lobby", and "battle" for nothing, an open lobby and a battle currently going on
       this.waitingProgress = 0; //either the current time to battle that gets updated regularly to be displayed in the lobby or an initial time that the client counts down himself from
-      this.battleParticipantsUnique = []; //form: [{factionName: string of name, players: array of names}, {factionName: string of name, players: array of names}]
+      this.battleParticipantsUnique = []; //form: [{factionName: string of name, players: array of ids}, {factionName: string of name, players: array of ids}]
       this.battleParticipants = []; //form: [{factionName: string of name, players: array of names}, {factionName: string of name, players: array of names}]
    }
 }

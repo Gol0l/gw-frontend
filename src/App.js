@@ -27,7 +27,7 @@ class App extends Component {
          simSettings: this.props.model.simSettings,
          systemsList: this.props.model.systemsList,
          playerInfo: this.props.model.playerInfo,
-         selection: {systemName: "none", planetName: "none", planetRect: "none"}
+         selection: {system_Id: "none", planet_Id: "none", planetRect: "none"}
 
       };
       switch (this.props.model.playerInfo.faction) {
@@ -74,16 +74,16 @@ class App extends Component {
       this.setState({width: newWidth, height: newHeight});
    }
 
-   planetOnClick(systemName, name, rect, selecting) {
+   planetOnClick(system_Id, id, rect, selecting) {
       if (selecting == true) {
-         this.setState({selection: {systemName: systemName, planetName: name, planetRect: rect}});
+         this.setState({selection: {system_Id: system_Id, planet_Id: id, planetRect: rect}});
          var selectSFX = new Audio(require('./sounds/select1.ogg'));
          selectSFX.volume = 0.5;
          selectSFX.play();
          //select2SFX.play();
       }
-      else if (selecting == false && this.state.selection.planetName == name) {
-         this.setState({selection: {systemName: "none", planetName: "none", planetRect: "none"}});
+      else if (selecting == false && this.state.selection.planet_Id == id) {
+         this.setState({selection: {system_Id: "none", planet_Id: "none", planetRect: "none"}});
       }
 
 
@@ -119,8 +119,8 @@ class App extends Component {
 
       var doDisplay = true;
 
-      if (this.state.selection.planetName != "none") {
-         var indices = indicesFromNames(this.state.systemsList, this.state.selection.systemName, this.state.selection.planetName);
+      if (this.state.selection.planet_Id != "none") {
+         var indices = indicesFromIds(this.state.systemsList, this.state.selection.system_Id, this.state.selection.planet_Id);
          var sIndex = indices[0];
          var pIndex = indices[1];
          var buttonType = getButtonType(this.state.systemsList, sIndex, pIndex, this.state.playerInfo)
@@ -160,7 +160,7 @@ class App extends Component {
                                                                                                                                        frameDim: this.state.frameDim,
                                                                                                                                        simSettings: this.state.simSettings,
                                                                                                                                        systemsList: this.state.systemsList,
-                                                                                                                                       selectedPlanet: this.state.selection.planetName,
+                                                                                                                                       selectedPlanet: this.state.selection.planet_Id,
                                                                                                                                        playerFaction: this.state.playerInfo.faction,
                                                                                                                                        funcPlanetOnClick: this.planetOnClick
                                                                                                                                     })} />: <div></div>
@@ -247,7 +247,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
          var playerInLobby = false;
 
          if (teamIndex != -1) {
-            playerInLobby = ((planetInfo.currentBattle.battleParticipantsUnique[teamIndex].players).includes(playerInfo.name)) ? true : false;
+            playerInLobby = ((planetInfo.currentBattle.battleParticipantsUnique[teamIndex].players).includes(playerInfo.id)) ? true : false;
          }
          else {
             playerInLobby = false;
@@ -294,26 +294,26 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
 
 
 
-function indicesFromNames(systemsList, systemName, planetName) {
+function indicesFromIds(systemsList, system_Id, planet_Id) {
    var sIndex = "empty";
    var pIndex = "empty";
 
    for (var i = 0; i < systemsList.length; i++) {
-      if (systemsList[i].name == systemName) {
+      if (systemsList[i].id == system_Id) {
          sIndex = i;
       }
    }
    if (sIndex == "empty") {
-      throw new Error("star with name " + systemName + " not found")
+      throw new Error("star with id " + system_Id + " not found")
    }
 
    for (var i = 0; i < systemsList[sIndex].planetList.length; i++) {
-      if (systemsList[sIndex].planetList[i].name == planetName) {
+      if (systemsList[sIndex].planetList[i].id == planet_Id) {
          pIndex = i;
       }
    }
    if (pIndex == "empty") {
-      throw new Error("planet with name " + planetName + " not found within system " + systemName)
+      throw new Error("planet with id " + planet_Id + " not found within system " + system_Id)
    }
 
    return [sIndex, pIndex]

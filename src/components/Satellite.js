@@ -34,7 +34,7 @@ class Satellite extends React.Component {
 
    componentWillUnmount() {
       clearInterval(this.state.intervalID);
-      this.props.inp.funcPlanetOnClick(this.props.inp.systemName, this.props.inp.name, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
+      this.props.inp.funcPlanetOnClick(this.props.inp.system_Id, this.props.inp.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
 
    }
 
@@ -55,10 +55,10 @@ class Satellite extends React.Component {
    handleOnClick() {
 
       if (this.props.inp.isSelected) {
-         this.props.inp.funcPlanetOnClick(this.props.inp.systemName, this.props.inp.name, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
+         this.props.inp.funcPlanetOnClick(this.props.inp.system_Id, this.props.inp.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
       }
       else {
-         this.props.inp.funcPlanetOnClick(this.props.inp.systemName, this.props.inp.name, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), true)
+         this.props.inp.funcPlanetOnClick(this.props.inp.system_Id, this.props.inp.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), true)
       }
 
 

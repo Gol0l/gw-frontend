@@ -1,27 +1,32 @@
-class characterDictionary {
+class CharacterDictionary {
 
-   constructor(entity, network) {
+   constructor(network) {
       this.network = network;
       this.dict = {};
    }
 
 
-   get(name) {
+   setChar(id, name, faction) {
+      this.dict[id] = {id: id, name: name, faction: faction};
+   }
 
-      if (name in this.dict) {
-         return (this.dict[name]);
+   getChar(id) {
+      if (id in this.dict) {
+         return (this.dict[id]);
       }
       else {
-         add(name);
+         console.log("pulling char" + id);
+         this.pullChar(id);
+         return this.getChar(id);
       }
-
-
    }
 
-   add(name) {
-      gwCharacter = this.network.request(entity, name);
-      this.dict[name] = {  id: gwCharacter.id,
-                           name: gwCharacter.attributes.name,
-                           faction: gwCharacter.attributes.faction};
+   pullChar(id) {
+      var gwCharacter = this.network.dataRequest("gwCharacter/" + id);
+      this.dict[id] = { id: gwCharacter.id,
+                        name: gwCharacter.attributes.name,
+                        faction: gwCharacter.attributes.faction};
    }
 }
+
+export {CharacterDictionary}

@@ -39,7 +39,7 @@ class SolarSystem extends React.Component {
                         animProgress: 0,
                         intervalID: intervalID});
 
-         this.props.inp.funcSystemSelect(this.props.inp.name, true)
+         this.props.inp.funcSystemSelect(this.props.inp.id, true)
       }
       else {
          const animSteps = Math.round(this.state.animDuration * fps);
@@ -64,7 +64,7 @@ class SolarSystem extends React.Component {
          this.setState({scaleFactor: goal,
                         animProgress: 0});
          if (!this.state.isExpanded) {
-            this.props.inp.funcSystemSelect(this.props.inp.name, false)
+            this.props.inp.funcSystemSelect(this.props.inp.id, false)
          }
       }
 
@@ -112,18 +112,18 @@ class SolarSystem extends React.Component {
             lobbyCount += 1;
          }
 
-         displayList.push(<Satellite key = {i} inp = {new InpSatellite({systemName: this.props.inp.name,
+         displayList.push(<Satellite key = {i} inp = {new InpSatellite({system_Id: this.props.inp.id,
                                                                         radius: planetList[i].distance,
                                                                         size: planetList[i].size * basePlanetSize,
                                                                         start: "random",
                                                                         settings: settings,
                                                                         content: planetList[i].sprite,
                                                                         spin: planetList[i].spin,
-                                                                        name: planetList[i].name,
+                                                                        id: planetList[i].id,
                                                                         displayName: planetList[i].displayName,
                                                                         status: planetList[i].currentBattle.status,
                                                                         faction: planetList[i].faction,
-                                                                        isSelected: (this.props.inp.selectedPlanet == planetList[i].name) ? true : false,
+                                                                        isSelected: (this.props.inp.selectedPlanet == planetList[i].id) ? true : false,
                                                                         funcPlanetOnClick: this.props.inp.funcPlanetOnClick
 
                                                                         })

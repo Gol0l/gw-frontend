@@ -8,7 +8,7 @@ class InpSolarSystem extends InputForm {
       super(inputObject);
 
       this.template = {
-         name: "string",
+         id: "string",
          displayName: "string",
          top: "number",
          left: "number",

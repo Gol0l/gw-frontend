@@ -7,9 +7,9 @@ class InpSatellite extends InputForm {
 
       this.template = {
 
-         name: "string",
+         id: "string",
          displayName: "string",
-         systemName: "string",
+         system_Id: "string",
          start: "arbitrary",
          radius: "number",
          size: "number",

@@ -52,9 +52,9 @@ class GalaxyMap extends React.Component {
       var lines = []
       for (var i = 0; i < systemsList.length; i++) {
          for (var j = 0; j < systemsList[i].neighbours.length; j++) {
-            var neighbourIndex = systemIndexFromName(systemsList, systemsList[i].neighbours[j])
+            var neighbourIndex = systemIndexFromId(systemsList, systemsList[i].neighbours[j])
             var line = [[systemsList[i].left, systemsList[i].top], [systemsList[neighbourIndex].left, systemsList[neighbourIndex].top]]
-            lines.push({line: line, origin: systemsList[i].name})
+            lines.push({line: line, origin: systemsList[i].id})
          }
       }
       return lines
@@ -130,12 +130,12 @@ class GalaxyMap extends React.Component {
       this.setState({leftShift: left, topShift: top})
    }
 
-   handleSystemSelect(name, currentlySelecting) {
+   handleSystemSelect(id, currentlySelecting) {
       if (currentlySelecting) {
-         this.selectedSystems.push(name)
+         this.selectedSystems.push(id)
       }
       else {
-         var index = this.selectedSystems.indexOf(name);
+         var index = this.selectedSystems.indexOf(id);
          if (index > -1) {
              this.selectedSystems.splice(index, 1);
          }
@@ -169,9 +169,9 @@ class GalaxyMap extends React.Component {
             && systemsList[i].top * mapScale > viewport.top - heightPadding && systemsList[i].top * mapScale < viewport.top + viewport.height + heightPadding) {
                isVisible = true;
             }
-         var isSelected = (this.selectedSystems.indexOf(systemsList[i].name) != -1) ? true : false;
+         var isSelected = (this.selectedSystems.indexOf(systemsList[i].id) != -1) ? true : false;
          displayList.push((isVisible || isSelected) ? <SolarSystem inp = {new InpSolarSystem({
-                                                name: systemsList[i].name,
+                                                id: systemsList[i].id,
                                                 displayName: systemsList[i].displayName,
                                                 top: Math.floor(systemsList[i].top * mapScale),
                                                 left: Math.floor(systemsList[i].left * mapScale),
@@ -190,9 +190,9 @@ class GalaxyMap extends React.Component {
 
          var factionInfluence = getFactionInfluence(systemsList[i].planetList)
          if (factionInfluence.influence == 1) {
-            gateList.push(systemsList[i].name);
+            gateList.push(systemsList[i].id);
             if (factionInfluence.faction == playerFaction) {
-               playerGateList.push(systemsList[i].name);
+               playerGateList.push(systemsList[i].id);
             }
          }
 
@@ -266,16 +266,16 @@ class GalaxyMap extends React.Component {
    }
 }
 
-function systemIndexFromName(systemsList, systemName) {
+function systemIndexFromId(systemsList, system_Id) {
    var sIndex = "empty";
 
    for (var i = 0; i < systemsList.length; i++) {
-      if (systemsList[i].name == systemName) {
+      if (systemsList[i].id == system_Id) {
          sIndex = i;
       }
    }
    if (sIndex == "empty") {
-      throw new Error("star with name " + systemName + " not found")
+      throw new Error("star with id " + system_Id + " not found")
    }
 
    return sIndex
