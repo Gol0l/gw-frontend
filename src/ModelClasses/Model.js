@@ -25,18 +25,91 @@ class Model {
    generateCharacterDict(dataCharacters, network) {
       this.characterDict = new CharacterDictionary(network);
       for (var i = 0; i < dataCharacters.length; i++) {
-         this.characterDict.setChar(dataCharacters[i].id, dataCharacters[i].attributes.name, dataCharacters.attributes.faction);
+         this.characterDict.addChar(dataCharacters[i].id, dataCharacters[i].attributes.name, dataCharacters[i].attributes.faction);
       }
    }
+
+   incorporateBackendData(dataSystems, dataPlanets, dataBattles) {
+      var dataPlanetsDict = {}
+      for (var i = 0; i < dataPlanets.length; i++) {
+         dataPlanetsDict[dataPlanets[i].id] = dataPlanets[i];
+      }
+      var planetToBattleDict = {};
+      for (var i = 0; i < dataBattles.length; i++) {
+         planetToBattleDict[dataBattles[i].relationships.planet.data.id] = dataBattles[i];
+      }
+
+
+      for (var i = 0; i < dataSystems.length; i++) {
+         var sys = dataSystems[i];
+         this.addSystem(   (sys.attributes.name == null) ? "no name" : sys.attributes.name,
+                           sys.id,
+                           sys.attributes.y * this.simSettings.systemPositionScale,
+                           sys.attributes.x * this.simSettings.systemPositionScale);
+
+         for (var j = 0; j < sys.relationships.connectedSystems.data.length; j++) {
+            this.systemsList[i].neighbours.push(sys.relationships.connectedSystems.data[j].id);
+         }
+
+         for (var j = 0; j < sys.relationships.planets.data.length; j++) {
+
+            var currentPlanetId = sys.relationships.planets.data[j].id;
+            console.log(currentPlanetId)
+            console.log(dataPlanetsDict[currentPlanetId].attributes.name);
+            console.log(this.systemsList[i])
+            this.systemsList[i].addPlanet(   (dataPlanetsDict[currentPlanetId].attributes.name == null) ? "no name" : dataPlanetsDict[currentPlanetId].attributes.name,
+                                             dataPlanetsDict[currentPlanetId].id,
+                                             dataPlanetsDict[currentPlanetId].attributes.currentOwner,
+                                             {mapName: "Seton's Clutch", mapImg: "SetonsClutch.png", mapSize: 20, maxPlayers: 8},
+                                             dataPlanetsDict[currentPlanetId].relationships.map.data.id,
+                                             'planetSprites1.png');
+
+            var currentPlanet = this.systemsList[i].planetList[this.systemsList[i].planetList.length - 1];
+            if (currentPlanetId in planetToBattleDict) {
+
+               currentPlanet.currentBattle.id = planetToBattleDict[currentPlanetId].id;
+               currentPlanet.currentBattle.waitingProgress = planetToBattleDict[currentPlanetId].attributes.waitingProgress;
+
+               if (planetToBattleDict[currentPlanetId].attributes.status == "INITIATED") {
+                  currentPlanet.currentBattle.status = "lobby";
+               }
+               else if (planetToBattleDict[currentPlanetId].attributes.status == "FINISHED") {
+                  console.log("there shouldnt be any finished battes, Ill display battle");
+                  currentPlanet.currentBattle.status = "battle";
+               }
+               currentPlanet.currentBattle.battleParticipants.push({ factionName: planetToBattleDict[currentPlanetId].attributes.defendingFaction,
+                                                                     players: []});
+               currentPlanet.currentBattle.battleParticipants.push({ factionName: planetToBattleDict[currentPlanetId].attributes.attackingFaction,
+                                                                     players: []});
+               currentPlanet.currentBattle.battleParticipantsUnique.push({ factionName: planetToBattleDict[currentPlanetId].attributes.defendingFaction,
+                                                                     players: []});
+               currentPlanet.currentBattle.battleParticipantsUnique.push({ factionName: planetToBattleDict[currentPlanetId].attributes.attackingFaction,
+                                                                     players: []});
+
+               var participantList = planetToBattleDict[currentPlanetId].relationships.participants.data
+               for (var k = 0; k < participantList.length; k++) {
+
+                  for (var l = 0; l < 2; l++) {
+                     if (currentPlanet.currentBattle.battleParticipantsUnique[l].factionName == this.characterDict.getChar(participantList[k].id).faction) {
+                        currentPlanet.currentBattle.battleParticipantsUnique[l].players.push(participantList[k].id)
+                        currentPlanet.currentBattle.battleParticipants[l].players.push(this.characterDict.getChar(participantList[k].id).name)
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+
    generateDictionaries() {
       this.systemDict = {}
       this.planetDict = {}
       this.battleDict = {}
       for (var i = 0; i < this.systemsList.length; i++) {
-         this.systemDict.push({key: this.systemsList[i].id, value: this.systemsList[i]})
-         for (var j = 0; j < this.planetList.length; j++) {
-            this.planetDict.push({key: this.systemsList[i].planetList[j].id, value: this.systemsList[i].planetList[j]})
-            this.battleDict.push({key: this.systemsList[i].planetList[j].currentBattle.id, value: this.systemsList[i].planetList[j].currentBattle})
+         this.systemDict[this.systemsList[i].id] = this.systemsList[i];
+         for (var j = 0; j < this.systemsList[i].planetList.length; j++) {
+            this.planetDict[this.systemsList[i].planetList[j].id] = this.systemsList[i].planetList[j];
+            this.battleDict[this.systemsList[i].planetList[j].currentBattle.id] = this.systemsList[i].planetList[j].currentBattle;
          }
       }
    }
@@ -56,10 +129,19 @@ class ModelPlayerInfo {
    }
 }
 
+class ModelCharacter {
+   constructor(id, displayName, faction) {
+      this.id = id;
+      this.displayName = displayName;
+      this.faction = faction;
+   }
+}
+
 class ModelSimSettings {
    constructor() {
 
       this.mapScale = 1; //relevant for zoom beheaviour
+      this.systemPositionScale = 10; //the scale of the systems coordinate system
       this.systemScale = 7; //the scale of the systems
       this.baseStarSize = 1.6; //factor to scale all star radii
       this.basePlanetSize = 0.35; //factor to scale all sprite radii
@@ -125,3 +207,4 @@ class ModelBattle {
 }
 
 export {Model};
+export {ModelCharacter};

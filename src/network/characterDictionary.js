@@ -1,3 +1,6 @@
+import {ModelCharacter} from '../modelclasses/Model.js';
+
+
 class CharacterDictionary {
 
    constructor(network) {
@@ -6,26 +9,27 @@ class CharacterDictionary {
    }
 
 
-   setChar(id, name, faction) {
-      this.dict[id] = {id: id, name: name, faction: faction};
+   addChar(id, displayName, faction) {
+      this.dict[id] = new ModelCharacter(id, displayName, faction);
    }
 
-   getChar(id) {
+   getChar(id, callback) {
       if (id in this.dict) {
          return (this.dict[id]);
       }
       else {
          console.log("pulling char" + id);
-         this.pullChar(id);
-         return this.getChar(id);
+         var promiseCharacter = this.pullChar(id);
+         promiseCharacter.then(function(resolveData) {
+            this.addChar(resolveData.id, resolveData.attributes.name, resolveData.attributes.faction);
+            callback();
+         });
       }
    }
 
    pullChar(id) {
-      var gwCharacter = this.network.dataRequest("gwCharacter/" + id);
-      this.dict[id] = { id: gwCharacter.id,
-                        name: gwCharacter.attributes.name,
-                        faction: gwCharacter.attributes.faction};
+
+      return (this.network.dataRequest("gwCharacter/" + id));
    }
 }
 

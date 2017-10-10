@@ -1,18 +1,19 @@
-function handleHelloMessage(data) {
-   this.playerInfo.isLoggedIn = true;
+function handleHelloMessage(model, data) {
+   model.playerInfo.isLoggedIn = true;
    if (data.characterId != null) {
+      const character = model.characterDict.getChar(data.characterId, () => handleHelloMessage(model, data));
 
-      this.playerInfo.id = data.characterId;
-      this.playerInfo.displayName = this.characterDict.getChar(data.characterId).name;
-      this.playerInfo.faction = this.characterDict.getChar(data.characterId).faction;
-      this.playerInfo.readyForBattle = true;
+      model.playerInfo.id = character.id;
+      model.playerInfo.displayName = character.displayName;
+      model.playerInfo.faction = character.faction;
+      model.playerInfo.readyForBattle = true;
    }
 }
 export {handleHelloMessage}
 
-function handlePlanetConquered(data) {
-   const battle = this.battleDict[data.battleId]
-   const planet = this.planetDict[data.planetId]
+function handlePlanetConquered(model, data) {
+   const battle = model.battleDict[data.battleId]
+   const planet = model.planetDict[data.planetId]
    planet.faction = data.attackingFaction
    battle.status = "idle"
    battle.battleParticipants = []
@@ -20,9 +21,9 @@ function handlePlanetConquered(data) {
 }
 export {handlePlanetConquered}
 
-function handlePlanetDefended(data) {
-   const battle = this.battleDict[data.battleId]
-   const planet = this.planetDict[data.planetId]
+function handlePlanetDefended(model, data) {
+   const battle = model.battleDict[data.battleId]
+   const planet = model.planetDict[data.planetId]
    planet.faction = data.defendingFaction
    battle.status = "idle"
    battle.battleParticipants = []
@@ -30,37 +31,37 @@ function handlePlanetDefended(data) {
 }
 export {handlePlanetDefended}
 
-function handlePlanetOwnerChanged(data) {
-   const planet = this.planetDict[data.planetId]
+function handlePlanetOwnerChanged(model, data) {
+   const planet = model.planetDict[data.planetId]
    planet.faction = data.newOwner
 }
 export {handlePlanetOwnerChanged}
 
-function handlePlanetUnderAssault(data) {
-   const battle = this.battleDict[data.battleId]
+function handlePlanetUnderAssault(model, data) {
+   const battle = model.battleDict[data.battleId]
    battle.status = "lobby"
-   battle.battleParticipants.push({ factionName: this.defendingFaction,
+   battle.battleParticipants.push({ factionName: model.defendingFaction,
                                     players: []})
-   battle.battleParticipants.push({ factionName: this.attackingFaction,
+   battle.battleParticipants.push({ factionName: model.attackingFaction,
                                     players: []})
-   battle.battleParticipantsUnique.push({ factionName: this.defendingFaction,
+   battle.battleParticipantsUnique.push({ factionName: model.defendingFaction,
                                           players: []})
-   battle.battleParticipantsUnique.push({ factionName: this.attackingFaction,
+   battle.battleParticipantsUnique.push({ factionName: model.attackingFaction,
                                           players: []})
 }
 export {handlePlanetUnderAssault}
 
-function handleSolarSystemLinked(data) {
-   const solarSystemFrom = this.systemDict[data.solarSystemFrom]
-   const solarSystemTo = this.systemDict[data.solarSystemTo]
+function handleSolarSystemLinked(model, data) {
+   const solarSystemFrom = model.systemDict[data.solarSystemFrom]
+   const solarSystemTo = model.systemDict[data.solarSystemTo]
    solarSystemFrom.neighbours.push(data.solarSystemTo)
    solarSystemTo.neighbours.push(data.solarSystemFrom)
 }
 export {handleSolarSystemLinked}
 
-function handleSolarSystemUnlinked(data) {
-   const solarSystemFrom = this.systemDict[data.solarSystemFrom]
-   const solarSystemTo = this.systemDict[data.solarSystemTo]
+function handleSolarSystemUnlinked(model, data) {
+   const solarSystemFrom = model.systemDict[data.solarSystemFrom]
+   const solarSystemTo = model.systemDict[data.solarSystemTo]
 
    var index = solarSystemTo.neighbours.indexOf(data.solarSystemFrom);
    if (index > -1) {
@@ -74,18 +75,18 @@ function handleSolarSystemUnlinked(data) {
 }
 export {handleSolarSystemUnlinked}
 
-function handleBattleParticipantJoinedAssault(data) {
-   const battle = this.battleDict[data.battleId];
-   const character = this.characterDict.getChar(data.characterId);
+function handleBattleParticipantJoinedAssault(model, data) {
+   const battle = model.battleDict[data.battleId];
+   const character = model.characterDict.getChar(data.characterId, () => handleBattleParticipantJoinedAssault(model, data));
    var factionIndex = (battle.battleParticipantsUnique[0].factionName == character.faction) ? 0 : 1
-   battle.battleParticipants[factionIndex].players.push(character.name)
+   battle.battleParticipants[factionIndex].players.push(character.displayName)
    battle.battleParticipantsUnique[factionIndex].players.push(character.id)
 }
 export {handleBattleParticipantJoinedAssault}
 
-function handleBattleParticipantLeftAssault(data) {
-   const battle = this.battleDict[data.battleId];
-   const character = this.characterDict.getChar(data.characterId);
+function handleBattleParticipantLeftAssault(model, data) {
+   const battle = model.battleDict[data.battleId];
+   const character = model.characterDict.getChar(data.characterId, () => handleBattleParticipantJoinedAssault(model, data));
    var factionIndex = (battle.battleParticipantsUnique[0].factionName == character.faction) ? 0 : 1
 
    var index = battle.battleParticipantsUnique[factionIndex].players.indexOf(character.id);
@@ -97,8 +98,8 @@ function handleBattleParticipantLeftAssault(data) {
 }
 export {handleBattleParticipantLeftAssault}
 
-function handleBattleUpdateWaitingProgress(data) {
-   const battle = this.battleDict[data.battleId];
+function handleBattleUpdateWaitingProgress(model, data) {
+   const battle = model.battleDict[data.battleId];
    battle.waitingProgress = data.waitingProgress
    if (data.waitingProgress >= 1) {
       battle.status = "battle"

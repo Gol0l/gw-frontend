@@ -7,6 +7,7 @@ class InpGalaxyMapSimSettings extends InputForm {
 
       this.template = {
          mapScale: "number",
+         systemPositionScale: "number",
          systemScale: "number",
          simSpeed: "number",
          fps: "number",

@@ -4,30 +4,38 @@ class Connector {
 
    constructor(domain) {
       this.domain = domain;
+      this.model = {};
    }
 
 
    dataRequest(entity) {
-      url = "http://" + this.domain + "/data/" + entity;
+      var url = "http://" + this.domain + "/data/" + entity;
+      console.log(url);
 
-      var url = "http://" + this.domain + "/data/gwCharacter";
+      var requestPromise = new Promise(function(resolve, reject) {
+         var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function(response) {
+            if (this.readyState == 4 && this.status == 200) {
+               console.log("xhttp done" + entity);
+               console.log(xhttp.responseText);
+               resolve(JSON.parse(xhttp.responseText).data);
 
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function(response) {
-         if (this.readyState == 4 && this.status == 200) {
+            } else if (this.readyState == 4) {
+               console.log("failed xhttp");
+               reject("dataRequest failed");
+            }
+         };
+         xhttp.open("GET", url);
+         xhttp.send();
+      });
 
-            return (JSON.parse(xhttp.responseText).data);
+      return (requestPromise)
 
-         } else if (this.readyState == 4) {
-            console.log("getCharacter failed");
-         }
-      };
-      xhttp.open("GET", url);
-      xhttp.send();
 
    }
 
-   setupSocket(user_token, handlers) {
+   setupSocket(user_token, model, handlers) {
+      this.model = model;
       var url = "ws://" + this.domain + "/websocket?accessToken=" + user_token;
       this.socket = new WebSocket(url);
       this.socket.onmessage = function (event) {
@@ -35,7 +43,7 @@ class Connector {
          var handler = handlers[data.action];
          if (handler) {
 
-            handler(data.data);
+            handler(model, data.data);
          } else {
             console.log("No handler registered for this message: " + data.action);
             console.log(data);
