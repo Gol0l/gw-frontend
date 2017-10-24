@@ -16,7 +16,7 @@ class StatusBar extends React.Component {
 
       }
       const topShift = -(this.props.inp.height + this.props.inp.distance)
-      var divStyle = {position: "absolute", transform: "translate(-50%, 0%)", top: topShift, display: "flex", justifyContent: "center"}
+      var divStyle = {position: "absolute", transform: "translate(-50%, 0%)", top: topShift, display: "flex", justifyContent: "center", whiteSpace: "nowrap"}
       return (
          <div id = "StatusBar" style = {divStyle}>
 

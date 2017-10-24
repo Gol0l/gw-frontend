@@ -19,7 +19,8 @@ class InpSolarSystem extends InputForm {
          neighbours: "array",
          selectedPlanet: "string",
          funcPlanetOnClick: "function",
-         funcSystemSelect: "function"
+         funcSystemSelect: "function",
+         globalUpdate: "boolean"
 
       };
 

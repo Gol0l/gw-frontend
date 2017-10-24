@@ -24,6 +24,7 @@ class CharacterDictionary {
             this.addChar(resolveData.id, resolveData.attributes.name, resolveData.attributes.faction);
             callback();
          });
+         return ("error");
       }
    }
 

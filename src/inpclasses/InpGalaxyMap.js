@@ -17,7 +17,8 @@ class InpGalaxyMap extends InputForm {
          systemsList: "array",
          selectedPlanet: "string",
          funcPlanetOnClick: "function",
-         playerFaction: "string"
+         playerFaction: "string",
+         globalUpdate: "boolean"
       };
 
       this.validate(inputObject)

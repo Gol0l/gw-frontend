@@ -27,7 +27,8 @@ class App extends Component {
          simSettings: this.props.model.simSettings,
          systemsList: this.props.model.systemsList,
          playerInfo: this.props.model.playerInfo,
-         selection: {system_Id: "none", planet_Id: "none", planetRect: "none"}
+         selection: {system_Id: "none", planet_Id: "none", planetRect: "none"},
+         globalUpdate: false
 
       };
       switch (this.props.model.playerInfo.faction) {
@@ -51,21 +52,32 @@ class App extends Component {
 
       this.planetOnClick = this.planetOnClick.bind(this);
       this.resizeWindow = this.resizeWindow.bind(this);
-      this.buttonAttack = this.buttonAttack.bind(this);
+      this.buttonStartAttack = this.buttonStartAttack.bind(this);
+      this.buttonJoinAttack = this.buttonJoinAttack.bind(this);
+      this.buttonJoinDefense = this.buttonJoinDefense.bind(this);
+      this.buttonLeaveLobby = this.buttonLeaveLobby.bind(this);
       this.buttonCantAttack = this.buttonCantAttack.bind(this);
       this.buttonError = this.buttonError.bind(this);
       this.buttonNoDisplay = this.buttonNoDisplay.bind(this);
-      this.buttonLeaveLobby = this.buttonLeaveLobby.bind(this);
       this.submitLogin = this.submitLogin.bind(this);
       this.submitCharacter = this.submitCharacter.bind(this);
       this.requestName = this.requestName.bind(this);
-
+      this.forceUpdateFunction = this.forceUpdateFunction.bind(this);
+      this.props.model.getForceAppUpdateFromApp(this.forceUpdateFunction);
 
       }
 
 
    componentDidMount() {
       window.addEventListener('resize', this.resizeWindow);
+   }
+
+
+
+   forceUpdateFunction() {
+      console.log("forcing an update on:");
+      console.log(this);
+      this.setState({globalUpdate: true});
    }
 
    resizeWindow(newWidth, newHeight) {
@@ -89,9 +101,22 @@ class App extends Component {
 
    }
 
-   buttonAttack() {
-      alert('attacking/joining the battle for this planet')
+   buttonStartAttack() {
+      this.props.buttonCallback(this.state.selection.planet_Id, "startAttack")
    }
+
+   buttonJoinAttack() {
+      this.props.buttonCallback(this.state.selection.planet_Id, "joinAttack")
+   }
+
+   buttonJoinDefense() {
+      this.props.buttonCallback(this.state.selection.planet_Id, "joinDefense")
+   }
+
+   buttonLeaveLobby() {
+      this.props.buttonCallback(this.state.selection.planet_Id, "leaveLobby")
+   }
+
    buttonCantAttack() {
       alert('cant attack/join the battle for this planet!')
    }
@@ -101,9 +126,6 @@ class App extends Component {
    buttonNoDisplay() {
       alert('how did you click something that isnt supposed to be displayed')
    }
-   buttonLeaveLobby() {
-      alert('leaving the Lobby')
-   }
    submitLogin(name, password) {
       alert('logging you in...', name, password)
    }
@@ -112,6 +134,13 @@ class App extends Component {
    }
    requestName(characterFaction) {
       return (characterFaction.toString() + "Name")
+   }
+
+   componentDidUpdate() {
+      console.log("componentDidUpdate");
+      if (this.state.globalUpdate) {
+         this.setState({globalUpdate: false});
+      }
    }
 
 
@@ -130,11 +159,11 @@ class App extends Component {
          var doDisplay = false;
          buttonType = "noDisplay"
       }
-      const buttonTypeToFunction = {startAttack: this.buttonAttack,
+      const buttonTypeToFunction = {startAttack: this.buttonStartAttack,
                                     greyedStartAttack: this.buttonCantAttack,
-                                    joinAttack: this.buttonAttack,
+                                    joinAttack: this.buttonJoinAttack,
                                     greyedJoinAttack: this.buttonCantAttack,
-                                    joinDefense: this.buttonAttack,
+                                    joinDefense: this.buttonJoinDefense,
                                     greyedJoinDefense: this.buttonCantAttack,
                                     battleOngoing: this.buttonCantAttack,
                                     leaveLobby: this.buttonLeaveLobby,
@@ -162,8 +191,11 @@ class App extends Component {
                                                                                                                                        systemsList: this.state.systemsList,
                                                                                                                                        selectedPlanet: this.state.selection.planet_Id,
                                                                                                                                        playerFaction: this.state.playerInfo.faction,
-                                                                                                                                       funcPlanetOnClick: this.planetOnClick
+                                                                                                                                       funcPlanetOnClick: this.planetOnClick,
+                                                                                                                                       globalUpdate: this.state.globalUpdate
                                                                                                                                     })} />: <div></div>
+
+
 
       var audioElement = (this.state.playerInfo.isLoggedIn && this.state.playerInfo.hasCharacter) ? <AudioController/>: <div></div>
 
@@ -180,6 +212,9 @@ class App extends Component {
                                                                                           waitingProgress: planetInfo.currentBattle.waitingProgress,
                                                                                           maxPlayers: planetInfo.mapInfo.maxPlayers})} />]
                                              : <div></div>
+
+
+      console.log("end of render");
 
 
       return (
@@ -219,7 +254,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
    switch (planetInfo.currentBattle.status) {
       case "idle":
          if (planetInfo.faction != playerInfo.faction) {
-            if (isPlanetAccessible() && playerInfo.readyForBattle) {
+            if (isPlanetAccessible() && !playerInfo.isInBattle) {
                buttonType = "startAttack"
             }
             else {
@@ -255,7 +290,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
          if (!playerInLobby) {
             if (factions.includes(playerInfo.faction)) {
                if (planetInfo.faction != playerInfo.faction) {
-                  if (playerInfo.readyForBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
+                  if (!playerInfo.isInBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
                      buttonType = "joinAttack"
                   }
                   else {
@@ -263,7 +298,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
                   }
                }
                else {
-                  if (playerInfo.readyForBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
+                  if (playerInfo.isInBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
                      buttonType = "joinDefense"
                   }
                   else {

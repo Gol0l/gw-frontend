@@ -5,37 +5,49 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {Model} from './modelclasses/Model.js';
 import {handleFunctionDict} from './network/messageHandlers.js'
+import {buttonCallback} from './network/messageConstructors.js'
 import {Connector} from './network/Connector.js'
 
 
 
 
-var startGalacticWar = function() {
-   ReactDOM.render(<App model = {model}/>, document.getElementById('root'));
+function startGalacticWar(model, network) {
+   model.getForceAppUpdateFromApp = function(forceUpdateFunction) {
+      model.forceAppUpdate = forceUpdateFunction;
+   }
+
+   ReactDOM.render(<App model = {model} buttonCallback = {(planetId, buttonType) => buttonCallback(model, network, planetId, buttonType)}/>, document.getElementById('root'));
+
+   var user_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjo0MTAyMzU4NDAwLCAiYXV0aG9yaXRpZXMiOiBbXSwgInVzZXJfaWQiOiA1LCAidXNlcl9uYW1lIjogIkFlb24gRWNobyJ9.Kv1en5p2bWb6zE2ag6PWp4u1WxR6F8HPZSweDG23p60";
+   network.setupSocket(user_token, model, handleFunctionDict);
+
+   console.log("functionnn" + model.forceAppUpdate);
+
 }
 
-var setupModel = function(model, network, dataList) {
+function setupModel(model, network, dataList) {
    model.generateCharacterDict(dataList[0], network);
    model.incorporateBackendData(dataList[1], dataList[2], dataList[3]);
    model.generateDictionaries();
 
-   startGalacticWar();
+
+
+   startGalacticWar(model, network);
 
 }
-var gololInit = function(model) {
+function gololInit(model) {
    console.log("thisismyinit")
 
-   var user_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjo0MTAyMzU4NDAwLCAiYXV0aG9yaXRpZXMiOiBbXSwgInVzZXJfaWQiOiA1LCAidXNlcl9uYW1lIjogIkFlb24gRWNobyJ9.Kv1en5p2bWb6zE2ag6PWp4u1WxR6F8HPZSweDG23p60";
    var network = new Connector("localhost:8080");
 
-   network.setupSocket(user_token, model, handleFunctionDict);
+
 
    model.playerInfo.id = "userId";
-   model.playerInfo.displayName = "user";
-   model.playerInfo.faction = "uef";
+   model.playerInfo.displayName = "aeon";
+   model.playerInfo.faction = "aeon";
    model.playerInfo.isLoggedIn = true;
    model.playerInfo.hasCharacter = true;
-   model.playerInfo.readyForBattle = true;
+   model.playerInfo.isInBattle = false;
 
 
    var promiseCharacters = network.dataRequest("gwCharacter");
@@ -43,7 +55,7 @@ var gololInit = function(model) {
    var promisePlanets = network.dataRequest("planet");
    var promiseBattles = network.dataRequest("battle?filter=status!=FINISHED");
 
-   console.log("dataCharacters called". dataCharacter)
+   console.log("dataCharacters called")
    Promise.all([promiseCharacters, promiseSystems, promisePlanets, promiseBattles]).then((returnDataList) => setupModel(model, network, returnDataList))
 
 }
@@ -102,10 +114,10 @@ function oldInit() {
 
   model.playerInfo.id = "userId";
   model.playerInfo.displayName = "user";
-  model.playerInfo.faction = "aeon";
+  model.playerInfo.faction = "uef";
   model.playerInfo.isLoggedIn = true;
   model.playerInfo.hasCharacter = true;
-  model.playerInfo.readyForBattle = true;
+  model.playerInfo.isInBattle = false;
   ReactDOM.render(<App model = {model}/>, document.getElementById('root'));
 }
 
@@ -120,3 +132,4 @@ console.log(model.playerInfo.isLoggedIn);
 
 
 registerServiceWorker();
+export {startGalacticWar};

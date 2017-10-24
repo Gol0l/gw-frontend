@@ -33,12 +33,15 @@ class MapLine extends React.Component {
                         <stop offset="100%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0"}} />
                      </linearGradient>
 
+
+
                      <line x1 = {this.props.inp.points[0][0]}
                         y1 = {this.props.inp.points[0][1]}
                         x2 = {this.props.inp.points[1][0]}
                         y2 = {this.props.inp.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
-                        strokeWidth = "1px" />
+
+                        strokeWidth = {1} />
                   </svg>
             )
 
@@ -59,36 +62,43 @@ class MapLine extends React.Component {
                         <stop offset="100%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0"}} />
                      </linearGradient>
 
+
+
                      <line x1 = {this.props.inp.points[0][0]}
                         y1 = {this.props.inp.points[0][1]}
                         x2 = {this.props.inp.points[1][0]}
                         y2 = {this.props.inp.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
-                        strokeWidth = "2px" />
+
+                        strokeWidth = {1} />
                   </svg>
             )
       }
 
       if (this.props.inp.type == "owned") {
          return(  <svg>
-                     <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {this.props.inp.points[0][0]}
+                     <linearGradient gradientUnits = "userSpaceOnUse" id = {"line" + number.toString()}   x1 = {this.props.inp.points[0][0]}
                                                                      y1 = {this.props.inp.points[0][1]}
                                                                      x2 = {this.props.inp.points[1][0]}
                                                                      y2 = {this.props.inp.points[1][1]}>
-                        <stop offset="0%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                        <stop offset="5%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                        <stop offset="33%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0.7"}} />
-                        <stop offset="66%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0.7"}} />
-                        <stop offset="95%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
-                        <stop offset="100%" style={{stopColor:"rgb(220,220,220)", stopOpacity:"0"}} />
+                        <stop offset="0%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
+                        <stop offset="5%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
+                        <stop offset="33%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"1"}} />
+                        <stop offset="66%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"1"}} />
+                        <stop offset="95%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
+                        <stop offset="100%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
                      </linearGradient>
+
+
 
                      <line x1 = {this.props.inp.points[0][0]}
                         y1 = {this.props.inp.points[0][1]}
                         x2 = {this.props.inp.points[1][0]}
                         y2 = {this.props.inp.points[1][1]}
+
                         stroke = {"url(#line" + number.toString() + ")"}
-                        strokeWidth = "2px" />
+                        
+                        strokeWidth = {1} />
                   </svg>
             )
       }

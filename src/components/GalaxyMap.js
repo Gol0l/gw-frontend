@@ -81,8 +81,10 @@ class GalaxyMap extends React.Component {
    }
 
    handleWheel(e) {
+
       const mapScale = this.state.simSettings.mapScale;
       var newScale = mapScale * (1.0 + (e.deltaY / -850));
+
       const position = ReactDOM.findDOMNode(this.dragBoxNode).getBoundingClientRect();
       var i = 0;
       while ((newScale * this.props.inp.mapWidth <= this.props.inp.width - (this.props.inp.frameDim.leftSize + this.props.inp.frameDim.rightSize)//limiting max zoom out
@@ -90,6 +92,7 @@ class GalaxyMap extends React.Component {
             newScale * this.props.inp.mapHeight <= this.props.inp.height - (this.props.inp.frameDim.topSize + this.props.inp.frameDim.bottomSize))
             &&
             i < 10) {
+               console.log("looping to adjust");
                i++
                newScale = (mapScale + newScale) / 2;
             }
@@ -97,8 +100,12 @@ class GalaxyMap extends React.Component {
       //setting zoom to zoom in on the mouse cursor by moving the DragBox according to the cursor position and mapWidth/Height increase
 
 
+
       const distanceLeft = position.left;
       const distanceTop = position.top;
+      if ((distanceLeft < -200000 || distanceTop < -200000) && newScale >= mapScale) {
+         newScale = mapScale;
+      }
       const horCursorPosRatio = (e.pageX - distanceLeft) / (mapScale * this.props.inp.mapWidth);
       const widthDiff = (newScale * this.props.inp.mapWidth) - (mapScale * this.props.inp.mapWidth);
       const verCursorPosRatio = (e.pageY - distanceTop) / (mapScale * this.props.inp.mapHeight);
@@ -145,6 +152,7 @@ class GalaxyMap extends React.Component {
 
 
    render() {
+      console.log("rendering GalaxyMap")
       const systemsList = this.props.inp.systemsList;
       const simSettings = this.state.simSettings;
       const mapScale = this.state.simSettings.mapScale;
@@ -183,7 +191,8 @@ class GalaxyMap extends React.Component {
                                                                basePlanetSize: simSettings.basePlanetSize, baseStarSize: simSettings.baseStarSize},
                                                 selectedPlanet: this.props.inp.selectedPlanet,
                                                 funcPlanetOnClick: this.props.inp.funcPlanetOnClick,
-                                                funcSystemSelect: this.handleSystemSelect
+                                                funcSystemSelect: this.handleSystemSelect,
+                                                globalUpdate: this.props.inp.globalUpdate
                                                 })}
                                        key = {i} /> : <div key = {i}></div>)
 

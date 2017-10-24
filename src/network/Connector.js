@@ -1,4 +1,4 @@
-
+import {startGalacticWar} from '../index.js'
 
 class Connector {
 
@@ -17,7 +17,6 @@ class Connector {
          xhttp.onreadystatechange = function(response) {
             if (this.readyState == 4 && this.status == 200) {
                console.log("xhttp done" + entity);
-               console.log(xhttp.responseText);
                resolve(JSON.parse(xhttp.responseText).data);
 
             } else if (this.readyState == 4) {
@@ -42,12 +41,14 @@ class Connector {
          var data = JSON.parse(event.data);
          var handler = handlers[data.action];
          if (handler) {
-
+            console.log("message received: " + data.action);
             handler(model, data.data);
          } else {
             console.log("No handler registered for this message: " + data.action);
             console.log(data);
          }
+
+
       }
       this.socket.onopen = function (event) {
          console.log("onOpen");
@@ -57,6 +58,12 @@ class Connector {
          console.log("onClose");
       };
    }
+
+   sendMessage(data) {
+      this.socket.send(JSON.stringify(data));
+   }
+
+
 }
 
 export {Connector}

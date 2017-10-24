@@ -19,6 +19,7 @@ class SolarSystem extends React.Component {
          animDuration: 1, // in seconds
          animProgress: 0,
          scaleFactor: 0,
+         lastProps: this.props
       };
 
       this.handleClick = this.handleClick.bind(this);
@@ -77,7 +78,16 @@ class SolarSystem extends React.Component {
 
    shouldComponentUpdate(nextProps, nextState) {
       var deepEqual = require('deep-equal');
-      return (!deepEqual(nextProps.inp, this.props.inp) || !deepEqual(nextState, this.state))
+      console.log("shouldupdate");
+      console.log(this.props.inp.globalUpdate);
+
+      if (this.props.inp.globalUpdate) {
+         return (true);
+      }
+      else {
+         return (!deepEqual(nextProps.inp, this.props.inp) || !deepEqual(nextState, this.state));
+      }
+
    }
 
    componentWillUnmount() {
@@ -86,6 +96,7 @@ class SolarSystem extends React.Component {
 
    render() {
 
+      console.log("rendering SolarSystem")
       const top = this.props.inp.top;
       const left = this.props.inp.left;
       const basePlanetSize = this.props.inp.simSettings.basePlanetSize;

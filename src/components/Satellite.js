@@ -65,6 +65,7 @@ class Satellite extends React.Component {
    }
 
    render() {
+
       const minScaleForDisplay = 15;
       const objectSize = this.props.inp.size;
       const displayScale = this.props.inp.settings.displayScale;
@@ -80,8 +81,8 @@ class Satellite extends React.Component {
 
       var displayShadow =  <div  style = {{  position: "absolute",
                                              transform: "translate("
-                                             + (- 1/2).toString() + "px,"
-                                             + (- 1/2).toString() + "px)"
+                                             + (- 2/2).toString() + "px,"
+                                             + (- 2/2).toString() + "px)"
                                              + " "
                                              + "rotate(" + (180*this.state.angle/Math.PI).toString() + "deg)",
                                              width: Math.round((objectSize) * displayScale) + 2,

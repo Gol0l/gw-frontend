@@ -23,6 +23,7 @@ class Model {
    }
 
    generateCharacterDict(dataCharacters, network) {
+      console.log("generating model.characterDict")
       this.characterDict = new CharacterDictionary(network);
       for (var i = 0; i < dataCharacters.length; i++) {
          this.characterDict.addChar(dataCharacters[i].id, dataCharacters[i].attributes.name, dataCharacters[i].attributes.faction);
@@ -54,9 +55,7 @@ class Model {
          for (var j = 0; j < sys.relationships.planets.data.length; j++) {
 
             var currentPlanetId = sys.relationships.planets.data[j].id;
-            console.log(currentPlanetId)
-            console.log(dataPlanetsDict[currentPlanetId].attributes.name);
-            console.log(this.systemsList[i])
+
             this.systemsList[i].addPlanet(   (dataPlanetsDict[currentPlanetId].attributes.name == null) ? "no name" : dataPlanetsDict[currentPlanetId].attributes.name,
                                              dataPlanetsDict[currentPlanetId].id,
                                              dataPlanetsDict[currentPlanetId].attributes.currentOwner,
@@ -96,6 +95,7 @@ class Model {
                      }
                   }
                }
+               console.log(currentPlanet.currentBattle);
             }
          }
       }
@@ -122,7 +122,7 @@ class ModelPlayerInfo {
       this.displayName = ""; //name that a user sees
       this.suggestedDisplayName = "Bernd";
       this.faction = ""; //player faction
-      this.readyForBattle = false; //a variable that sums up all player related reasons why he might or might not be able to join a lobby
+      this.isInBattle = false; //a variable that sums up all player related reasons why he might or might not be able to join a lobby
       this.isLoggedIn = false;
       this.hasCharacter = false;
 
