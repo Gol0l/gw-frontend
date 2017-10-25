@@ -162,10 +162,10 @@ class SolarSystem extends React.Component {
 
 
 
-      const leftShift = -centerMass.radius * Math.sqrt(scale) * baseStarSize
-      const topShift = -centerMass.radius * Math.sqrt(scale) * baseStarSize
-      const width = centerMass.radius * 2 * Math.sqrt(scale) * baseStarSize
-      const height = centerMass.radius * 2 * Math.sqrt(scale) * baseStarSize
+      const leftShift = -centerMass.radius * Math.pow(scale, 3/5) * baseStarSize
+      const topShift = -centerMass.radius * Math.pow(scale, 3/5) * baseStarSize
+      const width = centerMass.radius * 2 * Math.pow(scale, 3/5) * baseStarSize
+      const height = centerMass.radius * 2 * Math.pow(scale, 3/5) * baseStarSize
 
       return (
          <div id = "container" style = {divStyle}>

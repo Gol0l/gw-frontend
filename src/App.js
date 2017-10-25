@@ -290,7 +290,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
          if (!playerInLobby) {
             if (factions.includes(playerInfo.faction)) {
                if (planetInfo.faction != playerInfo.faction) {
-                  if (!playerInfo.isInBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
+                  if (!playerInfo.isInBattle && playerCount <= planetInfo.mapInfo.maxPlayers / 2) {
                      buttonType = "joinAttack"
                   }
                   else {
@@ -298,7 +298,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
                   }
                }
                else {
-                  if (playerInfo.isInBattle && playerCount < planetInfo.mapInfo.maxPlayers / 2) {
+                  if (!playerInfo.isInBattle && playerCount <= planetInfo.mapInfo.maxPlayers / 2) {
                      buttonType = "joinDefense"
                   }
                   else {

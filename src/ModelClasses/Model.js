@@ -14,8 +14,7 @@ class Model {
       this.simSettings = new ModelSimSettings();
       this.systemsList = []; //form: an array of ModelSolarSystem objects
       this.messageHandlers = {}; //an object of handlers for the messages from the backend
-      this.characters = [] //a local copy of the gw characters
-      this.generateDictionaries()
+      this.participantToCharacterIdDict = {};
    }
 
    addSystem(displayName, id, top, left) {
@@ -27,10 +26,15 @@ class Model {
       this.characterDict = new CharacterDictionary(network);
       for (var i = 0; i < dataCharacters.length; i++) {
          this.characterDict.addChar(dataCharacters[i].id, dataCharacters[i].attributes.name, dataCharacters[i].attributes.faction);
+         for (var j = 0; j < dataCharacters[i].relationships.battleParticipantList.data.length; j++) {
+            this.participantToCharacterIdDict[dataCharacters[i].relationships.battleParticipantList.data[j].id] = dataCharacters[i].id;
+         }
+
       }
    }
 
    incorporateBackendData(dataSystems, dataPlanets, dataBattles) {
+      this.systemList = [];
       var dataPlanetsDict = {}
       for (var i = 0; i < dataPlanets.length; i++) {
          dataPlanetsDict[dataPlanets[i].id] = dataPlanets[i];
@@ -86,12 +90,22 @@ class Model {
                                                                      players: []});
 
                var participantList = planetToBattleDict[currentPlanetId].relationships.participants.data
+
+
+
                for (var k = 0; k < participantList.length; k++) {
+                  var currentCharId = this.participantToCharacterIdDict[participantList[k].id];
+
+                  if (!(participantList[k].id in this.participantToCharacterIdDict)) {
+                     console.log("error: couldnt find character corresponding to one this battles' participants")
+                  }
+                  var currentCharacter = this.characterDict.getChar(currentCharId, () => this.incorporateBackendData(dataSystems, dataPlanets, dataBattles));
 
                   for (var l = 0; l < 2; l++) {
-                     if (currentPlanet.currentBattle.battleParticipantsUnique[l].factionName == this.characterDict.getChar(participantList[k].id).faction) {
-                        currentPlanet.currentBattle.battleParticipantsUnique[l].players.push(participantList[k].id)
-                        currentPlanet.currentBattle.battleParticipants[l].players.push(this.characterDict.getChar(participantList[k].id).name)
+                     if (currentPlanet.currentBattle.battleParticipantsUnique[l].factionName == currentCharacter.faction) {
+
+                        currentPlanet.currentBattle.battleParticipantsUnique[l].players.push(currentCharacter.id)
+                        currentPlanet.currentBattle.battleParticipants[l].players.push(currentCharacter.displayName)
                      }
                   }
                }
@@ -99,6 +113,8 @@ class Model {
             }
          }
       }
+      //this information will NOT be updated through the websocket and is OUTDATED soon after the initialization
+      this.participantToCharacterIdDict = null
    }
 
    generateDictionaries() {
@@ -142,8 +158,8 @@ class ModelSimSettings {
 
       this.mapScale = 1; //relevant for zoom beheaviour
       this.systemPositionScale = 10; //the scale of the systems coordinate system
-      this.systemScale = 7; //the scale of the systems
-      this.baseStarSize = 1.6; //factor to scale all star radii
+      this.systemScale = 2; //the scale of the systems
+      this.baseStarSize = 1.5; //factor to scale all star radii
       this.basePlanetSize = 0.35; //factor to scale all sprite radii
       this.simSpeed = 1; //the speed of planet movement
       this.fps = 30; //the fps in planetmovement

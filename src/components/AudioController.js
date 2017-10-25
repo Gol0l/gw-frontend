@@ -407,7 +407,7 @@ class AudioController extends React.Component {
    render() {
 
       return (
-         <div id='audiobox' className="themeBackgroundNoHover themeBorderDefault themeShadowDefault" style = {{lineHeight: 0.5}}>
+         <div id='audiobox' className="themeBackgroundDefault themeBorderDefault themeShadowDefault" style = {{lineHeight: 0.5}}>
             <div  className="themeBorderDefault themeShadowDefault"
                   style = {{position: "absolute", left: "49%", width: "47%", height: "31%", backgroundColor: "rgba(0, 0, 0, 0.5)", borderRadius: "2px"}}
                   onMouseMove = {this.handleImmersionMouseMove} onMouseDown = {() => this.setState({mouseDown: true})} onMouseUp = {() => this.setState({mouseDown: false})} onMouseLeave = {() => this.setState({mouseDown: false})}

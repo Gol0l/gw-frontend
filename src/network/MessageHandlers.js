@@ -25,6 +25,7 @@ function handlePlanetConquered(model, data) {
    const battle = model.battleDict[data.battleId]
    const planet = model.planetDict[data.planetId]
    planet.faction = data.attackingFaction
+   battle.id = "nobattle";
    battle.status = "idle"
    battle.battleParticipants = []
    battle.battleParticipantsUnique = []
@@ -37,6 +38,7 @@ function handlePlanetDefended(model, data) {
    const battle = model.battleDict[data.battleId]
    const planet = model.planetDict[data.planetId]
    planet.faction = data.defendingFaction
+   battle.id = "nobattle";
    battle.status = "idle"
    battle.battleParticipants = []
    battle.battleParticipantsUnique = []
@@ -47,7 +49,7 @@ export {handlePlanetDefended}
 
 function handlePlanetOwnerChanged(model, data) {
    const planet = model.planetDict[data.planetId]
-   planet.faction = data.newOwner
+   planet.faction = data.newOwner;
 
    model.forceAppUpdate();
 }
@@ -119,7 +121,7 @@ export {handleBattleParticipantJoinedAssault}
 
 function handleBattleParticipantLeftAssault(model, data) {
    const battle = model.battleDict[data.battleId];
-   const character = model.characterDict.getChar(data.characterId, () => handleBattleParticipantJoinedAssault(model, data));
+   const character = model.characterDict.getChar(data.characterId, () => handleBattleParticipantLeftAssault(model, data));
    if (character != "error") {
       var factionIndex = (battle.battleParticipantsUnique[0].factionName == character.faction) ? 0 : 1
 

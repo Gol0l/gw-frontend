@@ -22,11 +22,14 @@ class CharacterDictionary {
          var promiseCharacter = this.pullChar(id);
          promiseCharacter.then(function(resolveData) {
             this.addChar(resolveData.id, resolveData.attributes.name, resolveData.attributes.faction);
+            console.log("fetched character: " + id);
+            console.log("now executing callback");
             callback();
          });
          return ("error");
       }
    }
+
 
    pullChar(id) {
 
