@@ -13,7 +13,7 @@ class ActionButton extends React.Component {
    this.handleClick = this.handleClick.bind(this)
    }
 
-   handleClick = function() {
+   handleClick() {
       this.props.inp.buttonFunction();
    }
 

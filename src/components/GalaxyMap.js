@@ -21,8 +21,6 @@ import {getVoronoi} from '../voronoi/getVoronoi.js';
 
 
 class GalaxyMap extends React.Component {
-   /*props: an object of the class InpGalaxyMap
-   */
    constructor(props) {
       super(props);
 
@@ -83,7 +81,7 @@ class GalaxyMap extends React.Component {
    handleWheel(e) {
 
       const mapScale = this.state.simSettings.mapScale;
-      var newScale = mapScale * (1.0 + (e.deltaY / -850));
+      var newScale = mapScale * (1.0 + (e.deltaY / -600));
 
       const position = ReactDOM.findDOMNode(this.dragBoxNode).getBoundingClientRect();
       var i = 0;
@@ -92,7 +90,6 @@ class GalaxyMap extends React.Component {
             newScale * this.props.inp.mapHeight <= this.props.inp.height - (this.props.inp.frameDim.topSize + this.props.inp.frameDim.bottomSize))
             &&
             i < 10) {
-               console.log("looping to adjust");
                i++
                newScale = (mapScale + newScale) / 2;
             }
@@ -188,7 +185,11 @@ class GalaxyMap extends React.Component {
                                                 gravPar: systemsList[i].gravPar,
                                                 neighbours: systemsList[i].neighbours,
                                                 simSettings: { scale: simSettings.systemScale * mapScale, fps: simSettings.fps, simSpeed: simSettings.simSpeed,
-                                                               basePlanetSize: simSettings.basePlanetSize, baseStarSize: simSettings.baseStarSize},
+                                                               basePlanetSize: simSettings.basePlanetSize, baseStarSize: simSettings.baseStarSize,
+                                                               centerMassScalingExponent: simSettings.centerMassScalingExponent,
+                                                               systemScaleUiThreshold: simSettings.systemScaleUiThreshold,
+                                                               planetScalingExponent: simSettings.planetScalingExponent,
+                                                               planetScaleUiThreshold: simSettings.planetScaleUiThreshold},
                                                 selectedPlanet: this.props.inp.selectedPlanet,
                                                 funcPlanetOnClick: this.props.inp.funcPlanetOnClick,
                                                 funcSystemSelect: this.handleSystemSelect,
@@ -236,7 +237,6 @@ class GalaxyMap extends React.Component {
          }
       }
 
-
       return(
          <div id = "galaxywrapper"  style = {{position: "relative"}}>
 
@@ -255,7 +255,7 @@ class GalaxyMap extends React.Component {
                                                          {tileList}
                                                          {systemConnections}
                                                       </svg>
-                                                      <div id="background" style = {{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.2)", width: mapWidth * mapScale, height: mapHeight * mapScale}} onWheel = {this.handleWheel}>
+                                                      <div id="background" style = {{position: "absolute", backgroundColor: "rgba(0, 0, 2," + (1 - 5 / mapScale).toString() + ")", width: mapWidth * mapScale, height: mapHeight * mapScale}} onWheel = {this.handleWheel}>
                                                          {displayList}
                                                       </div>
                                                    </div>})
@@ -334,21 +334,21 @@ function getTileColor(factionInfluence) {
    var tileColor;
    switch (factionInfluence.faction) {
       case ("aeon"):
-         tileColor = "rgba(0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0.25)"
+         tileColor = "rgba(0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0.18)"
          break;
       case ("cybran"):
-         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0, 0.25)"
+         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0, 0.18)"
          break;
       case ("uef"):
-         tileColor = "rgba(0, 0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0.25)"
+         tileColor = "rgba(0, 0, " + Math.round(255 * factionInfluence.influence).toString() + ", 0.18)"
          break;
       case ("seraphim"):
-         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", " + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0.25)"
+         tileColor = "rgba(" + Math.round(255 * factionInfluence.influence).toString() + ", " + Math.round(255 * factionInfluence.influence).toString() + ", 0, 0.18)"
          break;
       case ("none"):
-         tileColor = "rgba(0, 0, 0, 0.25)"
+         tileColor = "rgba(0, 0, 0, 0.1)"
       default:
-         tileColor = "rgba(0, 0, 0, 0.25)"
+         tileColor = "rgba(0, 0, 0, 0.1)"
 
    }
 

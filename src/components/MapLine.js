@@ -89,6 +89,13 @@ class MapLine extends React.Component {
                         <stop offset="100%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
                      </linearGradient>
 
+                     <filter id="glow">
+                         <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                         <feMerge>
+                             <feMergeNode in="coloredBlur"/>
+                             <feMergeNode in="SourceGraphic"/>
+                         </feMerge>
+                     </filter>
 
 
                      <line x1 = {this.props.inp.points[0][0]}
@@ -97,7 +104,7 @@ class MapLine extends React.Component {
                         y2 = {this.props.inp.points[1][1]}
 
                         stroke = {"url(#line" + number.toString() + ")"}
-                        
+                        style = {{}}
                         strokeWidth = {1} />
                   </svg>
             )

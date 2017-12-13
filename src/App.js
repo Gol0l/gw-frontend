@@ -12,7 +12,8 @@ import {InpLoginBox} from './inpclasses/InpLoginBox.js';
 import {LoginBox} from './components/LoginBox.js';
 import {InpCharacterCreation} from './inpclasses/InpCharacterCreation.js';
 import {CharacterCreation} from './components/CharacterCreation.js';
-
+import {EquipmentWidget} from './components/EquipmentWidget.js';
+import {InpEquipmentWidget} from './inpclasses/InpEquipmentWidget.js';
 
 class App extends Component {
    constructor(props) {
@@ -42,7 +43,6 @@ class App extends Component {
             require("./style/gw-style-cybran.css")
             break;
          case "seraphim":
-            console.log("seraphim?")
             require("./style/gw-style-seraphim.css")
             break;
          default:
@@ -52,6 +52,7 @@ class App extends Component {
 
       this.planetOnClick = this.planetOnClick.bind(this);
       this.resizeWindow = this.resizeWindow.bind(this);
+      this.shopProcessTransactions = this.shopProcessTransactions.bind(this);
       this.buttonStartAttack = this.buttonStartAttack.bind(this);
       this.buttonJoinAttack = this.buttonJoinAttack.bind(this);
       this.buttonJoinDefense = this.buttonJoinDefense.bind(this);
@@ -101,6 +102,10 @@ class App extends Component {
 
    }
 
+   shopProcessTransactions(transactions) {
+      this.props.shopCallback(transactions);
+   }
+
    buttonStartAttack() {
       this.props.buttonCallback(this.state.selection.planet_Id, "startAttack")
    }
@@ -137,7 +142,6 @@ class App extends Component {
    }
 
    componentDidUpdate() {
-      console.log("componentDidUpdate");
       if (this.state.globalUpdate) {
          this.setState({globalUpdate: false});
       }
@@ -146,7 +150,7 @@ class App extends Component {
 
    render() {
 
-      var doDisplay = true;
+      var displayInterface = true;
 
       if (this.state.selection.planet_Id != "none") {
          var indices = indicesFromIds(this.state.systemsList, this.state.selection.system_Id, this.state.selection.planet_Id);
@@ -156,7 +160,7 @@ class App extends Component {
          var planetInfo = this.state.systemsList[sIndex].planetList[pIndex]
       }
       else {
-         var doDisplay = false;
+         var displayInterface = false;
          buttonType = "noDisplay"
       }
       const buttonTypeToFunction = {startAttack: this.buttonStartAttack,
@@ -170,17 +174,17 @@ class App extends Component {
                                     error: this.buttonError,
                                     noDisplay: this.buttonNoDisplay}
 
-      var buttonFunction = buttonTypeToFunction[buttonType]
+      var buttonFunction = buttonTypeToFunction[buttonType];
 
 
-      var loginElement = (!this.state.playerInfo.isLoggedIn) ? <LoginBox inp={new InpLoginBox({submitFunction: this.submitLogin})} /> : <div></div>
+      var loginElement = (!this.state.playerInfo.isLoggedIn) ? <LoginBox inp={new InpLoginBox({submitFunction: this.submitLogin})} /> : <div></div>;
       console.log( "loggedin?", this.state.playerInfo.isLoggedIn);
 
       var characterElement = (this.state.playerInfo.isLoggedIn && !this.state.playerInfo.hasCharacter) ?
          <CharacterCreation inp={new InpCharacterCreation({ submitFunction: this.submitCharacter,
                                                             requestName: this.requestName,
                                                             suggestedName: this.state.playerInfo.suggestedDisplayName
-                                                            })} /> : <div id="unsuccess"></div>
+                                                         })} /> : <div id="nocharacterCreation"></div>;
 
       console.log( "character?", (this.state.playerInfo.isLoggedIn && !this.state.playerInfo.hasCharacter));
 
@@ -193,28 +197,72 @@ class App extends Component {
                                                                                                                                        playerFaction: this.state.playerInfo.faction,
                                                                                                                                        funcPlanetOnClick: this.planetOnClick,
                                                                                                                                        globalUpdate: this.state.globalUpdate
-                                                                                                                                    })} />: <div></div>
+                                                                                                                                    })} />: <div></div>;
 
 
 
-      var audioElement = (this.state.playerInfo.isLoggedIn && this.state.playerInfo.hasCharacter) ? <AudioController/>: <div></div>
+      var audioElement = (this.state.playerInfo.isLoggedIn && this.state.playerInfo.hasCharacter) ? <AudioController/>: <div></div>;
 
-      var interfaceElements = (doDisplay) ? [  <MapPreview inp = {new InpMapPreview({  mapName: planetInfo.mapInfo.mapName,
-                                                                                       mapSize: planetInfo.mapInfo.mapSize,
-                                                                                       mapImg: planetInfo.mapInfo.mapImg,
-                                                                                       maxPlayers: planetInfo.mapInfo.maxPlayers})} />,
-                                                <div id = "buttonWrap" style = {{position: "relative", left: this.state.width / 2}}>
-                                                   <ActionButton inp = {new InpActionButton({buttonType: buttonType,
-                                                                                             buttonFunction: buttonFunction})} />
-                                                </div>,
-                                                <BattleLobby inp = {new InpBattleLobby({  battleParticipants: planetInfo.currentBattle.battleParticipants,
-                                                                                          status: planetInfo.currentBattle.status,
-                                                                                          waitingProgress: planetInfo.currentBattle.waitingProgress,
-                                                                                          maxPlayers: planetInfo.mapInfo.maxPlayers})} />]
-                                             : <div></div>
+      var interfaceElements = (displayInterface) ? [  <MapPreview inp = {new InpMapPreview({ mapName: planetInfo.mapInfo.mapName,
+                                                                                             mapSize: planetInfo.mapInfo.mapSize,
+                                                                                             mapImg: planetInfo.mapInfo.mapImg,
+                                                                                             maxPlayers: planetInfo.mapInfo.maxPlayers})} />,
+                                                      <div id = "buttonWrap" style = {{position: "relative", left: this.state.width / 2}}>
+                                                         <ActionButton inp = {new InpActionButton({buttonType: buttonType,
+                                                                                                   buttonFunction: buttonFunction})} />
+                                                      </div>,
+                                                      <BattleLobby inp = {new InpBattleLobby({  battleParticipants: planetInfo.currentBattle.battleParticipants,
+                                                                                                status: planetInfo.currentBattle.status,
+                                                                                                waitingProgress: planetInfo.currentBattle.waitingProgress,
+                                                                                                maxPlayers: planetInfo.mapInfo.maxPlayers})} />]
+                                                   : <div></div>;
 
 
-      console.log("end of render");
+      var shopTestData = [{image: "tank.png",
+                           name: "heavy tank",
+                           itemId: "1",
+                           price: 200},
+                          {image: "tank.png",
+                           name: "light tank",
+                           itemId: "2",
+                           price: 350},
+                          {image: "tank.png",
+                           name: "arty",
+                           itemId: "3",
+                           price: 500},
+                          {image: "tank.png",
+                           name: "heavy tank",
+                           itemId: "4",
+                           price: 200},
+                          {image: "tank.png",
+                           name: "light tank",
+                           itemId: "5",
+                           price: 350},
+                          {image: "tank.png",
+                           name: "heavy tank",
+                           itemId: "6",
+                           price: 200},
+                          {image: "tank.png",
+                           name: "light tank",
+                           itemId: "7",
+                           price: 350},
+                        {image: "tank.png",
+                         name: "light tank",
+                         itemId: "5",
+                         price: 350},
+                        {image: "tank.png",
+                         name: "heavy tank",
+                         itemId: "6",
+                         price: 200},
+                        {image: "tank.png",
+                         name: "light tank",
+                         itemId: "7",
+                         price: 350}];
+
+      var equipmentWidgetElement = <EquipmentWidget inp = {new InpEquipmentWidget({ shopItems: shopTestData,
+                                                                                    inventoryItems: shopTestData,
+                                                                                    shopProcessTransactions: this.shopProcessTransactions,
+                                                                                    userBalance: 2000})} />
 
 
       return (
@@ -223,6 +271,7 @@ class App extends Component {
                {mapElement}
 
                {audioElement}
+               {equipmentWidgetElement}
                {interfaceElements}
                {characterElement}
                {loginElement}

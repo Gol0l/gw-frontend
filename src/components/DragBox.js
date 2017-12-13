@@ -47,8 +47,10 @@ class DragBox extends React.Component {
       if (this.state.mouseSelect) {
          var newLeft = this.props.inp.left;
          var newTop = this.props.inp.top;
-         newTop = e.pageY - this.state.mouseGrabPosY + this.state.lastOffsetTop;
-         newLeft = e.pageX - this.state.mouseGrabPosX + this.state.lastOffsetLeft;
+         var maxDragAccelerationfactor = 1;
+         var dragAccelerationFactor = 1 + maxDragAccelerationfactor * (Math.abs(window.innerWidth / 2 - e.pageX) / window.innerWidth + Math.abs(window.innerHeight / 2 - e.pageY) / window.innerHeight);
+         newTop = (e.pageY - this.state.mouseGrabPosY) * dragAccelerationFactor + this.state.lastOffsetTop;
+         newLeft = (e.pageX - this.state.mouseGrabPosX) * dragAccelerationFactor + this.state.lastOffsetLeft;
 
          const minLeft = (isNaN(this.props.inp.minLeft)) ? -10000 : this.props.inp.minLeft;
          const minTop = (isNaN(this.props.inp.minTop)) ? -10000 : this.props.inp.minTop;

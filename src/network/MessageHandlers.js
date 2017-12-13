@@ -3,7 +3,7 @@ function handleHelloMessage(model, data) {
    if (data.characterId != null) {
       const character = model.characterDict.getChar(data.characterId, () => handleHelloMessage(model, data));
       if (character != "error") {
-         console.log("currentbattleid" + data.currentBattleId)
+
          model.playerInfo.isLoggedIn = true;
          model.playerInfo.id = character.id;
          model.playerInfo.displayName = character.displayName;
@@ -22,33 +22,37 @@ function handleHelloMessage(model, data) {
 export {handleHelloMessage}
 
 function handlePlanetConquered(model, data) {
-   const battle = model.battleDict[data.battleId]
-   const planet = model.planetDict[data.planetId]
+   const battle = model.battleDict[data.battleId];
+   const planet = model.planetDict[data.planetId];
    planet.faction = data.attackingFaction
    battle.id = "nobattle";
-   battle.status = "idle"
-   battle.battleParticipants = []
-   battle.battleParticipantsUnique = []
+   battle.status = "idle";
+   battle.battleParticipants = [];
+   battle.battleParticipantsUnique = [];
+
+   model.battleDict[data.battleId] = null;
 
    model.forceAppUpdate();
 }
 export {handlePlanetConquered}
 
 function handlePlanetDefended(model, data) {
-   const battle = model.battleDict[data.battleId]
-   const planet = model.planetDict[data.planetId]
-   planet.faction = data.defendingFaction
+   const battle = model.battleDict[data.battleId];
+   const planet = model.planetDict[data.planetId];
+   planet.faction = data.defendingFaction;
    battle.id = "nobattle";
-   battle.status = "idle"
-   battle.battleParticipants = []
-   battle.battleParticipantsUnique = []
+   battle.status = "idle";
+   battle.battleParticipants = [];
+   battle.battleParticipantsUnique = [];
+
+   model.battleDict[data.battleId] = null;
 
    model.forceAppUpdate();
 }
 export {handlePlanetDefended}
 
 function handlePlanetOwnerChanged(model, data) {
-   const planet = model.planetDict[data.planetId]
+   const planet = model.planetDict[data.planetId];
    planet.faction = data.newOwner;
 
    model.forceAppUpdate();
@@ -57,9 +61,10 @@ export {handlePlanetOwnerChanged}
 
 function handlePlanetUnderAssault(model, data) {
    model.battleDict[data.battleId] = model.planetDict[data.planetId].currentBattle;
-
-   const battle = model.battleDict[data.battleId]
+   const battle = model.battleDict[data.battleId];
+   battle.id = data.battleId;
    battle.status = "lobby"
+   battle.waitingProgress = 0.0;
    battle.battleParticipants.push({ factionName: data.defendingFaction,
                                     players: []})
    battle.battleParticipants.push({ factionName: data.attackingFaction,

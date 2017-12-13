@@ -47,6 +47,7 @@ class Model {
 
       for (var i = 0; i < dataSystems.length; i++) {
          var sys = dataSystems[i];
+         console.log(sys.attributes);
          this.addSystem(   (sys.attributes.name == null) ? "no name" : sys.attributes.name,
                            sys.id,
                            sys.attributes.y * this.simSettings.systemPositionScale,
@@ -55,10 +56,15 @@ class Model {
          for (var j = 0; j < sys.relationships.connectedSystems.data.length; j++) {
             this.systemsList[i].neighbours.push(sys.relationships.connectedSystems.data[j].id);
          }
+         console.log("next");
 
          for (var j = 0; j < sys.relationships.planets.data.length; j++) {
 
             var currentPlanetId = sys.relationships.planets.data[j].id;
+
+            console.log(sys.relationships.planets.data)
+            console.log(currentPlanetId in dataPlanetsDict)
+            console.log("prev", dataPlanetsDict[currentPlanetId])
 
             this.systemsList[i].addPlanet(   (dataPlanetsDict[currentPlanetId].attributes.name == null) ? "no name" : dataPlanetsDict[currentPlanetId].attributes.name,
                                              dataPlanetsDict[currentPlanetId].id,
@@ -68,6 +74,7 @@ class Model {
                                              'planetSprites1.png');
 
             var currentPlanet = this.systemsList[i].planetList[this.systemsList[i].planetList.length - 1];
+            console.log("next2");
             if (currentPlanetId in planetToBattleDict) {
 
                currentPlanet.currentBattle.id = planetToBattleDict[currentPlanetId].id;
@@ -90,6 +97,8 @@ class Model {
                                                                      players: []});
 
                var participantList = planetToBattleDict[currentPlanetId].relationships.participants.data
+
+
 
 
 
@@ -156,11 +165,15 @@ class ModelCharacter {
 class ModelSimSettings {
    constructor() {
 
-      this.mapScale = 1; //relevant for zoom beheaviour
+      this.mapScale = 1.3; //relevant for zoom beheaviour
       this.systemPositionScale = 10; //the scale of the systems coordinate system
       this.systemScale = 2; //the scale of the systems
-      this.baseStarSize = 1.5; //factor to scale all star radii
+      this.baseStarSize = 1.6; //factor to scale all star radii
       this.basePlanetSize = 0.35; //factor to scale all sprite radii
+      this.centerMassScalingExponent = 3/5;
+      this.systemScaleUiThreshold = 4;
+      this.planetScalingExponent = 1.0;
+      this.planetScaleUiThreshold = 15;
       this.simSpeed = 1; //the speed of planet movement
       this.fps = 30; //the fps in planetmovement
    }

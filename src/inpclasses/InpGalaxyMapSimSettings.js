@@ -12,7 +12,11 @@ class InpGalaxyMapSimSettings extends InputForm {
          simSpeed: "number",
          fps: "number",
          baseStarSize: "number",
-         basePlanetSize: "number"
+         basePlanetSize: "number",
+         centerMassScalingExponent: "number",
+         systemScaleUiThreshold: "number",
+         planetScalingExponent: "number",
+         planetScaleUiThreshold: "number"
       };
 
       this.validate(inputObject)

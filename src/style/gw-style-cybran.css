@@ -28,6 +28,30 @@
 	bottom:1vh;
 }
 
+.scrollbar::-webkit-scrollbar {
+  width: 2%;
+  background: transparent;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #333333;
+}
+
+.themeHoverDefault {
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
+}
+.themeHoverDefault:hover {
+	opacity:1;
+}
+
+.themeHoverStrong {
+	opacity:0.5;
+	transition:opacity 0.1s ease-out;
+}
+.themeHoverStrong:hover {
+	opacity:1;
+}
+
 .themeBackgroundDefault {
 	padding:5px;
 	background-color:rgba(150,0,0,0.2);

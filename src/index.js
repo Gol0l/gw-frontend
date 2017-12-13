@@ -5,8 +5,58 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {Model} from './modelclasses/Model.js';
 import {handleFunctionDict} from './network/messageHandlers.js'
-import {buttonCallback} from './network/messageConstructors.js'
+import {networkCallbacks} from './network/messageConstructors.js'
 import {Connector} from './network/Connector.js'
+
+
+function resourceOwnerCredentialsGrant(	client_id,
+                                        client_secret,
+                                        scope,
+                                        username,
+                                        password,
+                                        callback) {
+
+  var http = new XMLHttpRequest();
+  var url = "https://api.faforever.com/oauth/authorize";
+  var myHeaderValue = "";
+  var params = "grant_type=password" +
+               "&client_id=" + client_id +
+                "&client_secret=" + client_secret +
+                "&scope=" + scope +
+                "&username=" + username +
+                "&password=" + password;
+
+  http.open("POST", url, true);
+
+  //Send the proper header information along with the request
+  http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+  http.onreadystatechange = function() {//Call a function when the state changes.
+      if(http.readyState == 4 && http.status == 200) {
+          callback(JSON.parse(http.responseText));
+      }
+  }
+  http.send(params);
+
+}
+
+function printTokenData(data) {
+   console.log("RETURNRETURNRETURN")
+	console.log(data);
+}
+
+resourceOwnerCredentialsGrant("postman",
+                              "postman",
+                              "upload_map upload_mod write_account_data",
+                              "Golol",
+                              "wegnerrr",
+                              printTokenData);
+
+
+
+
+
+
 
 
 
@@ -16,7 +66,8 @@ function startGalacticWar(model, network) {
       model.forceAppUpdate = forceUpdateFunction;
    }
 
-   ReactDOM.render(<App model = {model} buttonCallback = {(planetId, buttonType) => buttonCallback(model, network, planetId, buttonType)}/>, document.getElementById('root'));
+   ReactDOM.render(<App model = {model}   buttonCallback = {(planetId, buttonType) => networkCallbacks.buttonCallback(model, network, planetId, buttonType)}
+                                          shopCallback = {(transactions) => networkCallbacks.shopCallback(model, network, transactions)}/>, document.getElementById('root'));
 
    var user_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjo0MTAyMzU4NDAwLCAiYXV0aG9yaXRpZXMiOiBbXSwgInVzZXJfaWQiOiA1LCAidXNlcl9uYW1lIjogIkFlb24gRWNobyJ9.Kv1en5p2bWb6zE2ag6PWp4u1WxR6F8HPZSweDG23p60";
    network.setupSocket(user_token, model, handleFunctionDict);
@@ -36,7 +87,6 @@ function setupModel(model, network, dataList) {
 
 }
 function gololInit(model) {
-   console.log("thisismyinit")
 
    var network = new Connector("localhost:8080");
 
@@ -50,12 +100,11 @@ function gololInit(model) {
    model.playerInfo.isInBattle = false;
 
 
-   var promiseCharacters = network.dataRequest("gwCharacter");
-   var promiseSystems = network.dataRequest("solarSystem");
-   var promisePlanets = network.dataRequest("planet");
-   var promiseBattles = network.dataRequest("battle?filter=status!=FINISHED");
+   var promiseCharacters = network.dataRequest("gwCharacter", "", 1);
+   var promiseSystems = network.dataRequest("solarSystem", "", 1);
+   var promisePlanets = network.dataRequest("planet", "", 1);
+   var promiseBattles = network.dataRequest("battle", "filter=status!=FINISHED", 1);
 
-   console.log("dataCharacters called")
    Promise.all([promiseCharacters, promiseSystems, promisePlanets, promiseBattles]).then((returnDataList) => setupModel(model, network, returnDataList))
 
 }

@@ -18,17 +18,28 @@ function buttonCallback(model, network, planetId, buttonType) {
    }
 }
 
-export {buttonCallback}
+function shopCallback(model, network, transactions) {
+   alert('top level! we did it!');
+   console.log("transactions:");
+   console.log(transactions);
+}
 
+
+var networkCallbacks = {buttonCallback: buttonCallback,
+                        shopCallback: shopCallback};
+
+export {networkCallbacks}
+
+var uuidV4 = require('uuid/v4');
 function createStartAssault(planetId) {
-   const uuid = require('uuid/v4');
+   const uuid = uuidV4();
    return ({action: "initiateAssault",
             data: {  requestId: uuid,
                      planetId: planetId}})
 }
 
 function createJoinAssault(battleId) {
-   const uuid = require('uuid/v4');
+   const uuid = uuidV4();
    return ({action: "joinAssault",
             data: {  requestId: uuid,
                      battleId: battleId}})
@@ -36,7 +47,8 @@ function createJoinAssault(battleId) {
 
 
 function createLeaveLobby(battleId) {
-   const uuid = require('uuid/v4');
+   console.log("creating leavelobby")
+   const uuid = uuidV4();
    return ({action: "leaveAssault",
             data: {  requestId: uuid,
                      battleId: battleId}})

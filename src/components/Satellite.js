@@ -66,15 +66,15 @@ class Satellite extends React.Component {
 
    render() {
 
-      const minScaleForDisplay = 15;
-      const objectSize = this.props.inp.size;
+      const minScaleForDisplay = this.props.inp.settings.planetScaleUiThreshold;
       const displayScale = this.props.inp.settings.displayScale;
+      const objectSize = this.props.inp.size * Math.pow(displayScale, this.props.inp.settings.planetScalingExponent);
       const radius = this.props.inp.radius;
 
       var displaySprite =  <div  style = {{  position: "absolute",
                                              transform: "rotate(" + this.state.rotation.toString() + "deg)",
-                                             width: Math.round(objectSize * displayScale),
-                                             height: Math.round(objectSize * displayScale)
+                                             width: Math.round(objectSize),
+                                             height: Math.round(objectSize)
                                           }}>
                               <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.inp.content.toString())}/>
                            </div>
@@ -85,36 +85,36 @@ class Satellite extends React.Component {
                                              + (- 2/2).toString() + "px)"
                                              + " "
                                              + "rotate(" + (180*this.state.angle/Math.PI).toString() + "deg)",
-                                             width: Math.round((objectSize) * displayScale) + 2,
-                                             height: Math.round((objectSize) * displayScale) + 2
+                                             width: Math.round(objectSize) + 2,
+                                             height: Math.round(objectSize) + 2
                                           }}>
                               <img style = {{pointerEvents: "none", position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/shadow.png')}/>
                            </div>
 
       var planetStyle = {  transform: "translate("
-                        + (displayScale * (radius * Math.cos(this.state.angle) - objectSize/2)).toString() + "px,"
-                        + (displayScale * (radius * Math.sin(this.state.angle) - objectSize/2)).toString() + "px)",
-                           width: Math.round(objectSize * displayScale),
-                           height: Math.round(objectSize * displayScale)}
+                        + (displayScale * radius * Math.cos(this.state.angle) - objectSize/2).toString() + "px,"
+                        + (displayScale * radius * Math.sin(this.state.angle) - objectSize/2).toString() + "px)",
+                           width: Math.round(objectSize),
+                           height: Math.round(objectSize)}
 
       var factionImg;
 
       switch (this.props.inp.faction) {
 
          case "aeon":
-            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/aeon.jpeg')}/>;
+            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/aeon_transparent_bright.png')}/>;
             break;
          case "cybran":
-            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/cybran.jpeg')}/>;
+            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/cybran_transparent_bright.png')}/>;
             break;
          case "uef":
-            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/uef.jpeg')}/>;
+            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/uef_transparent_bright.png')}/>;
             break;
          case "seraphim":
-            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/seraphim.jpeg')}/>;
+            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/seraphim_transparent_bright.png')}/>;
             break;
          default:
-            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/cybran.jpeg')}/>;
+            factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/cybran_transparent_bright.png')}/>;
 
       }
 
@@ -126,7 +126,7 @@ class Satellite extends React.Component {
             break;
          case "battle":
             var statusContent =  <div style = {{height: "1em", width: "auto"}}>
-                                    <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/battleSymbol.gif')}/>
+                                    <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/battleLogo.png')}/>
                                  </div>
             break;
          case "idle":
@@ -135,19 +135,19 @@ class Satellite extends React.Component {
       }
 
       var displayStatus = [<StatusBar key = "status" inp = {new InpStatusBar({height: 16,
-                                          distance: objectSize * displayScale * 0.5 + 4,
+                                          distance: objectSize * 0.5 + 4,
                                           contents: [statusContent]}) }/>,
                            <StatusBar key = "name" inp = {new InpStatusBar({height: 12,
-                                          distance: -objectSize * displayScale * 0.5 - 13,
+                                          distance: -objectSize * 0.5 - 13,
                                           contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
                            } />,
-                           <StatusBar key = "factionSymbol" inp = {new InpStatusBar({height: 16,
-                                          distance: -objectSize * displayScale * 0.5 - 30,
+                           <StatusBar key = "factionSymbol" inp = {new InpStatusBar({height: 28,
+                                          distance: -objectSize * 0.5 - 42,
                                           contents: [<div style = {{height: "1em", width: "auto"}}>{factionImg}</div>]})
                            } />]
 
 
-      var displaySelector = <Selector inp = {new InpSelector({ width: Math.round(objectSize * displayScale * 2.4), height: Math.round(objectSize * displayScale * 2.4),
+      var displaySelector = <Selector inp = {new InpSelector({ width: Math.round(objectSize * 2.4), height: Math.round(objectSize * 2.4),
                                                                isOpened: this.props.inp.isSelected})} />
 
 

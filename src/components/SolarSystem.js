@@ -24,6 +24,7 @@ class SolarSystem extends React.Component {
 
       this.handleClick = this.handleClick.bind(this);
       this.animExpand = this.animExpand.bind(this);
+      this.deepEqual = require('deep-equal');
    }
 
    handleClick(e) {
@@ -77,15 +78,15 @@ class SolarSystem extends React.Component {
    }
 
    shouldComponentUpdate(nextProps, nextState) {
-      var deepEqual = require('deep-equal');
-      console.log("shouldupdate");
+
+
       console.log(this.props.inp.globalUpdate);
 
       if (this.props.inp.globalUpdate) {
          return (true);
       }
       else {
-         return (!deepEqual(nextProps.inp, this.props.inp) || !deepEqual(nextState, this.state));
+         return (!this.deepEqual(nextProps.inp, this.props.inp) || !this.deepEqual(nextState, this.state));
       }
 
    }
@@ -105,10 +106,12 @@ class SolarSystem extends React.Component {
       const centerMass = this.props.inp.centerMass;
 
       const divStyle = {position: "absolute", transform: "translate(" + left.toString() + "px," + top.toString() + "px)"};
-      const settings = {gravPar: this.props.inp.gravPar,
-                        displayScale: scale * this.state.scaleFactor,
-                        fps: this.props.inp.simSettings.fps,
-                        simSpeed: this.props.inp.simSettings.simSpeed};
+      const planetSettings = {gravPar: this.props.inp.gravPar,
+                              displayScale: scale * this.state.scaleFactor,
+                              fps: this.props.inp.simSettings.fps,
+                              simSpeed: this.props.inp.simSettings.simSpeed,
+                              planetScalingExponent: this.props.inp.simSettings.planetScalingExponent,
+                              planetScaleUiThreshold: this.props.inp.simSettings.planetScaleUiThreshold};
 
       const planetList = this.props.inp.planetList
 
@@ -123,11 +126,12 @@ class SolarSystem extends React.Component {
             lobbyCount += 1;
          }
 
+         
          displayList.push(<Satellite key = {i} inp = {new InpSatellite({system_Id: this.props.inp.id,
                                                                         radius: planetList[i].distance,
                                                                         size: planetList[i].size * basePlanetSize,
                                                                         start: "random",
-                                                                        settings: settings,
+                                                                        settings: planetSettings,
                                                                         content: planetList[i].sprite,
                                                                         spin: planetList[i].spin,
                                                                         id: planetList[i].id,
@@ -161,23 +165,24 @@ class SolarSystem extends React.Component {
          }
 
 
+      const scalingExponent = this.props.inp.simSettings.centerMassScalingExponent;
+      const leftShift = -centerMass.radius * Math.pow(scale, scalingExponent) * baseStarSize
+      const topShift = -centerMass.radius * Math.pow(scale, scalingExponent) * baseStarSize
+      const width = centerMass.radius * 2 * Math.pow(scale, scalingExponent) * baseStarSize
+      const height = centerMass.radius * 2 * Math.pow(scale, scalingExponent) * baseStarSize
 
-      const leftShift = -centerMass.radius * Math.pow(scale, 3/5) * baseStarSize
-      const topShift = -centerMass.radius * Math.pow(scale, 3/5) * baseStarSize
-      const width = centerMass.radius * 2 * Math.pow(scale, 3/5) * baseStarSize
-      const height = centerMass.radius * 2 * Math.pow(scale, 3/5) * baseStarSize
-
+      const uiThreshold = this.props.inp.simSettings.systemScaleUiThreshold;
       return (
          <div id = "container" style = {divStyle}>
 
-            {(scale < 8) ? <div></div> :
+            {(scale < uiThreshold) ? <div></div> :
                <StatusBar inp = {new InpStatusBar({height: 16,
                                                    distance: height * 0.6 + 3,
                                                    contents: statusContent})
                } />
             }
 
-            {(scale < 8) ? <div></div> :
+            {(scale < uiThreshold) ? <div></div> :
                <StatusBar inp = {new InpStatusBar({height: 14,
                                                    distance: -height * 0.6 - 14,
                                                    contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})

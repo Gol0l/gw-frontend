@@ -39,7 +39,6 @@ class InputForm {
       }
       else {
          correct = false;
-         console.log(Object.keys(template), Object.keys(types))
          throw new Error("number of keys in input object not correct")
       }
       return (correct)

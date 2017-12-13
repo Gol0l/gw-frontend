@@ -10,10 +10,12 @@ class InpSatelliteSettings extends InputForm {
          gravPar: "number",
          displayScale: "number",
          fps: "number",
-         simSpeed: "number"
+         simSpeed: "number",
+         planetScalingExponent: "number",
+         planetScaleUiThreshold: "number"
 
       };
-      
+
       this.validate(inputObject)
 
 

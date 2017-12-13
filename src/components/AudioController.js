@@ -384,12 +384,24 @@ class AudioController extends React.Component {
             case "immersion":
                var rect = this.immersionNode.getBoundingClientRect()
                var value = (e.clientX - rect.left) / rect.width;
-               this.setState({immersion: (value > 1) ? 1 : value});
+               if (value > 1) {
+                  value = 1;
+               }
+               if (value < 0) {
+                  value = 0;
+               }
+               this.setState({immersion: value});
                break;
             case "volume":
                var rect = this.volumeNode.getBoundingClientRect()
                var value = (e.clientX - rect.left) / rect.width;
-               this.setState({volume: (value > 1) ? 1 : value});
+               if (value > 1) {
+                  value = 1;
+               }
+               if (value < 0) {
+                  value = 0;
+               }
+               this.setState({volume: value});
                this.adjustVolume()
                break;
             default:
@@ -407,26 +419,26 @@ class AudioController extends React.Component {
    render() {
 
       return (
-         <div id='audiobox' className="themeBackgroundDefault themeBorderDefault themeShadowDefault" style = {{lineHeight: 0.5}}>
-            <div  className="themeBorderDefault themeShadowDefault"
+         <div id='audiobox' className="themeBackgroundNoHover themeBorderDefault themeShadowDefault" style = {{lineHeight: 0.5}}>
+            <div  className="themeBorderDefault themeShadowDefault themeHoverDefault"
                   style = {{position: "absolute", left: "49%", width: "47%", height: "31%", backgroundColor: "rgba(0, 0, 0, 0.5)", borderRadius: "2px"}}
                   onMouseMove = {this.handleImmersionMouseMove} onMouseDown = {() => this.setState({mouseDown: true})} onMouseUp = {() => this.setState({mouseDown: false})} onMouseLeave = {() => this.setState({mouseDown: false})}
                   ref = {(node) => this.immersionNode = node}>
                <div style = {{position: "absolute", left: "0%", top: "4%", width: (this.state.immersion * 100).toString() + "%", height: "92%", backgroundColor: "rgba(225, 225, 255, 0.5)", borderRadius: "2px"}}>
                </div>
             </div>
-            <div className="themeBackgroundNoHover themeBorderDefault themeTextDefault themeShadowDefault" style = {{width: "40%"}}>
+            <div className="themeTextDefault" style = {{width: "40%", padding: "5px"}}>
                Immersion
             </div>
             <br/>
-            <div  className="themeBorderDefault themeShadowDefault"
+            <div  className="themeBorderDefault themeShadowDefault themeHoverDefault"
                   style = {{position: "absolute", left: "49%", width: "47%", height: "31%", backgroundColor: "rgba(0, 0, 0, 0.5)", borderRadius: "2px"}}
                   onMouseMove = {this.handleVolumeMouseMove} onMouseDown = {() => this.setState({mouseDown: true})} onMouseUp = {() => this.setState({mouseDown: false})} onMouseLeave = {() => this.setState({mouseDown: false})}
                   ref = {(node) => this.volumeNode = node}>
                <div style = {{position: "absolute", left: "0%", top: "4%", width: (this.state.volume * 100).toString() + "%", height: "92%", backgroundColor: "rgba(225, 225, 255, 0.5)", borderRadius: "2px"}}>
                </div>
             </div>
-            <div className="themeBackgroundNoHover themeBorderDefault themeTextDefault themeShadowDefault" style = {{width: "40%"}}>
+            <div className="themeTextDefault" style = {{width: "40%", padding: "5px"}}>
                Volume
             </div>
          </div>

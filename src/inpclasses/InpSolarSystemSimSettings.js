@@ -10,7 +10,11 @@ class InpSolarSystemSimSettings extends InputForm {
          fps: "number",
          simSpeed: "number",
          baseStarSize: "number",
-         basePlanetSize: "number"
+         basePlanetSize: "number",
+         centerMassScalingExponent: "number",
+         systemScaleUiThreshold: "number",
+         planetScalingExponent: "number",
+         planetScaleUiThreshold: "number"
 
       };
 
