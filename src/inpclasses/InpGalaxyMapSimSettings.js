@@ -8,6 +8,8 @@ class InpGalaxyMapSimSettings extends InputForm {
       this.template = {
          mapScale: "number",
          systemPositionScale: "number",
+         systemPositionOffsetLeft: "number",
+         systemPositionOffsetTop: "number",
          systemScale: "number",
          simSpeed: "number",
          fps: "number",
@@ -16,6 +18,7 @@ class InpGalaxyMapSimSettings extends InputForm {
          centerMassScalingExponent: "number",
          systemScaleUiThreshold: "number",
          planetScalingExponent: "number",
+         planetRadiusScale: "number",
          planetScaleUiThreshold: "number"
       };
 

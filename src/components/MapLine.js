@@ -18,7 +18,6 @@ class MapLine extends React.Component {
 
    render() {
       var number = this.props.inp.identifier;
-
       if (this.props.inp.type == "inactive") {
          return(  <svg>
                      <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {this.props.inp.points[0][0]}
@@ -41,7 +40,7 @@ class MapLine extends React.Component {
                         y2 = {this.props.inp.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
 
-                        strokeWidth = {1} />
+                        strokeWidth = {0.6} />
                   </svg>
             )
 

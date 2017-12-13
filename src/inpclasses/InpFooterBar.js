@@ -1,15 +1,16 @@
+
 import {InputForm} from './InputForm.js'
 
-class InpEquipmentWidget extends InputForm {
+
+class InpFooterBar extends InputForm {
 
    constructor(inputObject) {
-      super(inputObject)
+      super(inputObject);
 
       this.template = {
 
-         shopItems: "array",
          playerInfo: "object",
-         shopProcessTransactions: "function",
+         handleShopClicked: "function"
 
       };
 
@@ -17,4 +18,4 @@ class InpEquipmentWidget extends InputForm {
 
    }
 }
-export {InpEquipmentWidget};
+export {InpFooterBar};

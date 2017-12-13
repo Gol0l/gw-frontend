@@ -7,7 +7,8 @@ class InpInventory extends InputForm {
 
       this.template = {
 
-         inventoryItems: "array",
+         shopItems: "array",
+         playerInventory: "object",
          sizeOfRow: "number",
          sizeOfColumn: "number"
 

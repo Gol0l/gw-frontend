@@ -8,8 +8,8 @@ class InpInventoryCard extends InputForm {
 
       this.template = {
 
-         item: "object"
-
+         item: "object",
+         amount: "number"
       };
 
       this.validate(inputObject)

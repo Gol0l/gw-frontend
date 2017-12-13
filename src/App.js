@@ -23,11 +23,7 @@ class App extends Component {
 
       this.state = {
          width: window.innerWidth, height: window.innerHeight,
-         mapWidth: this.props.model.mapWidth, mapHeight: this.props.model.mapHeight,
          frameDim: {leftSize: 0, topSize: 0, rightSize: 0, bottomSize: 0},
-         simSettings: this.props.model.simSettings,
-         systemsList: this.props.model.systemsList,
-         playerInfo: this.props.model.playerInfo,
          selection: {system_Id: "none", planet_Id: "none", planetRect: "none"},
          globalUpdate: false
 
@@ -149,15 +145,20 @@ class App extends Component {
 
 
    render() {
+      const playerInfo = this.props.model.playerInfo;
+      const systemsList = this.props.model.systemsList;
+      const simSettings = this.props.model.simSettings;
+      const mapWidth = this.props.model.mapWidth;
+      const mapHeight = this.props.model.mapHeight;
 
       var displayInterface = true;
 
       if (this.state.selection.planet_Id != "none") {
-         var indices = indicesFromIds(this.state.systemsList, this.state.selection.system_Id, this.state.selection.planet_Id);
+         var indices = indicesFromIds(systemsList, this.state.selection.system_Id, this.state.selection.planet_Id);
          var sIndex = indices[0];
          var pIndex = indices[1];
-         var buttonType = getButtonType(this.state.systemsList, sIndex, pIndex, this.state.playerInfo)
-         var planetInfo = this.state.systemsList[sIndex].planetList[pIndex]
+         var buttonType = getButtonType(systemsList, sIndex, pIndex, playerInfo)
+         var planetInfo = systemsList[sIndex].planetList[pIndex]
       }
       else {
          var displayInterface = false;
@@ -177,31 +178,31 @@ class App extends Component {
       var buttonFunction = buttonTypeToFunction[buttonType];
 
 
-      var loginElement = (!this.state.playerInfo.isLoggedIn) ? <LoginBox inp={new InpLoginBox({submitFunction: this.submitLogin})} /> : <div></div>;
-      console.log( "loggedin?", this.state.playerInfo.isLoggedIn);
+      var loginElement = (!playerInfo.isLoggedIn) ? <LoginBox inp={new InpLoginBox({submitFunction: this.submitLogin})} /> : <div></div>;
+      console.log( "loggedin?", playerInfo.isLoggedIn);
 
-      var characterElement = (this.state.playerInfo.isLoggedIn && !this.state.playerInfo.hasCharacter) ?
+      var characterElement = (playerInfo.isLoggedIn && !playerInfo.hasCharacter) ?
          <CharacterCreation inp={new InpCharacterCreation({ submitFunction: this.submitCharacter,
                                                             requestName: this.requestName,
-                                                            suggestedName: this.state.playerInfo.suggestedDisplayName
+                                                            suggestedName: playerInfo.suggestedDisplayName
                                                          })} /> : <div id="nocharacterCreation"></div>;
 
-      console.log( "character?", (this.state.playerInfo.isLoggedIn && !this.state.playerInfo.hasCharacter));
+      console.log( "character?", (playerInfo.isLoggedIn && !playerInfo.hasCharacter));
 
-      var mapElement = (this.state.playerInfo.isLoggedIn && this.state.playerInfo.hasCharacter) ? <GalaxyMap  inp = {new InpGalaxyMap({width: this.state.width, height: this.state.height,
-                                                                                                                                       mapWidth: this.state.mapWidth, mapHeight: this.state.mapHeight,
-                                                                                                                                       frameDim: this.state.frameDim,
-                                                                                                                                       simSettings: this.state.simSettings,
-                                                                                                                                       systemsList: this.state.systemsList,
-                                                                                                                                       selectedPlanet: this.state.selection.planet_Id,
-                                                                                                                                       playerFaction: this.state.playerInfo.faction,
-                                                                                                                                       funcPlanetOnClick: this.planetOnClick,
-                                                                                                                                       globalUpdate: this.state.globalUpdate
-                                                                                                                                    })} />: <div></div>;
+      var mapElement = (playerInfo.isLoggedIn && playerInfo.hasCharacter) ? <GalaxyMap  inp = {new InpGalaxyMap({ width: this.state.width, height: this.state.height,
+                                                                                                                  mapWidth: mapWidth, mapHeight: mapHeight,
+                                                                                                                  frameDim: this.state.frameDim,
+                                                                                                                  simSettings: simSettings,
+                                                                                                                  systemsList: systemsList,
+                                                                                                                  selectedPlanet: this.state.selection.planet_Id,
+                                                                                                                  playerFaction: playerInfo.faction,
+                                                                                                                  funcPlanetOnClick: this.planetOnClick,
+                                                                                                                  globalUpdate: this.state.globalUpdate
+                                                                                                               })} />: <div></div>;
 
 
 
-      var audioElement = (this.state.playerInfo.isLoggedIn && this.state.playerInfo.hasCharacter) ? <AudioController/>: <div></div>;
+      var audioElement = (playerInfo.isLoggedIn && playerInfo.hasCharacter) ? <AudioController/>: <div></div>;
 
       var interfaceElements = (displayInterface) ? [  <MapPreview inp = {new InpMapPreview({ mapName: planetInfo.mapInfo.mapName,
                                                                                              mapSize: planetInfo.mapInfo.mapSize,
@@ -244,25 +245,24 @@ class App extends Component {
                            price: 200},
                           {image: "tank.png",
                            name: "light tank",
-                           itemId: "7",
+                           itemId: "8",
                            price: 350},
-                        {image: "tank.png",
-                         name: "light tank",
-                         itemId: "5",
-                         price: 350},
-                        {image: "tank.png",
-                         name: "heavy tank",
-                         itemId: "6",
-                         price: 200},
-                        {image: "tank.png",
-                         name: "light tank",
-                         itemId: "7",
-                         price: 350}];
+                          {image: "tank.png",
+                           name: "light tank",
+                           itemId: "9",
+                           price: 350},
+                          {image: "tank.png",
+                           name: "heavy tank",
+                           itemId: "10",
+                           price: 200},
+                          {image: "tank.png",
+                           name: "light tank",
+                           itemId: "11",
+                           price: 350}];
 
       var equipmentWidgetElement = <EquipmentWidget inp = {new InpEquipmentWidget({ shopItems: shopTestData,
-                                                                                    inventoryItems: shopTestData,
-                                                                                    shopProcessTransactions: this.shopProcessTransactions,
-                                                                                    userBalance: 2000})} />
+                                                                                    playerInfo: playerInfo,
+                                                                                    shopProcessTransactions: this.shopProcessTransactions})} />
 
 
       return (
@@ -291,8 +291,16 @@ class App extends Component {
 export default App;
 
 
-function isPlanetAccessible() {
-   return true
+function isSystemAccessible(systemsList, sIndex, playerInfo) {
+   var isAccessible = false;
+   for (var i = 0; i < systemsList.length; i++) {
+      if (systemsList[i].faction == playerInfo.faction) {
+         if (systemsList[i].neighbours.includes(systemsList[sIndex].id)) {
+            isAccessible = true;
+         }
+      }
+   }
+   return (isAccessible);
 }
 
 function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR THE KIND OF ACTION HAPPENS HERE
@@ -303,7 +311,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
    switch (planetInfo.currentBattle.status) {
       case "idle":
          if (planetInfo.faction != playerInfo.faction) {
-            if (isPlanetAccessible() && !playerInfo.isInBattle) {
+            if (isSystemAccessible(systemsList, sIndex, playerInfo) && !playerInfo.isInBattle) {
                buttonType = "startAttack"
             }
             else {
@@ -373,7 +381,7 @@ function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR TH
          break;
    }
 
-   return buttonType
+   return (buttonType)
 }
 
 
@@ -400,5 +408,5 @@ function indicesFromIds(systemsList, system_Id, planet_Id) {
       throw new Error("planet with id " + planet_Id + " not found within system " + system_Id)
    }
 
-   return [sIndex, pIndex]
+   return ([sIndex, pIndex])
 }

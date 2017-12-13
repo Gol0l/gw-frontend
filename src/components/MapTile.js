@@ -41,7 +41,7 @@ class MapTile extends React.Component {
                </filter>
 
                <polygon points = {stringPolygon} style = {{ clipPath: "url(#" + pathId + ")", pointerEvents: "none", fill: this.props.inp.color, fillOpacity: 1,
-                                                            stroke: this.props.inp.color, strokeWidth: 0}} />
+                                                            stroke: this.props.inp.color, strokeWidth: 0.5}} />
             </svg>
 
       )

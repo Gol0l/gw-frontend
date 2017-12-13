@@ -20,7 +20,8 @@ class InventoryCard extends React.Component {
             <div style = {{display: "flex", justifyContent: "center", width: "100%", flexDirection: "column", whiteSpace: "nowrap"}}>
                <div style = {{textAlign: "center"}}>{this.props.inp.item.name}</div>
             </div>
-            <div style = {{width: "20%", height: "100%", marginRight: "2%"}}>
+            <div style = {{width: "20%", height: "100%", marginRight: "2%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1em"}}>
+               {this.props.inp.amount}
             </div>
          </div>
 

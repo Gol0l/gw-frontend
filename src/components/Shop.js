@@ -68,9 +68,8 @@ class Shop extends React.Component {
 
 
       return (
-         <div  style = {{  position: "relative", top: "0%", right: "1%", width: "100%", height: "65%",
-                           backgroundColor: "rgba(20, 20, 20, 0.4)", fontSize: "0.9em"}}
-               className = "themeShadowDefault">
+         <div  style = {{  position: "relative", top: "0%", width: "100%", height: "65%", fontSize: "0.9em"}}
+               className = "themeShadowDefault themeBackgroundGreyDarkNoHover noPadding">
             <div  style = {{position: "relative", width: "100%", height: "90%", overflowX: "hidden", overflowY: "auto", paddingBottom: 0}}
                   className = "scrollbar">
                {rowList}

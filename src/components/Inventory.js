@@ -11,19 +11,21 @@ class Inventory extends React.Component {
    }
 
    render() {
-      const inventoryItems = this.props.inp.inventoryItems;
+      const shopItems = this.props.inp.shopItems;
+      const playerInventory = this.props.inp.playerInventory
       const sizeOfRow = this.props.inp.sizeOfRow;
       const sizeOfColumn = this.props.inp.sizeOfColumn;
       var cardList = [];
       var rowList = [];
       var row = [];
-      for (var i = 0; i < inventoryItems.length; i++) {
-         var card = <InventoryCard id = {inventoryItems[i].itemId} inp = {new InpInventoryCard({item: inventoryItems[i]})} />;
+      for (var i = 0; i < shopItems.length; i++) {
+         var card = <InventoryCard id = {shopItems[i].itemId} inp = {new InpInventoryCard({  item: shopItems[i],
+                                                                                             amount: (isNaN(playerInventory[shopItems[i].itemId])) ? 0 : playerInventory[shopItems[i].itemId]})} />;
 
          row.push(<div  style = {{height: "100%", width: (96.0 / sizeOfRow).toString() + "%", marginRight: "2%"}}
                         className = "themeHoverDefault noPadding themeBorderDefault themeTextDefault"> {card} </div>);
 
-         if (row.length == sizeOfRow || i == inventoryItems.length - 1) {
+         if (row.length == sizeOfRow || i == shopItems.length - 1) {
             rowList.push(<div id = {i} style = {{  display: "flex", justifyContent: "flex-start",
                                                    width: "98%", height: (91.0 / sizeOfColumn).toString() + "%", marginTop: "2%", marginLeft: "2%"}}> {row} </div>);
             row = [];
@@ -32,9 +34,8 @@ class Inventory extends React.Component {
 
 
       return (
-         <div  style = {{  position: "relative", top: "0%", right: "1%", width: "100%", height: "35%",
-                           backgroundColor: "rgba(20, 20, 20, 0.4)", fontSize: "0.9em"}}
-               className = "themeShadowDefault">
+         <div  style = {{  position: "relative", top: "0%", width: "100%", height: "35%", fontSize: "0.9em"}}
+               className = "themeShadowDefault themeBackgroundGreyDarkNoHover noPadding">
             <div  style = {{position: "relative", width: "100%", height: "90%", overflowX: "hidden", overflowY: "auto", paddingBottom: 0}}
                   className = "scrollbar">
                {rowList}

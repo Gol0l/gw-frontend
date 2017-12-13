@@ -189,6 +189,7 @@ class GalaxyMap extends React.Component {
                                                                centerMassScalingExponent: simSettings.centerMassScalingExponent,
                                                                systemScaleUiThreshold: simSettings.systemScaleUiThreshold,
                                                                planetScalingExponent: simSettings.planetScalingExponent,
+                                                               planetRadiusScale: simSettings.planetRadiusScale,
                                                                planetScaleUiThreshold: simSettings.planetScaleUiThreshold},
                                                 selectedPlanet: this.props.inp.selectedPlanet,
                                                 funcPlanetOnClick: this.props.inp.funcPlanetOnClick,

@@ -102,8 +102,10 @@ class SolarSystem extends React.Component {
       const left = this.props.inp.left;
       const basePlanetSize = this.props.inp.simSettings.basePlanetSize;
       const baseStarSize = this.props.inp.simSettings.baseStarSize;
-      const scale = this.props.inp.simSettings.scale
+      const scale = this.props.inp.simSettings.scale;
       const centerMass = this.props.inp.centerMass;
+
+      const planetRadiusScale = this.props.inp.simSettings.planetRadiusScale;
 
       const divStyle = {position: "absolute", transform: "translate(" + left.toString() + "px," + top.toString() + "px)"};
       const planetSettings = {gravPar: this.props.inp.gravPar,
@@ -126,9 +128,9 @@ class SolarSystem extends React.Component {
             lobbyCount += 1;
          }
 
-         
+
          displayList.push(<Satellite key = {i} inp = {new InpSatellite({system_Id: this.props.inp.id,
-                                                                        radius: planetList[i].distance,
+                                                                        radius: planetList[i].distance * planetRadiusScale,
                                                                         size: planetList[i].size * basePlanetSize,
                                                                         start: "random",
                                                                         settings: planetSettings,

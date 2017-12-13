@@ -14,6 +14,7 @@ class InpSolarSystemSimSettings extends InputForm {
          centerMassScalingExponent: "number",
          systemScaleUiThreshold: "number",
          planetScalingExponent: "number",
+         planetRadiusScale: "number",
          planetScaleUiThreshold: "number"
 
       };

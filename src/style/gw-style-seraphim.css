@@ -33,7 +33,7 @@
   background: transparent;
 }
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: #444444;
 }
 
 .themeHoverDefault {
@@ -64,6 +64,12 @@
 	opacity:1;
 }
 
+.themeBackgroundNoHover {
+	padding:5px;
+	background-color:rgba(255,255,180,0.2);
+	opacity:0.8;
+}
+
 .themeBackgroundGrey {
 	padding:5px;
 	background-color:rgba(160,160,160,0.2);
@@ -76,15 +82,28 @@
 	opacity:0.6;
 }
 
-.themeBackgroundNoHover {
-	padding:5px;
-	background-color:rgba(255,255,180,0.2);
-	opacity:0.8;
-}
-
 .themeBackgroundGreyNoHover {
 	padding:5px;
 	background-color:rgba(160,160,160,0.2);
+	opacity:0.8;
+}
+
+.themeBackgroundGreyDark {
+	padding:5px;
+	background-color:rgba(20,20,20,0.4);
+	opacity:0.8;
+	transition:opacity 0.1s ease-out;
+	-webkit-backface-visibility: hidden;
+}
+
+.themeBackgroundGreyDark:hover {
+	opacity:0.6;
+}
+
+
+.themeBackgroundGreyDarkNoHover {
+	padding:5px;
+	background-color:rgba(20,20,20,0.4);
 	opacity:0.8;
 }
 
