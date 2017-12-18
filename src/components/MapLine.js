@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesMapLine.js'
 
 class MapLine extends React.Component {
 
@@ -7,7 +9,7 @@ class MapLine extends React.Component {
    }
 
    shouldComponentUpdate(nextProps) {
-      if (nextProps.inp.color != this.props.inp.color) {
+      if (nextProps.color != this.props.color) {
          return true
       }
       else {
@@ -17,13 +19,13 @@ class MapLine extends React.Component {
 
 
    render() {
-      var number = this.props.inp.identifier;
-      if (this.props.inp.type == "inactive") {
+      var number = this.props.identifier;
+      if (this.props.type == "inactive") {
          return(  <svg>
-                     <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {this.props.inp.points[0][0]}
-                                                                     y1 = {this.props.inp.points[0][1]}
-                                                                     x2 = {this.props.inp.points[1][0]}
-                                                                     y2 = {this.props.inp.points[1][1]}>
+                     <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {this.props.points[0][0]}
+                                                                     y1 = {this.props.points[0][1]}
+                                                                     x2 = {this.props.points[1][0]}
+                                                                     y2 = {this.props.points[1][1]}>
                         <stop offset="0%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0"}} />
                         <stop offset="5%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0"}} />
                         <stop offset="33%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0.7"}} />
@@ -34,10 +36,10 @@ class MapLine extends React.Component {
 
 
 
-                     <line x1 = {this.props.inp.points[0][0]}
-                        y1 = {this.props.inp.points[0][1]}
-                        x2 = {this.props.inp.points[1][0]}
-                        y2 = {this.props.inp.points[1][1]}
+                     <line x1 = {this.props.points[0][0]}
+                        y1 = {this.props.points[0][1]}
+                        x2 = {this.props.points[1][0]}
+                        y2 = {this.props.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
 
                         strokeWidth = {0.6} />
@@ -46,13 +48,13 @@ class MapLine extends React.Component {
 
       }
 
-      if (this.props.inp.type == "active") {
+      if (this.props.type == "active") {
 
          return(  <svg>
-                     <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {this.props.inp.points[0][0]}
-                                                                     y1 = {this.props.inp.points[0][1]}
-                                                                     x2 = {this.props.inp.points[1][0]}
-                                                                     y2 = {this.props.inp.points[1][1]}>
+                     <linearGradient gradientUnits = "userSpaceOnUse" id= {"line" + number.toString()}   x1 = {this.props.points[0][0]}
+                                                                     y1 = {this.props.points[0][1]}
+                                                                     x2 = {this.props.points[1][0]}
+                                                                     y2 = {this.props.points[1][1]}>
                         <stop offset="0%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0"}} />
                         <stop offset="5%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0"}} />
                         <stop offset="33%" style={{stopColor:"rgb(100,100,100)", stopOpacity:"0.7"}} />
@@ -63,10 +65,10 @@ class MapLine extends React.Component {
 
 
 
-                     <line x1 = {this.props.inp.points[0][0]}
-                        y1 = {this.props.inp.points[0][1]}
-                        x2 = {this.props.inp.points[1][0]}
-                        y2 = {this.props.inp.points[1][1]}
+                     <line x1 = {this.props.points[0][0]}
+                        y1 = {this.props.points[0][1]}
+                        x2 = {this.props.points[1][0]}
+                        y2 = {this.props.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
 
                         strokeWidth = {1} />
@@ -74,12 +76,12 @@ class MapLine extends React.Component {
             )
       }
 
-      if (this.props.inp.type == "owned") {
+      if (this.props.type == "owned") {
          return(  <svg>
-                     <linearGradient gradientUnits = "userSpaceOnUse" id = {"line" + number.toString()}   x1 = {this.props.inp.points[0][0]}
-                                                                     y1 = {this.props.inp.points[0][1]}
-                                                                     x2 = {this.props.inp.points[1][0]}
-                                                                     y2 = {this.props.inp.points[1][1]}>
+                     <linearGradient gradientUnits = "userSpaceOnUse" id = {"line" + number.toString()}   x1 = {this.props.points[0][0]}
+                                                                     y1 = {this.props.points[0][1]}
+                                                                     x2 = {this.props.points[1][0]}
+                                                                     y2 = {this.props.points[1][1]}>
                         <stop offset="0%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
                         <stop offset="5%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"0"}} />
                         <stop offset="33%" style={{stopColor:"rgb(255,255,255)", stopOpacity:"1"}} />
@@ -97,10 +99,10 @@ class MapLine extends React.Component {
                      </filter>
 
 
-                     <line x1 = {this.props.inp.points[0][0]}
-                        y1 = {this.props.inp.points[0][1]}
-                        x2 = {this.props.inp.points[1][0]}
-                        y2 = {this.props.inp.points[1][1]}
+                     <line x1 = {this.props.points[0][0]}
+                        y1 = {this.props.points[0][1]}
+                        x2 = {this.props.points[1][0]}
+                        y2 = {this.props.points[1][1]}
 
                         stroke = {"url(#line" + number.toString() + ")"}
                         style = {{}}
@@ -111,6 +113,7 @@ class MapLine extends React.Component {
    }
 }
 
+MapLine.propTypes = propTypesTemplate;
 export {MapLine};
 
 

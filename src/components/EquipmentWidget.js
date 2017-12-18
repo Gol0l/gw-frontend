@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Shop} from './Shop.js';
-import {InpShop} from '../inpclasses/InpShop.js';
 import {Inventory} from './Inventory.js';
-import {InpInventory} from '../inpclasses/InpInventory.js';
 import {FooterBar} from './FooterBar.js';
-import {InpFooterBar} from '../inpclasses/InpFooterBar.js';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesEquipmentWidget.js'
 
 class EquipmentWidget extends React.Component {
 
@@ -27,21 +25,21 @@ class EquipmentWidget extends React.Component {
 
       var shopElement = (this.state.shopOpen) ? <div  style = {{position: "absolute", width: width * 0.8, height: height, bottom: 2 + barHeight, right: "0.0%"}}
                                                    className = "themeTextDefault">
-                                                <Inventory inp = {new InpInventory({shopItems: this.props.inp.shopItems,
-                                                                                    playerInventory: this.props.inp.playerInfo.inventory,
-                                                                                    sizeOfRow: 2,
-                                                                                    sizeOfColumn: 5 * (35 / 65)})} />
-                                                <Shop inp = {new InpShop({ shopItems: this.props.inp.shopItems,
-                                                                           sizeOfRow: 2,
-                                                                           sizeOfColumn: 5,
-                                                                           returnTransactions: this.props.inp.shopProcessTransactions,
-                                                                           userBalance: this.props.inp.playerInfo.balance})} />
+                                                <Inventory  shopItems = {this.props.shopItems}
+                                                            playerInventory = {this.props.playerInfo.inventory}
+                                                            sizeOfRow = {2}
+                                                            sizeOfColumn = {5 * (35 / 65)} />
+                                                <Shop shopItems = {this.props.shopItems}
+                                                      sizeOfRow = {2}
+                                                      sizeOfColumn = {5}
+                                                      returnTransactions = {this.props.shopProcessTransactions}
+                                                      userBalance = {this.props.playerInfo.balance} />
                                                 </div> : <div></div>;
       return (
          <div>
             <div style = {{position: "absolute", right: "0.0%", bottom: 2, height: barHeight, width: width}}>
-               <FooterBar inp = {new InpFooterBar({playerInfo: this.props.inp.playerInfo,
-                                                   handleShopClicked: this.changeShopState})} />
+               <FooterBar  playerInfo = {this.props.playerInfo}
+                           handleShopClicked = {this.changeShopState} />
             </div>
                {shopElement}
          </div>
@@ -49,4 +47,5 @@ class EquipmentWidget extends React.Component {
    }
 }
 
+EquipmentWidget.propTypes = propTypesTemplate;
 export {EquipmentWidget};

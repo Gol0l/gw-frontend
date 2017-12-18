@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesLoginBox.js'
 
 
 class LoginBox extends React.Component {
@@ -38,7 +39,7 @@ class LoginBox extends React.Component {
 
 
    handleSubmit = function() {
-      this.props.inp.submitFunction(this.state.name, this.state.password);
+      this.props.submitFunction(this.state.name, this.state.password);
    }
 
    handleNameChange = function(event) {
@@ -87,4 +88,5 @@ class LoginBox extends React.Component {
    }
 }
 
+LoginBox.propTypes = propTypesTemplate;
 export {LoginBox};

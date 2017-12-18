@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 import {GalaxyMap} from './components/GalaxyMap.js';
-import {InpGalaxyMap} from './inpclasses/InpGalaxyMap.js';
 import {MapPreview} from './components/MapPreview.js';
-import {InpMapPreview} from './inpclasses/InpMapPreview.js'
 import {BattleLobby} from './components/BattleLobby.js';
-import {InpBattleLobby} from './inpclasses/InpBattleLobby.js'
 import {ActionButton} from './components/ActionButton.js';
-import {InpActionButton} from './inpclasses/InpActionButton.js';
 import {AudioController} from './components/AudioController.js';
-import {InpLoginBox} from './inpclasses/InpLoginBox.js';
 import {LoginBox} from './components/LoginBox.js';
-import {InpCharacterCreation} from './inpclasses/InpCharacterCreation.js';
 import {CharacterCreation} from './components/CharacterCreation.js';
 import {EquipmentWidget} from './components/EquipmentWidget.js';
-import {InpEquipmentWidget} from './inpclasses/InpEquipmentWidget.js';
+
 
 class App extends Component {
    constructor(props) {
@@ -178,44 +172,42 @@ class App extends Component {
       var buttonFunction = buttonTypeToFunction[buttonType];
 
 
-      var loginElement = (!playerInfo.isLoggedIn) ? <LoginBox inp={new InpLoginBox({submitFunction: this.submitLogin})} /> : <div></div>;
+      var loginElement = (!playerInfo.isLoggedIn) ? <LoginBox submitFunction = {this.submitLogin} /> : <div></div>;
       console.log( "loggedin?", playerInfo.isLoggedIn);
 
       var characterElement = (playerInfo.isLoggedIn && !playerInfo.hasCharacter) ?
-         <CharacterCreation inp={new InpCharacterCreation({ submitFunction: this.submitCharacter,
-                                                            requestName: this.requestName,
-                                                            suggestedName: playerInfo.suggestedDisplayName
-                                                         })} /> : <div id="nocharacterCreation"></div>;
+         <CharacterCreation   submitFunction = {this.submitCharacter}
+                              requestName = {this.requestName}
+                              suggestedName = {playerInfo.suggestedDisplayName} /> : <div id="nocharacterCreation"></div>;
 
       console.log( "character?", (playerInfo.isLoggedIn && !playerInfo.hasCharacter));
 
-      var mapElement = (playerInfo.isLoggedIn && playerInfo.hasCharacter) ? <GalaxyMap  inp = {new InpGalaxyMap({ width: this.state.width, height: this.state.height,
-                                                                                                                  mapWidth: mapWidth, mapHeight: mapHeight,
-                                                                                                                  frameDim: this.state.frameDim,
-                                                                                                                  simSettings: simSettings,
-                                                                                                                  systemsList: systemsList,
-                                                                                                                  selectedPlanet: this.state.selection.planet_Id,
-                                                                                                                  playerFaction: playerInfo.faction,
-                                                                                                                  funcPlanetOnClick: this.planetOnClick,
-                                                                                                                  globalUpdate: this.state.globalUpdate
-                                                                                                               })} />: <div></div>;
+      var mapElement = (playerInfo.isLoggedIn && playerInfo.hasCharacter) ? <GalaxyMap width = {this.state.width} height = {this.state.height}
+                                                                                       mapWidth = {mapWidth} mapHeight = {mapHeight}
+                                                                                       frameDim = {this.state.frameDim}
+                                                                                       simSettings = {simSettings}
+                                                                                       systemsList = {systemsList}
+                                                                                       selectedPlanet = {this.state.selection.planet_Id}
+                                                                                       playerFaction = {playerInfo.faction}
+                                                                                       funcPlanetOnClick = {this.planetOnClick}
+                                                                                       globalUpdate = {this.state.globalUpdate} />: <div></div>;
 
 
 
       var audioElement = (playerInfo.isLoggedIn && playerInfo.hasCharacter) ? <AudioController/>: <div></div>;
 
-      var interfaceElements = (displayInterface) ? [  <MapPreview inp = {new InpMapPreview({ mapName: planetInfo.mapInfo.mapName,
-                                                                                             mapSize: planetInfo.mapInfo.mapSize,
-                                                                                             mapImg: planetInfo.mapInfo.mapImg,
-                                                                                             maxPlayers: planetInfo.mapInfo.maxPlayers})} />,
+      var interfaceElements = (displayInterface) ? [  <MapPreview mapName = {planetInfo.mapInfo.mapName}
+                                                                  mapSize = {planetInfo.mapInfo.mapSize}
+                                                                  mapImg = {planetInfo.mapInfo.mapImg}
+                                                                  maxPlayers = {planetInfo.mapInfo.maxPlayers} />,
                                                       <div id = "buttonWrap" style = {{position: "relative", left: this.state.width / 2}}>
-                                                         <ActionButton inp = {new InpActionButton({buttonType: buttonType,
-                                                                                                   buttonFunction: buttonFunction})} />
+                                                         <ActionButton  buttonType = {buttonType}
+                                                                        buttonFunction = {buttonFunction} />
                                                       </div>,
-                                                      <BattleLobby inp = {new InpBattleLobby({  battleParticipants: planetInfo.currentBattle.battleParticipants,
-                                                                                                status: planetInfo.currentBattle.status,
-                                                                                                waitingProgress: planetInfo.currentBattle.waitingProgress,
-                                                                                                maxPlayers: planetInfo.mapInfo.maxPlayers})} />]
+                                                      <BattleLobby   battleParticipants = {planetInfo.currentBattle.battleParticipants}
+                                                                     status = {planetInfo.currentBattle.status}
+                                                                     waitingProgress = {planetInfo.currentBattle.waitingProgress}
+                                                                     maxPlayers = {planetInfo.mapInfo.maxPlayers} />]
                                                    : <div></div>;
 
 
@@ -260,9 +252,9 @@ class App extends Component {
                            itemId: "11",
                            price: 350}];
 
-      var equipmentWidgetElement = <EquipmentWidget inp = {new InpEquipmentWidget({ shopItems: shopTestData,
-                                                                                    playerInfo: playerInfo,
-                                                                                    shopProcessTransactions: this.shopProcessTransactions})} />
+      var equipmentWidgetElement = <EquipmentWidget   shopItems = {shopTestData}
+                                                      playerInfo = {playerInfo}
+                                                      shopProcessTransactions = {this.shopProcessTransactions} />
 
 
       return (
@@ -290,7 +282,7 @@ class App extends Component {
 
 export default App;
 
-
+//probably broken!
 function isSystemAccessible(systemsList, sIndex, playerInfo) {
    var isAccessible = false;
    for (var i = 0; i < systemsList.length; i++) {

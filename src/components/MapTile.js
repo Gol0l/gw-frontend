@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesMapTile.js'
 
 class MapTile extends React.Component {
 
@@ -7,7 +9,7 @@ class MapTile extends React.Component {
    }
 
    shouldComponentUpdate(nextProps) {
-      if (nextProps.inp.color != this.props.inp.color) {
+      if (nextProps.color != this.props.color) {
          return true
       }
       else {
@@ -19,9 +21,9 @@ class MapTile extends React.Component {
    render() {
       var stringPolygon = ""
 
-      for (var j = 0; j < this.props.inp.points.length; j++) {
+      for (var j = 0; j < this.props.points.length; j++) {
 
-         stringPolygon += this.props.inp.points[j][0].toString() + "," + this.props.inp.points[j][1].toString() + " "
+         stringPolygon += this.props.points[j][0].toString() + "," + this.props.points[j][1].toString() + " "
       }
       const pathId = require('uuid/v4')();
 
@@ -40,14 +42,15 @@ class MapTile extends React.Component {
                    </feMerge>
                </filter>
 
-               <polygon points = {stringPolygon} style = {{ clipPath: "url(#" + pathId + ")", pointerEvents: "none", fill: this.props.inp.color, fillOpacity: 1,
-                                                            stroke: this.props.inp.color, strokeWidth: 0.5}} />
+               <polygon points = {stringPolygon} style = {{ clipPath: "url(#" + pathId + ")", pointerEvents: "none", fill: this.props.color, fillOpacity: 1,
+                                                            stroke: this.props.color, strokeWidth: 0.5}} />
             </svg>
 
       )
    }
 }
 
+MapTile.propTypes = propTypesTemplate;
 export {MapTile};
 
 

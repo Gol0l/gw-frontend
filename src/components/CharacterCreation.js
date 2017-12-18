@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesCharacterCreation.js'
 
 
 class CharacterCreation extends React.Component {
@@ -8,7 +9,7 @@ class CharacterCreation extends React.Component {
    constructor(props) {
       super(props);
       this.state = { top: 0,
-                     characterName: this.props.inp.suggestedName,
+                     characterName: this.props.suggestedName,
                      characterFaction: "default"};
 
    this.allowUpdate = true;
@@ -40,7 +41,7 @@ class CharacterCreation extends React.Component {
 
 
    handleSubmit = function() {
-      this.props.inp.submitFunction(this.state.characterFaction, this.state.characterName);
+      this.props.submitFunction(this.state.characterFaction, this.state.characterName);
    }
 
    uefClicked = function(event) {
@@ -107,7 +108,7 @@ class CharacterCreation extends React.Component {
                         <div style={{marginTop: 5, marginBottom: 3}}>your name: {this.state.characterName}</div>
 
 
-                        <div  className = "themeBackgroundDefault themeShadowDefult themeTextDefault" onClick = {this.props.inp.requestName}
+                        <div  className = "themeBackgroundDefault themeShadowDefult themeTextDefault" onClick = {this.props.requestName}
                               style = {{display: "inline-block"}}>
                            new
                         </div>
@@ -127,4 +128,5 @@ class CharacterCreation extends React.Component {
    }
 }
 
+CharacterCreation.propTypes = propTypesTemplate;
 export {CharacterCreation};

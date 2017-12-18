@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesDragBox.js'
+
 
 class DragBox extends React.Component {
 
@@ -45,32 +48,32 @@ class DragBox extends React.Component {
    handleMouseMove(e) {
 
       if (this.state.mouseSelect) {
-         var newLeft = this.props.inp.left;
-         var newTop = this.props.inp.top;
+         var newLeft = this.props.left;
+         var newTop = this.props.top;
          var maxDragAccelerationfactor = 1;
          var dragAccelerationFactor = 1 + maxDragAccelerationfactor * (Math.abs(window.innerWidth / 2 - e.pageX) / window.innerWidth + Math.abs(window.innerHeight / 2 - e.pageY) / window.innerHeight);
          newTop = (e.pageY - this.state.mouseGrabPosY) * dragAccelerationFactor + this.state.lastOffsetTop;
          newLeft = (e.pageX - this.state.mouseGrabPosX) * dragAccelerationFactor + this.state.lastOffsetLeft;
 
-         const minLeft = (isNaN(this.props.inp.minLeft)) ? -10000 : this.props.inp.minLeft;
-         const minTop = (isNaN(this.props.inp.minTop)) ? -10000 : this.props.inp.minTop;
-         const maxLeft = (isNaN(this.props.inp.maxLeft)) ? 10000 : this.props.inp.maxLeft;
-         const maxTop = (isNaN(this.props.inp.maxTop)) ? 10000 : this.props.inp.maxTop;
+         const minLeft = (isNaN(this.props.minLeft)) ? -10000 : this.props.minLeft;
+         const minTop = (isNaN(this.props.minTop)) ? -10000 : this.props.minTop;
+         const maxLeft = (isNaN(this.props.maxLeft)) ? 10000 : this.props.maxLeft;
+         const maxTop = (isNaN(this.props.maxTop)) ? 10000 : this.props.maxTop;
 
          newTop = (newTop > maxTop) ? maxTop : newTop;
          newTop = (newTop < minTop) ? minTop : newTop;
          newLeft = (newLeft > maxLeft) ? maxLeft : newLeft;
          newLeft = (newLeft < minLeft) ? minLeft : newLeft;
 
-      this.props.inp.returnShiftedPosition(newLeft, newTop)
+      this.props.returnShiftedPosition(newLeft, newTop)
       }
    }
 
 
    render() {
-      const content = this.props.inp.content;
-      const divStyle = {top: this.props.inp.top,
-                        left: this.props.inp.left};
+      const content = this.props.content;
+      const divStyle = {top: this.props.top,
+                        left: this.props.left};
 
       return (
          <div  style = {{  position: "absolute",
@@ -84,5 +87,5 @@ class DragBox extends React.Component {
    };
 }
 
-
+DragBox.propTypes = propTypesTemplate;
 export {DragBox};

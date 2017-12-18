@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesGalaxyMap.js'
 import {SolarSystem} from './SolarSystem.js';
-import {InpSolarSystem} from '../inpclasses/InpSolarSystem.js';
-
 import {DragBox} from './DragBox.js';
-import {InpDragBox} from '../inpclasses/InpDragBox.js'
-
 import {MapTile} from './MapTile.js';
-import {InpMapTile} from '../inpclasses/InpMapTile.js';
-
 import {MapLine} from './MapLine.js';
-import {InpMapLine} from '../inpclasses/InpMapLine.js';
-
 import {getVoronoi} from '../voronoi/getVoronoi.js';
-
 
 
 
@@ -25,7 +16,7 @@ class GalaxyMap extends React.Component {
       super(props);
 
 
-      this.state = { simSettings: this.props.inp.simSettings,
+      this.state = { simSettings: this.props.simSettings,
                      leftShift: 0,
                      topShift: 0};
 
@@ -46,7 +37,7 @@ class GalaxyMap extends React.Component {
    }
 
    initialSystemLines() {
-      const systemsList = this.props.inp.systemsList;
+      const systemsList = this.props.systemsList;
       var lines = []
       for (var i = 0; i < systemsList.length; i++) {
          for (var j = 0; j < systemsList[i].neighbours.length; j++) {
@@ -59,10 +50,10 @@ class GalaxyMap extends React.Component {
    }
 
    initialVoronoi() {
-      var bbox = {xl:0, xr: this.props.inp.mapWidth, yt:0, yb: this.props.inp.mapHeight};
+      var bbox = {xl:0, xr: this.props.mapWidth, yt:0, yb: this.props.mapHeight};
       var positionList = []
-      for (var i = 0; i < this.props.inp.systemsList.length; i++) {
-         positionList.push({x: this.props.inp.systemsList[i].left, y: this.props.inp.systemsList[i].top})
+      for (var i = 0; i < this.props.systemsList.length; i++) {
+         positionList.push({x: this.props.systemsList[i].left, y: this.props.systemsList[i].top})
       }
 
       return getVoronoi(positionList, bbox)
@@ -71,8 +62,8 @@ class GalaxyMap extends React.Component {
 
    getViewport() {
       var viewport = {height: 0, width: 0, top: 0, left: 0}
-      viewport.height = this.props.inp.height - this.props.inp.frameDim.topSize - this.props.inp.frameDim.bottomSize;
-      viewport.width = this.props.inp.width - this.props.inp.frameDim.leftSize - this.props.inp.frameDim.rightSize;
+      viewport.height = this.props.height - this.props.frameDim.topSize - this.props.frameDim.bottomSize;
+      viewport.width = this.props.width - this.props.frameDim.leftSize - this.props.frameDim.rightSize;
       viewport.top = -this.state.topShift;
       viewport.left = -this.state.leftShift;
       return viewport
@@ -85,9 +76,9 @@ class GalaxyMap extends React.Component {
 
       const position = ReactDOM.findDOMNode(this.dragBoxNode).getBoundingClientRect();
       var i = 0;
-      while ((newScale * this.props.inp.mapWidth <= this.props.inp.width - (this.props.inp.frameDim.leftSize + this.props.inp.frameDim.rightSize)//limiting max zoom out
+      while ((newScale * this.props.mapWidth <= this.props.width - (this.props.frameDim.leftSize + this.props.frameDim.rightSize)//limiting max zoom out
             ||
-            newScale * this.props.inp.mapHeight <= this.props.inp.height - (this.props.inp.frameDim.topSize + this.props.inp.frameDim.bottomSize))
+            newScale * this.props.mapHeight <= this.props.height - (this.props.frameDim.topSize + this.props.frameDim.bottomSize))
             &&
             i < 10) {
                i++
@@ -103,10 +94,10 @@ class GalaxyMap extends React.Component {
       if ((distanceLeft < -200000 || distanceTop < -200000) && newScale >= mapScale) {
          newScale = mapScale;
       }
-      const horCursorPosRatio = (e.pageX - distanceLeft) / (mapScale * this.props.inp.mapWidth);
-      const widthDiff = (newScale * this.props.inp.mapWidth) - (mapScale * this.props.inp.mapWidth);
-      const verCursorPosRatio = (e.pageY - distanceTop) / (mapScale * this.props.inp.mapHeight);
-      const heightDiff = (newScale * this.props.inp.mapHeight) - (mapScale * this.props.inp.mapHeight);
+      const horCursorPosRatio = (e.pageX - distanceLeft) / (mapScale * this.props.mapWidth);
+      const widthDiff = (newScale * this.props.mapWidth) - (mapScale * this.props.mapWidth);
+      const verCursorPosRatio = (e.pageY - distanceTop) / (mapScale * this.props.mapHeight);
+      const heightDiff = (newScale * this.props.mapHeight) - (mapScale * this.props.mapHeight);
       const moveLeft = horCursorPosRatio * widthDiff;
       const moveTop = verCursorPosRatio * heightDiff;
 
@@ -115,8 +106,8 @@ class GalaxyMap extends React.Component {
       var newLeftShift = this.state.leftShift - moveLeft;
       var newTopShift = this.state.topShift - moveTop;
       const viewport = this.getViewport()
-      const minTop = -(this.props.inp.mapHeight * mapScale - viewport.height);
-      const minLeft = -(this.props.inp.mapWidth * mapScale - viewport.width);
+      const minTop = -(this.props.mapHeight * mapScale - viewport.height);
+      const minLeft = -(this.props.mapWidth * mapScale - viewport.width);
       newTopShift = (newTopShift > 0) ? 0 : newTopShift;
       newTopShift = (newTopShift < minTop) ? minTop : newTopShift;
       newLeftShift = (newLeftShift > 0) ? 0 : newLeftShift;
@@ -150,15 +141,15 @@ class GalaxyMap extends React.Component {
 
    render() {
       console.log("rendering GalaxyMap")
-      const systemsList = this.props.inp.systemsList;
+      const systemsList = this.props.systemsList;
       const simSettings = this.state.simSettings;
       const mapScale = this.state.simSettings.mapScale;
-      const width = this.props.inp.width;
-      const height = this.props.inp.height;
-      const mapWidth = this.props.inp.mapWidth;
-      const mapHeight = this.props.inp.mapHeight;
-      const frameDim = this.props.inp.frameDim;
-      const playerFaction = this.props.inp.playerFaction;
+      const width = this.props.width;
+      const height = this.props.height;
+      const mapWidth = this.props.mapWidth;
+      const mapHeight = this.props.mapHeight;
+      const frameDim = this.props.frameDim;
+      const playerFaction = this.props.playerFaction;
 
       var displayList = [];
       var positionList = [];
@@ -166,6 +157,18 @@ class GalaxyMap extends React.Component {
       var gateList = [];
       var playerGateList = [];
       const viewport = this.getViewport()
+
+      var solarSystemSimSettings = {scale: simSettings.systemScale * mapScale,
+                                    fps: simSettings.fps,
+                                    simSpeed: simSettings.simSpeed,
+                                    basePlanetSize: simSettings.basePlanetSize,
+                                    baseStarSize: simSettings.baseStarSize,
+                                    centerMassScalingExponent: simSettings.centerMassScalingExponent,
+                                    systemScaleUiThreshold: simSettings.systemScaleUiThreshold,
+                                    planetScalingExponent: simSettings.planetScalingExponent,
+                                    planetRadiusScale: simSettings.planetRadiusScale,
+                                    planetScaleUiThreshold: simSettings.planetScaleUiThreshold}
+                                    
       for (var i = 0; i < systemsList.length; i++) {
          var isVisible = false;
          var widthPadding = 0.02 * viewport.width;
@@ -175,28 +178,21 @@ class GalaxyMap extends React.Component {
                isVisible = true;
             }
          var isSelected = (this.selectedSystems.indexOf(systemsList[i].id) != -1) ? true : false;
-         displayList.push((isVisible || isSelected) ? <SolarSystem inp = {new InpSolarSystem({
-                                                id: systemsList[i].id,
-                                                displayName: systemsList[i].displayName,
-                                                top: Math.floor(systemsList[i].top * mapScale),
-                                                left: Math.floor(systemsList[i].left * mapScale),
-                                                planetList: systemsList[i].planetList,
-                                                centerMass: systemsList[i].centerMass,
-                                                gravPar: systemsList[i].gravPar,
-                                                neighbours: systemsList[i].neighbours,
-                                                simSettings: { scale: simSettings.systemScale * mapScale, fps: simSettings.fps, simSpeed: simSettings.simSpeed,
-                                                               basePlanetSize: simSettings.basePlanetSize, baseStarSize: simSettings.baseStarSize,
-                                                               centerMassScalingExponent: simSettings.centerMassScalingExponent,
-                                                               systemScaleUiThreshold: simSettings.systemScaleUiThreshold,
-                                                               planetScalingExponent: simSettings.planetScalingExponent,
-                                                               planetRadiusScale: simSettings.planetRadiusScale,
-                                                               planetScaleUiThreshold: simSettings.planetScaleUiThreshold},
-                                                selectedPlanet: this.props.inp.selectedPlanet,
-                                                funcPlanetOnClick: this.props.inp.funcPlanetOnClick,
-                                                funcSystemSelect: this.handleSystemSelect,
-                                                globalUpdate: this.props.inp.globalUpdate
-                                                })}
-                                       key = {i} /> : <div key = {i}></div>)
+         displayList.push((isVisible || isSelected) ? <SolarSystem
+            id = {systemsList[i].id}
+            displayName = {systemsList[i].displayName}
+            top = {Math.floor(systemsList[i].top * mapScale)}
+            left = {Math.floor(systemsList[i].left * mapScale)}
+            planetList = {systemsList[i].planetList}
+            centerMass = {systemsList[i].centerMass}
+            gravPar = {systemsList[i].gravPar}
+            neighbours = {systemsList[i].neighbours}
+            simSettings = {solarSystemSimSettings}
+            selectedPlanet = {this.props.selectedPlanet}
+            funcPlanetOnClick = {this.props.funcPlanetOnClick}
+            funcSystemSelect = {this.handleSystemSelect}
+            globalUpdate = {this.props.globalUpdate}
+            key = {i} /> : <div key = {i}></div>)
 
 
          var factionInfluence = getFactionInfluence(systemsList[i].planetList)
@@ -218,22 +214,22 @@ class GalaxyMap extends React.Component {
       var tileList = [];
       var systemConnections = []
       for (var i = 0; i < polygonList.length; i++) {
-         tileList.push(<MapTile key = {i} inp = {new InpMapTile({points: polygonList[i], color: tileColorList[i]})} />)
+         tileList.push(<MapTile key = {i} points = {polygonList[i]} color = {tileColorList[i]} />)
       }
 
 
       for (var i = 0; i < lineList.length; i++) {
          if (playerGateList.includes(lineList[i].origin)) {
 
-            systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "owned", identifier: i})} />)
+            systemConnections.push(<MapLine key = {i} points = {lineList[i].line} type = "owned" identifier = {i} />)
          }
          else if (gateList.includes(lineList[i].origin)) {
 
-            systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "active", identifier: i})} />)
+            systemConnections.push(<MapLine key = {i} points = {lineList[i].line} type = "active" identifier = {i} />)
          }
          else {
 
-            systemConnections.push(<MapLine key = {i} inp = {new InpMapLine({points: lineList[i].line, type: "inactive", identifier: i})} />)
+            systemConnections.push(<MapLine key = {i} points = {lineList[i].line} type = "inactive" identifier = {i} />)
 
          }
       }
@@ -243,25 +239,23 @@ class GalaxyMap extends React.Component {
 
             <div style = {{position: "relative", left: frameDim.leftSize, top: frameDim.topSize}}>
                <img src={require('../img/background2.jpg')} width = {width - (frameDim.rightSize + frameDim.leftSize)} height = {height - (frameDim.bottomSize + frameDim.topSize)}/>
-               <DragBox inp = {new InpDragBox({ left: this.state.leftShift, top: this.state.topShift,
-                                                minLeft: -(mapWidth * mapScale - (width - frameDim.leftSize - frameDim.rightSize)),
-                                                minTop: -(mapHeight * mapScale - (height - frameDim.topSize - frameDim.bottomSize)),
-                                                maxLeft: 0,
-                                                maxTop: 0,
-                                                returnShiftedPosition: this.handleDrag,
-                                                content:
-                                                   <div style = {{position: "absolute"}}>
-                                                      <svg style = {{position: "absolute", width: mapWidth, height: mapHeight,
-                                                                     transform: "scale(" + mapScale.toString() + "," + mapScale.toString() + ")", transformOrigin: "top left"}}>
-                                                         {tileList}
-                                                         {systemConnections}
-                                                      </svg>
-                                                      <div id="background" style = {{position: "absolute", backgroundColor: "rgba(0, 0, 2," + (1 - 5 / mapScale).toString() + ")", width: mapWidth * mapScale, height: mapHeight * mapScale}} onWheel = {this.handleWheel}>
-                                                         {displayList}
-                                                      </div>
-                                                   </div>})
-
-                              } ref = {node => this.dragBoxNode = node}/>
+               <DragBox left = {this.state.leftShift} top = {this.state.topShift}
+                        minLeft = {-(mapWidth * mapScale - (width - frameDim.leftSize - frameDim.rightSize))}
+                        minTop = {-(mapHeight * mapScale - (height - frameDim.topSize - frameDim.bottomSize))}
+                        maxLeft = {0}
+                        maxTop = {0}
+                        returnShiftedPosition = {this.handleDrag}
+                        content = { <div style = {{position: "absolute"}}>
+                                       <svg style = {{position: "absolute", width: mapWidth, height: mapHeight,
+                                                      transform: "scale(" + mapScale.toString() + "," + mapScale.toString() + ")", transformOrigin: "top left"}}>
+                                          {tileList}
+                                          {systemConnections}
+                                       </svg>
+                                       <div id="background" style = {{position: "absolute", backgroundColor: "rgba(0, 0, 2," + (1 - 5 / mapScale).toString() + ")", width: mapWidth * mapScale, height: mapHeight * mapScale}} onWheel = {this.handleWheel}>
+                                          {displayList}
+                                       </div>
+                                    </div>}
+                        ref = {node => this.dragBoxNode = node} />
             </div>
 
 
@@ -357,4 +351,5 @@ function getTileColor(factionInfluence) {
 
 }
 
+GalaxyMap.propTypes = propTypesTemplate;
 export {GalaxyMap};

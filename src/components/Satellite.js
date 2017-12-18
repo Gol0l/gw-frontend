@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {StatusBar} from './StatusBar.js';
-import {InpStatusBar} from '../inpclasses/InpStatusBar.js';
 import {Selector} from './Selector.js';
-import {InpSelector} from '../inpclasses/InpSelector.js';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesSatellite.js'
 
 class Satellite extends React.Component {
    /*props: an object of the class InpSatellite
@@ -12,9 +11,9 @@ class Satellite extends React.Component {
    constructor(props) {
       super(props);
 
-      const gravPar = this.props.inp.settings.gravPar;
-      const radius = this.props.inp.radius;
-      const start = this.props.inp.start;
+      const gravPar = this.props.settings.gravPar;
+      const radius = this.props.radius;
+      const start = this.props.start;
       this.state = {
          angle: (isNaN(start) ? Math.random() * 2 * Math.PI
                               : start % (2 * Math.PI)),
@@ -27,25 +26,25 @@ class Satellite extends React.Component {
    }
 
    componentDidMount() {
-      const fps = this.props.inp.settings.fps;
+      const fps = this.props.settings.fps;
       var intervalID = setInterval(this.updateAngle, Math.floor(1000 / fps));
       this.setState({intervalID: intervalID});
    }
 
    componentWillUnmount() {
       clearInterval(this.state.intervalID);
-      this.props.inp.funcPlanetOnClick(this.props.inp.system_Id, this.props.inp.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
+      this.props.funcPlanetOnClick(this.props.system_Id, this.props.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
 
    }
 
    updateAngle() {
       const angle = this.state.angle;
       const angularSpeed = this.state.angularSpeed;
-      const simSpeed = this.props.inp.settings.simSpeed;
-      const fps = this.props.inp.settings.fps;
+      const simSpeed = this.props.settings.simSpeed;
+      const fps = this.props.settings.fps;
       var newAngle = (angle + angularSpeed * simSpeed / fps) % (2 * Math.PI);
 
-      const spin = this.props.inp.spin / fps * 360
+      const spin = this.props.spin / fps * 360
       var newRotation = (this.state.rotation + spin) % 360
       this.setState({angle: newAngle,
                      rotation: newRotation});
@@ -54,11 +53,11 @@ class Satellite extends React.Component {
 
    handleOnClick() {
 
-      if (this.props.inp.isSelected) {
-         this.props.inp.funcPlanetOnClick(this.props.inp.system_Id, this.props.inp.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
+      if (this.props.isSelected) {
+         this.props.funcPlanetOnClick(this.props.system_Id, this.props.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), false)
       }
       else {
-         this.props.inp.funcPlanetOnClick(this.props.inp.system_Id, this.props.inp.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), true)
+         this.props.funcPlanetOnClick(this.props.system_Id, this.props.id, ReactDOM.findDOMNode(this.planetNode).getBoundingClientRect(), true)
       }
 
 
@@ -66,17 +65,17 @@ class Satellite extends React.Component {
 
    render() {
 
-      const minScaleForDisplay = this.props.inp.settings.planetScaleUiThreshold;
-      const displayScale = this.props.inp.settings.displayScale;
-      const objectSize = this.props.inp.size * Math.pow(displayScale, this.props.inp.settings.planetScalingExponent);
-      const radius = this.props.inp.radius;
+      const minScaleForDisplay = this.props.settings.planetScaleUiThreshold;
+      const displayScale = this.props.settings.displayScale;
+      const objectSize = this.props.size * Math.pow(displayScale, this.props.settings.planetScalingExponent);
+      const radius = this.props.radius;
 
       var displaySprite =  <div  style = {{  position: "absolute",
                                              transform: "rotate(" + this.state.rotation.toString() + "deg)",
                                              width: Math.round(objectSize),
                                              height: Math.round(objectSize)
                                           }}>
-                              <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.inp.content.toString())}/>
+                              <img style = {{position: "absolute", left: "0px", top: "0px", width: "100%", height: "100%"}} src = {require('../img/planetSprites/'+this.props.content.toString())}/>
                            </div>
 
       var displayShadow =  <div  style = {{  position: "absolute",
@@ -99,7 +98,7 @@ class Satellite extends React.Component {
 
       var factionImg;
 
-      switch (this.props.inp.faction) {
+      switch (this.props.faction) {
 
          case "aeon":
             factionImg = <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/factionLogos/aeon_transparent_bright.png')}/>;
@@ -118,7 +117,7 @@ class Satellite extends React.Component {
 
       }
 
-      switch (this.props.inp.status) {
+      switch (this.props.status) {
          case "lobby":
             var statusContent =  <div style = {{height: "1em", width: "auto"}}>
                                     <img style = {{left: "0px", top: "0px", width: "auto", height: "100%"}} src = {require('../img/lobbySymbol.jpeg')}/>
@@ -134,21 +133,20 @@ class Satellite extends React.Component {
             break;
       }
 
-      var displayStatus = [<StatusBar key = "status" inp = {new InpStatusBar({height: 16,
-                                          distance: objectSize * 0.5 + 4,
-                                          contents: [statusContent]}) }/>,
-                           <StatusBar key = "name" inp = {new InpStatusBar({height: 12,
-                                          distance: -objectSize * 0.5 - 13,
-                                          contents: [<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.inp.displayName}</div>]})
-                           } />,
-                           <StatusBar key = "factionSymbol" inp = {new InpStatusBar({height: 28,
-                                          distance: -objectSize * 0.5 - 42,
-                                          contents: [<div style = {{height: "1em", width: "auto"}}>{factionImg}</div>]})
-                           } />]
+      var displayStatus = [<StatusBar key = "status"  height = {16}
+                                                      distance = {objectSize * 0.5 + 4}
+                                                      contents = {[statusContent]} />,
+                           <StatusBar key = "name" height = {12}
+                                                   distance = {-objectSize * 0.5 - 13}
+                                                   contents = {[<div style = {{fontSize: "1em", lineHeight: "1em", color: "white"}}>{this.props.displayName}</div>]} />,
+                           <StatusBar key = "factionSymbol" height = {28}
+                                                            distance = {-objectSize * 0.5 - 42}
+                                                            contents = {[<div style = {{height: "1em", width: "auto"}}>{factionImg}</div>]} />]
 
 
-      var displaySelector = <Selector inp = {new InpSelector({ width: Math.round(objectSize * 2.4), height: Math.round(objectSize * 2.4),
-                                                               isOpened: this.props.inp.isSelected})} />
+      var displaySelector = <Selector  width = {Math.round(objectSize * 2.4)}
+                                       height = {Math.round(objectSize * 2.4)}
+                                       isOpened = {this.props.isSelected} />
 
 
       return (
@@ -175,4 +173,6 @@ class Satellite extends React.Component {
 
    }
 }
+
+Satellite.propTypes = propTypesTemplate;
 export {Satellite};

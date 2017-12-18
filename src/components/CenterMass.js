@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesCenterMass.js'
 
 
 class CenterMass extends React.Component {
@@ -9,7 +10,7 @@ class CenterMass extends React.Component {
       super(props);
 
       this.state = {
-         brightness: this.props.inp.brightness
+         brightness: this.props.brightness
       };
    this.handleMouseEnter = this.handleMouseEnter.bind(this);
    this.handleMouseLeave = this.handleMouseLeave.bind(this);
@@ -22,7 +23,7 @@ class CenterMass extends React.Component {
    }
 
    handleMouseLeave() {
-      var newBrightness = this.props.inp.brightness;
+      var newBrightness = this.props.brightness;
       this.setState({brightness: newBrightness});
 
    }
@@ -30,11 +31,11 @@ class CenterMass extends React.Component {
 
 
    render() {
-      const width = this.props.inp.width;
-      const height = this.props.inp.height;
+      const width = this.props.width;
+      const height = this.props.height;
       const brightness = this.state.brightness;
-      const color = this.props.inp.color;
-      const coronaColor = this.props.inp.coronaColor;
+      const color = this.props.color;
+      const coronaColor = this.props.coronaColor;
 
       return (
          <div style = {{position: "relative"}}>
@@ -57,4 +58,5 @@ class CenterMass extends React.Component {
    }
 }
 
+CenterMass.propTypes = propTypesTemplate;
 export {CenterMass};

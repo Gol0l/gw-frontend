@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesSelector.js'
 
 
 class Selector extends React.Component {
 
    render() {
-      const width = this.props.inp.width;
-      const height = this.props.inp.height;
-      const isOpened = this.props.inp.isOpened;
+      const width = this.props.width;
+      const height = this.props.height;
+      const isOpened = this.props.isOpened;
 
 
       return (
@@ -28,4 +30,5 @@ class Selector extends React.Component {
    }
 }
 
+Selector.propTypes = propTypesTemplate;
 export {Selector};

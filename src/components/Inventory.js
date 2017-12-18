@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {InventoryCard} from './InventoryCard.js';
-import {InpInventoryCard} from '../inpclasses/InpInventoryCard.js';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesInventory.js'
 
 class Inventory extends React.Component {
 
@@ -11,16 +11,16 @@ class Inventory extends React.Component {
    }
 
    render() {
-      const shopItems = this.props.inp.shopItems;
-      const playerInventory = this.props.inp.playerInventory
-      const sizeOfRow = this.props.inp.sizeOfRow;
-      const sizeOfColumn = this.props.inp.sizeOfColumn;
+      const shopItems = this.props.shopItems;
+      const playerInventory = this.props.playerInventory
+      const sizeOfRow = this.props.sizeOfRow;
+      const sizeOfColumn = this.props.sizeOfColumn;
       var cardList = [];
       var rowList = [];
       var row = [];
       for (var i = 0; i < shopItems.length; i++) {
-         var card = <InventoryCard id = {shopItems[i].itemId} inp = {new InpInventoryCard({  item: shopItems[i],
-                                                                                             amount: (isNaN(playerInventory[shopItems[i].itemId])) ? 0 : playerInventory[shopItems[i].itemId]})} />;
+         var card = <InventoryCard id = {shopItems[i].itemId}  item = {shopItems[i]}
+                                                               amount = {(isNaN(playerInventory[shopItems[i].itemId])) ? 0 : playerInventory[shopItems[i].itemId]} />;
 
          row.push(<div  style = {{height: "100%", width: (96.0 / sizeOfRow).toString() + "%", marginRight: "2%"}}
                         className = "themeHoverDefault noPadding themeBorderDefault themeTextDefault"> {card} </div>);
@@ -51,4 +51,5 @@ class Inventory extends React.Component {
    }
 }
 
+Inventory.propTypes = propTypesTemplate;
 export {Inventory};

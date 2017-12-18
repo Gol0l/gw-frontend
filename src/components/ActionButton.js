@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesActionButton.js'
 
 
 class ActionButton extends React.Component {
@@ -14,7 +15,7 @@ class ActionButton extends React.Component {
    }
 
    handleClick() {
-      this.props.inp.buttonFunction();
+      this.props.buttonFunction();
    }
 
    componentDidMount() {
@@ -36,7 +37,7 @@ class ActionButton extends React.Component {
 
 
    render() {
-      const buttonType = this.props.inp.buttonType;
+      const buttonType = this.props.buttonType;
 
       var displayButton = <div></div>
 
@@ -105,4 +106,5 @@ class ActionButton extends React.Component {
    }
 }
 
+ActionButton.propTypes = propTypesTemplate;
 export {ActionButton};

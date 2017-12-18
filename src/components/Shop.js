@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {ShopCard} from './ShopCard.js';
-import {InpShopCard} from '../inpclasses/InpShopCard.js';
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesShop.js'
 
 class Shop extends React.Component {
 
    constructor(props) {
       super(props);
       var cart = {};
-      for (var i = 0; i < this.props.inp.shopItems.length; i++) {
-         cart[this.props.inp.shopItems[i].itemId] = 0;
+      for (var i = 0; i < this.props.shopItems.length; i++) {
+         cart[this.props.shopItems[i].itemId] = 0;
       }
       this.state = {cart: cart,
-                    virtualBalance: this.props.inp.userBalance};
+                    virtualBalance: this.props.userBalance};
 
       this.changeCart = this.changeCart.bind(this);
       this.checkout = this.checkout.bind(this);
@@ -32,29 +32,30 @@ class Shop extends React.Component {
    }
 
    checkout() {
-      this.props.inp.returnTransactions(this.state.cart);
+      this.props.returnTransactions(this.state.cart);
       this.resetCart();
    }
 
    resetCart() {
       var cart = {};
-      for (var i = 0; i < this.props.inp.shopItems.length; i++) {
-         cart[this.props.inp.shopItems[i].itemId] = 0;
+      for (var i = 0; i < this.props.shopItems.length; i++) {
+         cart[this.props.shopItems[i].itemId] = 0;
       }
-      this.setState({cart: cart, virtualBalance: this.props.inp.userBalance});
+      this.setState({cart: cart, virtualBalance: this.props.userBalance});
       console.log("reset cart");
    }
 
    render() {
-      const shopItems = this.props.inp.shopItems;
-      const sizeOfRow = this.props.inp.sizeOfRow;
-      const sizeOfColumn = this.props.inp.sizeOfColumn;
+      const shopItems = this.props.shopItems;
+      const sizeOfRow = this.props.sizeOfRow;
+      const sizeOfColumn = this.props.sizeOfColumn;
       var cardList = [];
       var rowList = [];
       var row = [];
       for (var i = 0; i < shopItems.length; i++) {
-         var card = <ShopCard id = {shopItems[i].itemId} inp = {new InpShopCard({item: shopItems[i], status: this.state.cart[shopItems[i].itemId],
-                                                      changeCart: this.changeCart})} />;
+         var card = <ShopCard id = {shopItems[i].itemId} item = {shopItems[i]}
+                                                         status = {this.state.cart[shopItems[i].itemId]}
+                                                         changeCart = {this.changeCart} />;
 
          row.push(<div  style = {{height: "100%", width: (96.0 / sizeOfRow).toString() + "%", marginRight: "2%"}}
                         className = "themeHoverDefault noPadding themeBorderDefault themeTextDefault"> {card} </div>);
@@ -96,4 +97,5 @@ class Shop extends React.Component {
    }
 }
 
+Shop.propTypes = propTypesTemplate;
 export {Shop};

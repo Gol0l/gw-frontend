@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
-
+import PropTypes from 'prop-types';
+import {propTypesTemplate} from '../templates/typesFooterBar.js'
 
 class FooterBar extends React.Component {
 
@@ -23,7 +23,7 @@ class FooterBar extends React.Component {
                </div>
                <div  style = {{marginRight: "3%"}}
                      className = "themeBackgroundDefault themeBorderDefault themeShadowDefault"
-                     onClick = {this.props.inp.handleShopClicked}>
+                     onClick = {this.props.handleShopClicked}>
                      Shop
                </div>
 
@@ -33,4 +33,5 @@ class FooterBar extends React.Component {
    }
 }
 
+FooterBar.propTypes = propTypesTemplate;
 export {FooterBar};
