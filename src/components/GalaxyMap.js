@@ -72,7 +72,7 @@ class GalaxyMap extends React.Component {
    handleWheel(e) {
 
       const mapScale = this.state.simSettings.mapScale;
-      var newScale = mapScale * (1.0 + (e.deltaY / -600));
+      var newScale = mapScale * (1.0 + (Math.sign(e.deltaY) * 100 / -600));
 
       const position = ReactDOM.findDOMNode(this.dragBoxNode).getBoundingClientRect();
       var i = 0;
@@ -168,11 +168,11 @@ class GalaxyMap extends React.Component {
                                     planetScalingExponent: simSettings.planetScalingExponent,
                                     planetRadiusScale: simSettings.planetRadiusScale,
                                     planetScaleUiThreshold: simSettings.planetScaleUiThreshold}
-                                    
+
       for (var i = 0; i < systemsList.length; i++) {
          var isVisible = false;
-         var widthPadding = 0.02 * viewport.width;
-         var heightPadding = 0.02 * viewport.width;
+         var widthPadding = 0.01 * viewport.width;
+         var heightPadding = 0.01 * viewport.width;
          if (systemsList[i].left * mapScale > viewport.left - widthPadding && systemsList[i].left * mapScale < viewport.left + viewport.width + widthPadding
             && systemsList[i].top * mapScale > viewport.top - heightPadding && systemsList[i].top * mapScale < viewport.top + viewport.height + heightPadding) {
                isVisible = true;

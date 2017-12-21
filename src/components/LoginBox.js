@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {propTypesTemplate} from '../templates/typesLoginBox.js'
-
+require("../style/gw-style-uef.css")
 
 class LoginBox extends React.Component {
 
@@ -21,7 +21,6 @@ class LoginBox extends React.Component {
 
    componentDidMount() {
       var height = ReactDOM.findDOMNode(this.node).getBoundingClientRect().height;
-      console.log(height);
       this.setState({top: window.innerHeight / 2 - height / 2 - 40});
       this.allowUpdate = false;
    }
@@ -38,15 +37,16 @@ class LoginBox extends React.Component {
    }
 
 
-   handleSubmit = function() {
+   handleSubmit(event) {
+      event.preventDefault();
       this.props.submitFunction(this.state.name, this.state.password);
    }
 
-   handleNameChange = function(event) {
+   handleNameChange(event) {
       this.setState({name: event.target.value});
    }
 
-   handlePasswordChange = function(event) {
+   handlePasswordChange(event) {
       this.setState({password: event.target.value});
    }
 

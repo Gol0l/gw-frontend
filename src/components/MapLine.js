@@ -42,7 +42,7 @@ class MapLine extends React.Component {
                         y2 = {this.props.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
 
-                        strokeWidth = {0.6} />
+                        strokeWidth = {0.4} />
                   </svg>
             )
 
@@ -71,7 +71,7 @@ class MapLine extends React.Component {
                         y2 = {this.props.points[1][1]}
                         stroke = {"url(#line" + number.toString() + ")"}
 
-                        strokeWidth = {1} />
+                        strokeWidth = {0.7} />
                   </svg>
             )
       }
@@ -106,7 +106,7 @@ class MapLine extends React.Component {
 
                         stroke = {"url(#line" + number.toString() + ")"}
                         style = {{}}
-                        strokeWidth = {1} />
+                        strokeWidth = {0.7} />
                   </svg>
             )
       }

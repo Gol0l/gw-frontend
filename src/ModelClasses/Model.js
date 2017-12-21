@@ -6,9 +6,9 @@ import {CharacterDictionary} from '../network/CharacterDictionary.js'
 //properties that arent necessary for the core gameplay and not yet exist in the database like planet size and spin are currently just random
 
 class Model {
-   constructor(mapWidth, mapHeight) {
-      this.mapWidth = mapWidth; //Width and Height of the map on which the stars' coordinates lie
-      this.mapHeight = mapHeight;
+   constructor() {
+      this.mapWidth = 2000; //Width and Height of the map on which the stars' coordinates lie
+      this.mapHeight = 2000;
 
       this.playerInfo = new ModelPlayerInfo();
       this.simSettings = new ModelSimSettings();
@@ -142,7 +142,6 @@ class ModelPlayerInfo {
       this.suggestedDisplayName = "Bernd";
       this.faction = ""; //player faction
       this.isInBattle = false; //a variable that sums up all player related reasons why he might or might not be able to join a lobby
-      this.isLoggedIn = false;
       this.hasCharacter = false;
 
       this.inventory = {"3": 4, "4": 2}; //TEMPORARY OBVIOUSLY

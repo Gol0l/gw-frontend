@@ -38,25 +38,60 @@ class CharacterCreation extends React.Component {
    componentWillReceiveProps() {
       this.allowUpdate = true;
    }
+   changeStylesheet(cssPath) {
+      var array = document.getElementsByTagName("style")
+      Array.prototype.slice.call(array, 1).forEach((element) => element.remove());
 
+      var head = document.getElementsByTagName("head")[0];
+      var xhttp = new XMLHttpRequest();
+      xhttp.open('GET', cssPath);
+      console.log(cssPath)
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            if (style.styleSheet) {
+              style.styleSheet.cssText = xhttp.responseText;
+            } else {
+              style.appendChild(document.createTextNode(xhttp.responseText));
+            }
+            head.appendChild(style);
+          } else {
+            console.log("Error", xhttp.statusText);
+          }
+        }
+      }
+      xhttp.send();
+   }
 
-   handleSubmit = function() {
+   handleSubmit() {
       this.props.submitFunction(this.state.characterFaction, this.state.characterName);
    }
 
-   uefClicked = function(event) {
+   uefClicked(event) {
+      this.changeStylesheet(require("../style/gw-style-cybran.css"));
       this.setState({characterFaction: "uef"});
    }
 
-   cybranClicked = function(event) {
+   cybranClicked(event) {
+      var array = document.getElementsByTagName("style")
+      Array.prototype.slice.call(array).forEach((element) => element.remove());
+      require("../style/gw-style-cybran.css");
       this.setState({characterFaction: "cybran"});
    }
 
-   aeonClicked = function(event) {
+   aeonClicked(event) {
+      var array = document.getElementsByTagName("style")
+      Array.prototype.slice.call(array).forEach((element) => element.remove());
+      require("../style/gw-style-aeon.css");
       this.setState({characterFaction: "aeon"});
    }
 
-   seraphimClicked = function(event) {
+   seraphimClicked(event) {
+      var array = document.getElementsByTagName("style")
+      Array.prototype.slice.call(array).forEach((element) => element.remove());
+      require("../style/gw-style-seraphim.css");
       this.setState({characterFaction: "seraphim"});
    }
 
@@ -105,14 +140,15 @@ class CharacterCreation extends React.Component {
                      <label>
                         your faction: {displayFaction}
                         <br/>
-                        <div style={{marginTop: 5, marginBottom: 3}}>your name: {this.state.characterName}</div>
+                        <div style = {{display: "flex", justifyContent: "space-between"}}>
+                           <div style={{marginTop: 5, marginBottom: 3}}>your name: {this.state.characterName}</div>
 
 
-                        <div  className = "themeBackgroundDefault themeShadowDefult themeTextDefault" onClick = {this.props.requestName}
-                              style = {{display: "inline-block"}}>
-                           new
+                           <div  className = "themeBackgroundDefault themeShadowDefult themeTextDefault" onClick = {this.props.requestName}
+                                 style = {{display: "inline-block"}}>
+                              new
+                           </div>
                         </div>
-
 
                      </label>
                      <br/>

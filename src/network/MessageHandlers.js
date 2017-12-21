@@ -4,7 +4,6 @@ function handleHelloMessage(model, data) {
       const character = model.characterDict.getChar(data.characterId, () => handleHelloMessage(model, data));
       if (character != "error") {
 
-         model.playerInfo.isLoggedIn = true;
          model.playerInfo.id = character.id;
          model.playerInfo.displayName = character.displayName;
          model.playerInfo.faction = character.faction;

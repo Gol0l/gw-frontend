@@ -1,13 +1,32 @@
-import {startGalacticWar} from '../index.js'
 
 class Connector {
 
-   constructor(domain) {
+   constructor(domain, tokenUrl, clientId, clientSecret, scope) {
       this.domain = domain;
+      this.tokenUrl = tokenUrl;
+      this.clientId = clientId;
+      this.clientSecret = clientSecret;
+      this.scope = scope;
       this.model = {};
-      this.token = "";
+      this.tokenData = {};
    }
 
+   loginUser(username, password, callback) {
+      console.log("arrived");
+      var that = this;
+      clientCredentialsGrant( this.tokenUrl,
+                              this.clientId,
+                              this.clientSecret,
+                              this.scope,
+                              username,
+                              password,
+                              (response) => {
+                                 that.tokenData.accessToken = response.access_token;
+                                 that.tokenData.refreshToken = response.refreshToken;
+                                 that.tokenData.expiresIn = response.expires_in;
+                                 callback();
+                              } );
+   }
 
    dataRequest(entity, appendix, currentPage) {
       var url = "http://" + this.domain + "/data/" + entity + "?" + appendix + "&page[number]=" + currentPage + "&page[totals]";
@@ -62,18 +81,9 @@ class Connector {
 
    }
 
-   getToken() {
-      var clientOAuth2 = require('client-oauth2')
-      this.token = new clientOAuth2({  clientId: 'gw-client',
-                                       clientSecret: 'gw-client',
-                                       accessTokenUri: 'https://MISSING.com/login/oauth/access_token',
-                                       authorizationUri: 'https://MISSING.com/login/oauth/authorize',
-                                       redirectUri: 'http://MISSING2.com/auth/github/callback',
-                                       scopes: ['galactic-war']})
-   }
-   setupSocket(user_token, model, handlers) {
+   setupSocket(model, handlers) {
       this.model = model;
-      var url = "ws://" + this.domain + "/websocket?accessToken=" + user_token;
+      var url = "ws://" + this.domain + "/websocket?access_token=" + this.tokenData.accessToken;
       this.socket = new WebSocket(url);
       this.socket.onmessage = function (event) {
          var data = JSON.parse(event.data);
@@ -101,6 +111,40 @@ class Connector {
    }
 
 
+}
+
+function clientCredentialsGrant(	url,
+                                 client_id,
+                                 client_secret,
+                                 scope,
+                                 username,
+                                 password,
+                                 callback) {
+   /*
+   var http = new XMLHttpRequest();
+   var params =   "grant_type=password" +
+                  "&scope=" + scope +
+                  "&username=" + username +
+                  "&password=" + password;
+   var btoa = require("btoa");
+   var authentication = btoa(client_id + ':' + client_secret);
+
+   http.open("POST", url, true);
+   http.setRequestHeader('Authorization', 'Basic ' + authentication);
+   http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+   http.onreadystatechange = function() {//Call a function when the state changes.
+      if(http.readyState == 4 && http.status == 200) {
+         callback(JSON.parse(http.responseText));
+      }
+   }
+   http.send(params);
+   */
+   console.log("you just logged in as");
+   console.log("username: " + username + "password: " + password);
+   callback({  access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjo0MTAyMzU4NDAwLCAiYXV0aG9yaXRpZXMiOiBbXSwgInVzZXJfaWQiOiA1LCAidXNlcl9uYW1lIjogIkFlb24gRWNobyJ9.Kv1en5p2bWb6zE2ag6PWp4u1WxR6F8HPZSweDG23p60",
+               refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzIjo0MTAyMzU4NDAwLCAiYXV0aG9yaXRpZXMiOiBbXSwgInVzZXJfaWQiOiA1LCAidXNlcl9uYW1lIjogIkFlb24gRWNobyJ9.Kv1en5p2bWb6zE2ag6PWp4u1WxR6F8HPZSweDG23p60",
+               expires_in: 1000});
 }
 
 export {Connector}

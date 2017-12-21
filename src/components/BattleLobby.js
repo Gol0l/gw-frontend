@@ -7,7 +7,6 @@ class BattleLobby extends React.Component {
 
    constructor(props) {
       super(props);
-      console.log(props.inp);
    }
 
    render() {
