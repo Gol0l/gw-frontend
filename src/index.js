@@ -27,7 +27,7 @@ function setupModel(network, dataList) {
    model.playerInfo.id = "userId";
    model.playerInfo.displayName = "aeon";
    model.playerInfo.faction = "aeon";
-   model.playerInfo.hasCharacter = false;
+   model.playerInfo.hasCharacter = true;
    model.playerInfo.isInBattle = false;
 
    model.generateCharacterDict(dataList[0], network);

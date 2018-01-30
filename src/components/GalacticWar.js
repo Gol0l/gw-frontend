@@ -278,10 +278,25 @@ class App extends Component {
 export default App;
 
 //probably broken!
+function getSystemFaction(system) {
+   var quit = false;
+   if (system.planetList.length > 0) {
+      var faction = system.planetList[0].faction;
+      if (system.planetList.every((planet) => (planet.faction == faction))) {
+         return (faction);
+      }
+      else {
+         return ("no faction");
+      }
+   }
+   else {
+      return ("no faction");
+   }
+}
 function isSystemAccessible(systemsList, sIndex, playerInfo) {
    var isAccessible = false;
    for (var i = 0; i < systemsList.length; i++) {
-      if (systemsList[i].faction == playerInfo.faction) {
+      if (getSystemFaction(systemsList[i]) == playerInfo.faction) {
          if (systemsList[i].neighbours.includes(systemsList[sIndex].id)) {
             isAccessible = true;
          }
@@ -291,7 +306,6 @@ function isSystemAccessible(systemsList, sIndex, playerInfo) {
 }
 
 function getButtonType(systemsList, sIndex, pIndex, playerInfo) { //LOGIC FOR THE KIND OF ACTION HAPPENS HERE
-
    var buttonType = "noDisplay"
    const planetInfo = systemsList[sIndex].planetList[pIndex]
 

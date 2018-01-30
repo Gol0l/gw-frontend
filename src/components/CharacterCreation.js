@@ -70,28 +70,28 @@ class CharacterCreation extends React.Component {
    }
 
    uefClicked(event) {
-      this.changeStylesheet(require("../style/gw-style-cybran.css"));
+      //this.changeStylesheet(require("../style/gw-style-cybran.css"));
       this.setState({characterFaction: "uef"});
    }
 
    cybranClicked(event) {
-      var array = document.getElementsByTagName("style")
-      Array.prototype.slice.call(array).forEach((element) => element.remove());
-      require("../style/gw-style-cybran.css");
+      //var array = document.getElementsByTagName("style")
+      //Array.prototype.slice.call(array).forEach((element) => element.remove());
+      //require("../style/gw-style-cybran.css");
       this.setState({characterFaction: "cybran"});
    }
 
    aeonClicked(event) {
-      var array = document.getElementsByTagName("style")
-      Array.prototype.slice.call(array).forEach((element) => element.remove());
-      require("../style/gw-style-aeon.css");
+      //var array = document.getElementsByTagName("style")
+      //Array.prototype.slice.call(array).forEach((element) => element.remove());
+      //require("../style/gw-style-aeon.css");
       this.setState({characterFaction: "aeon"});
    }
 
    seraphimClicked(event) {
-      var array = document.getElementsByTagName("style")
-      Array.prototype.slice.call(array).forEach((element) => element.remove());
-      require("../style/gw-style-seraphim.css");
+      //var array = document.getElementsByTagName("style")
+      //Array.prototype.slice.call(array).forEach((element) => element.remove());
+      //require("../style/gw-style-seraphim.css");
       this.setState({characterFaction: "seraphim"});
    }
 
